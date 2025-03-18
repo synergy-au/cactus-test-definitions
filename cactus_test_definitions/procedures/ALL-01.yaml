@@ -4,7 +4,7 @@ Classes:
   - A
   - DR-A
 Preconditions:
-  db: config/preconditions/ALL-01.sql
+  db: preconditions/ALL-01.sql
 Steps:
   ALL-01-001:
     listener-enabled: true
