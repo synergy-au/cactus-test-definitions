@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 from importlib import resources
 
 import yaml
@@ -124,3 +124,8 @@ class TestProcedureConfig:
         yaml_resource = resources.files("cactus_test_definitions.procedures") / "test-procedures.yaml"
         with resources.as_file(yaml_resource) as yaml_file:
             return TestProcedureConfig.from_yamlfile(path=yaml_file)
+
+    @staticmethod
+    def available_tests() -> Iterable[str]:
+        test_procedures: TestProcedures = TestProcedureConfig.from_resource()
+        return test_procedures.test_procedures.keys()
