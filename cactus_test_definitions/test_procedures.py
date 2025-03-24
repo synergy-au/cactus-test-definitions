@@ -1,11 +1,17 @@
 from dataclasses import dataclass
+from enum import StrEnum
+from importlib import resources
 from pathlib import Path
 from typing import Any, Iterable
-from importlib import resources
 
 import yaml
 import yaml_include
 from dataclass_wizard import YAMLWizard
+
+
+class TestProcedureId(StrEnum):
+    ALL_01 = "ALL-01"
+    ALL_02 = "ALL-02"
 
 
 class TestProcedureDefinitionError(Exception):
