@@ -10,6 +10,7 @@ from dataclass_wizard import YAMLWizard
 
 
 class TestProcedureId(StrEnum):
+    __test__ = False  # Prevent pytest from picking up this class
     ALL_01 = "ALL-01"
     ALL_02 = "ALL-02"
 
@@ -44,6 +45,7 @@ class Preconditions:
 
 @dataclass
 class TestProcedure:
+    __test__ = False  # Prevent pytest from picking up this class
     description: str
     category: str
     classes: list[str]
@@ -58,6 +60,7 @@ class TestProcedures(YAMLWizard):
     By sub-classing the YAMLWizard mixin, we get access to the class method `from_yaml`
     which we can use to create an instances of `TestProcedures`.
     """
+    __test__ = False  # Prevent pytest from picking up this class
 
     description: str
     version: str
@@ -95,6 +98,7 @@ class TestProcedures(YAMLWizard):
 
 
 class TestProcedureConfig:
+    __test__ = False  # Prevent pytest from picking up this class
 
     @staticmethod
     def from_yamlfile(path: Path) -> TestProcedures:
