@@ -49,8 +49,8 @@ class TestProcedure:
     description: str
     category: str
     classes: list[str]
-    preconditions: Preconditions
     steps: dict[str, Step]
+    preconditions: Preconditions | None = None
 
 
 @dataclass
