@@ -9,7 +9,7 @@ Steps:
   ALL-01-001:
     listener-enabled: true
     event:
-      type: request-received
+      type: GET-request-received
       parameters:
         endpoint: /dcap
     actions:
@@ -26,7 +26,7 @@ Steps:
   ALL-01-002:
     listener-enabled: false
     event:
-      type: request-received
+      type: GET-request-received
       parameters:
         endpoint: /edev
     actions:
@@ -43,7 +43,7 @@ Steps:
   ALL-01-003:
     listener-enabled: false
     event:
-      type: request-received
+      type: GET-request-received
       parameters:
         endpoint: /tm
     actions:
@@ -60,7 +60,7 @@ Steps:
   ALL-01-004:
     listener-enabled: false
     event:
-      type: request-received
+      type: GET-request-received
       parameters:
         endpoint: /edev/1/der
     actions:
