@@ -1,0 +1,93 @@
+Description: Discovery with In-Band Registration
+Category: Registration
+Classes:
+  - A
+  - DR-A
+Envoy-Environment-Variables:
+  ENABLE_NOTIFICATIONS: "False"
+Steps:
+  ALL-02-001:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /dcap
+    actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - ALL-02-002
+            - ALL-02-003
+            - ALL-02-004
+            - ALL-02-005
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - ALL-02-001
+  ALL-02-002:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev
+    actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - ALL-02-002
+            - ALL-02-003
+            - ALL-02-004
+            - ALL-02-005
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - ALL-02-002
+  ALL-02-003:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev
+    actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - ALL-02-002
+            - ALL-02-003
+            - ALL-02-004
+            - ALL-02-005
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - ALL-02-003
+  ALL-02-004:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /tm
+    actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - ALL-02-002
+            - ALL-02-003
+            - ALL-02-004
+            - ALL-02-005
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - ALL-02-004
+  ALL-02-005:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/der
+    actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - ALL-02-002
+            - ALL-02-003
+            - ALL-02-004
+            - ALL-02-005
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - ALL-02-005

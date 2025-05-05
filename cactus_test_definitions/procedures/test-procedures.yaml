@@ -3,3 +3,4 @@ Description: CSIP-AUS Client Test Procedures
 Version: 0.1
 TestProcedures:
   ALL-01: !include ALL-01.yaml
+  ALL-02: !include ALL-02.yaml
