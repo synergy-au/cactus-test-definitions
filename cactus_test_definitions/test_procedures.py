@@ -49,6 +49,7 @@ class TestProcedure:
     category: str
     classes: list[str]
     steps: dict[str, Step]
+    envoy_environment_variables: dict[str, Any] | None = None
     preconditions: Preconditions | None = None
 
 
