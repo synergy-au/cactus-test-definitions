@@ -7,7 +7,6 @@ Preconditions:
   db: preconditions/ALL-01.sql
 Steps:
   ALL-01-001:
-    listener-enabled: true
     event:
       type: GET-request-received
       parameters:
@@ -24,7 +23,6 @@ Steps:
           listeners:
             - ALL-01-001
   ALL-01-002:
-    listener-enabled: false
     event:
       type: GET-request-received
       parameters:
@@ -41,7 +39,6 @@ Steps:
           listeners:
             - ALL-01-002
   ALL-01-003:
-    listener-enabled: false
     event:
       type: GET-request-received
       parameters:
@@ -58,7 +55,6 @@ Steps:
           listeners:
             - ALL-01-003
   ALL-01-004:
-    listener-enabled: false
     event:
       type: GET-request-received
       parameters:

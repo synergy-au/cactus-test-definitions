@@ -33,7 +33,6 @@ class Action:
 
 @dataclass
 class Step:
-    listener_enabled: bool
     event: Event
     actions: list[Action]
 
