@@ -6,6 +6,10 @@ from typing import Any, Iterable
 
 import yaml
 import yaml_include
+from cactus_test_definitions.variable_expressions import (
+    parse_variable_expression_body,
+    try_extract_variable_expression,
+)
 from dataclass_wizard import YAMLWizard
 
 
@@ -29,6 +33,14 @@ class Event:
 class Action:
     type: str
     parameters: dict[str, Any]
+
+    def __post_init__(self):
+        """Some parameter values might contain variable expressions (eg: a string "$now") that needs to be replaced
+        with an parsed Expression object instead."""
+        for k, v in self.parameters.items():
+            variable_expr = try_extract_variable_expression(v)
+            if variable_expr:
+                self.parameters[k] = parse_variable_expression_body(variable_expr)
 
 
 @dataclass
@@ -60,6 +72,7 @@ class TestProcedures(YAMLWizard):
     By sub-classing the YAMLWizard mixin, we get access to the class method `from_yaml`
     which we can use to create an instances of `TestProcedures`.
     """
+
     __test__ = False  # Prevent pytest from picking up this class
 
     description: str
