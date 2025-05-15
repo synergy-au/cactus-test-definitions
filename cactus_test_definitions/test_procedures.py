@@ -103,7 +103,7 @@ class TestProcedures(YAMLWizard):
                             for listener_step_name in listeners:
                                 if listener_step_name not in step_names:
                                     raise TestProcedureDefinitionError(
-                                        f"[{test_procedure_name}] Action '{action.type}' refers to unknown step '{listener_step_name}'."
+                                        f"[{test_procedure_name}] Action '{action.type}' refers to unknown step '{listener_step_name}'."  # noqa: E501
                                     )
 
     def validate(self):
@@ -136,7 +136,7 @@ class TestProcedureConfig:
 
         # ...because we are using YAMLWizard we need to supply a decoder and a Loader to
         # use this modified version.
-        test_procedures: TestProcedures = TestProcedures.from_yaml(yaml_contents, decoder=yaml.load, Loader=yaml.Loader)  # type: ignore
+        test_procedures: TestProcedures = TestProcedures.from_yaml(yaml_contents, decoder=yaml.load, Loader=yaml.Loader)  # type: ignore # noqa: E501
 
         test_procedures.validate()
 
