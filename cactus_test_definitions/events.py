@@ -15,8 +15,11 @@ from cactus_test_definitions.variable_expressions import (
 
 @dataclass
 class Event:
-    type: str
-    parameters: dict[str, Any]
+    """An event represents some form of client/other criteria occurring (trigger). When an event trigger is met,
+    any associated actions with the parent Step will be run."""
+
+    type: str  # The type of event being listened for
+    parameters: dict[str, Any]  # Any parameters to the event listener
 
     def __post_init__(self):
         """Some parameter values might contain variable expressions (eg: a string "$now") that needs to be replaced

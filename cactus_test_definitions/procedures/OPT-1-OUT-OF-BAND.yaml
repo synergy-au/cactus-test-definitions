@@ -1,8 +1,7 @@
-Description: Discovery with Out-of-Band Registration
+Description: Connection Point Registration (Out of Band EndDevice Registration)
 Category: Registration
 Classes:
-  - A
-  - DR-A
+  - C
 Preconditions:
   actions:
     - type: register-end-device
@@ -10,6 +9,8 @@ Preconditions:
         registration_pin: 11223
 Checks:
   - type: all-steps-complete
+    parameters: {}
+  - type: connectionpoint-contents
     parameters: {}
       
 Steps:
@@ -25,6 +26,7 @@ Steps:
             - GET-EDEV-LIST
             - GET-TM
             - GET-DER
+            - POST-CP
       - type: remove-listeners
         parameters:
           listeners:
@@ -63,3 +65,13 @@ Steps:
           listeners:
             - GET-DER
 
+  POST-CP:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/cp
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - POST-CP

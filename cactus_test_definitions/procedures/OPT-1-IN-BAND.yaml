@@ -1,17 +1,18 @@
-Description: Discovery with Out-of-Band Registration
+Description: Connection Point Registration (In Band EndDevice Registration)
 Category: Registration
 Classes:
-  - A
-  - DR-A
-Preconditions:
-  actions:
-    - type: register-end-device
-      parameters:
-        registration_pin: 11223
+  - C
 Checks:
   - type: all-steps-complete
     parameters: {}
-      
+  - type: der-capability-contents
+    parameters: {}
+  - type: der-settings-contents
+    parameters: {}
+  - type: der-status-contents
+    parameters: {}
+  - type: connectionpoint-contents
+    parameters: {}
 Steps:
   GET-DCAP:
     event:
@@ -22,24 +23,27 @@ Steps:
       - type: enable-listeners
         parameters:
           listeners:
-            - GET-EDEV-LIST
+            - GET-EDEV
             - GET-TM
-            - GET-DER
       - type: remove-listeners
         parameters:
           listeners:
             - GET-DCAP
 
-  GET-EDEV-LIST:
+  GET-EDEV:
     event:
       type: GET-request-received
       parameters:
         endpoint: /edev
     actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - POST-EDEV
       - type: remove-listeners
         parameters:
           listeners:
-            - GET-EDEV-LIST
+            - GET-EDEV
 
   GET-TM:
     event:
@@ -52,6 +56,22 @@ Steps:
           listeners:
             - GET-TM
 
+  POST-EDEV:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev
+    actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - GET-DER
+            - POST-CP
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - POST-EDEV
+
   GET-DER:
     event:
       type: GET-request-received
@@ -63,3 +83,13 @@ Steps:
           listeners:
             - GET-DER
 
+  POST-CP:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/cp
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - POST-CP

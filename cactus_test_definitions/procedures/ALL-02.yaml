@@ -28,6 +28,7 @@ Steps:
         parameters:
           listeners:
             - GET-DCAP
+  
   GET-EDEV:
     event:
       type: GET-request-received
@@ -42,6 +43,7 @@ Steps:
         parameters:
           listeners:
             - GET-EDEV
+  
   GET-TM:
     event:
       type: GET-request-received
@@ -52,6 +54,7 @@ Steps:
         parameters:
           listeners:
             - GET-TM
+  
   POST-EDEV:
     event:
       type: POST-request-received
@@ -66,6 +69,7 @@ Steps:
         parameters:
           listeners:
             - POST-EDEV
+  
   GET-DER:
     event:
       type: GET-request-received

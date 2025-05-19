@@ -1,0 +1,26 @@
+Description: Client Registration and PIN Validation
+Category: Registration
+Classes:
+  - A
+  
+Checks:
+  - type: all-steps-complete
+    parameters: {}
+  - type: der-capability-contents
+    parameters: {}
+  - type: der-settings-contents
+    parameters: {}
+  - type: der-status-contents
+    parameters: {}
+
+Steps:
+  GET-REGISTRATION:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/rg
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - GET-REGISTRATION
