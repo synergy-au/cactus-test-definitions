@@ -6,10 +6,8 @@ from typing import Any, Iterable
 
 import yaml
 import yaml_include
-from cactus_test_definitions.variable_expressions import (
-    parse_variable_expression_body,
-    try_extract_variable_expression,
-)
+from cactus_test_definitions.actions import Action, validate_action_parameters
+from cactus_test_definitions.errors import TestProcedureDefinitionError
 from dataclass_wizard import YAMLWizard
 
 
@@ -19,28 +17,10 @@ class TestProcedureId(StrEnum):
     ALL_02 = "ALL-02"
 
 
-class TestProcedureDefinitionError(Exception):
-    __test__ = False  # Prevent pytest from picking up this class
-
-
 @dataclass
 class Event:
     type: str
     parameters: dict
-
-
-@dataclass
-class Action:
-    type: str
-    parameters: dict[str, Any]
-
-    def __post_init__(self):
-        """Some parameter values might contain variable expressions (eg: a string "$now") that needs to be replaced
-        with an parsed Expression object instead."""
-        for k, v in self.parameters.items():
-            variable_expr = try_extract_variable_expression(v)
-            if variable_expr:
-                self.parameters[k] = parse_variable_expression_body(variable_expr)
 
 
 @dataclass
@@ -88,22 +68,17 @@ class TestProcedures(YAMLWizard):
         """
 
         for test_procedure_name, test_procedure in self.test_procedures.items():
-            step_names = test_procedure.steps.keys()
-            for step in test_procedure.steps.values():
+            for step_name, step in test_procedure.steps.items():
                 for action in step.actions:
+                    validate_action_parameters(test_procedure_name, step_name, action)
+
+                    # Provide additional "action specific" validation
                     match action.type:
                         case "enable-listeners" | "remove-listeners":
-                            try:
-                                listeners = action.parameters["listeners"]
-                            except KeyError:
-                                raise TestProcedureDefinitionError(
-                                    f"[{test_procedure_name}] Action '{action.type}' missing parameters 'listeners'."
-                                )
-
-                            for listener_step_name in listeners:
-                                if listener_step_name not in step_names:
+                            for listener_step_name in action.parameters["listeners"]:
+                                if listener_step_name not in test_procedure.steps.keys():
                                     raise TestProcedureDefinitionError(
-                                        f"[{test_procedure_name}] Action '{action.type}' refers to unknown step '{listener_step_name}'."  # noqa: E501
+                                        f"{test_procedure_name}.{step_name}. Refers to unknown step '{listener_step_name}'."  # noqa: E501
                                     )
 
     def validate(self):
@@ -114,11 +89,13 @@ class TestProcedureConfig:
     __test__ = False  # Prevent pytest from picking up this class
 
     @staticmethod
-    def from_yamlfile(path: Path) -> TestProcedures:
+    def from_yamlfile(path: Path, skip_validation: bool = False) -> TestProcedures:
         """Converts a yaml file given by 'path' into a 'TestProcedures' instance.
 
         Supports parts of the TestProcedures instance being described by external
         YAML files. These are referenced in the parent yaml file using the `!include` directive.
+
+        skip_validation: If True, the test_procedures.validate() call will not be made
 
         Example:
 
@@ -138,7 +115,8 @@ class TestProcedureConfig:
         # use this modified version.
         test_procedures: TestProcedures = TestProcedures.from_yaml(yaml_contents, decoder=yaml.load, Loader=yaml.Loader)  # type: ignore # noqa: E501
 
-        test_procedures.validate()
+        if not skip_validation:
+            test_procedures.validate()
 
         return test_procedures
 
