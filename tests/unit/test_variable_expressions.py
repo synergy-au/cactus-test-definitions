@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
+from decimal import Decimal
 from typing import Any
 
 import pytest
+from cactus_test_definitions.test_procedures import Action
 from cactus_test_definitions.variable_expressions import (
     Constant,
     Expression,
@@ -9,6 +11,7 @@ from cactus_test_definitions.variable_expressions import (
     NamedVariableType,
     OperationType,
     UnparseableVariableExpressionError,
+    is_resolvable_variable,
     parse_time_delta,
     parse_variable_expression_body,
     try_extract_variable_expression,
@@ -185,3 +188,30 @@ def test_parse_variable_expression_body(
         actual = parse_variable_expression_body(var_body)
         assert isinstance(actual, NamedVariable) or isinstance(actual, Constant) or isinstance(actual, Expression)
         assert actual == expected, f"Input string: {var_body}"
+
+
+@pytest.mark.parametrize(
+    "input, expected",
+    [
+        (None, False),
+        ("", False),
+        ("string value", False),
+        (123, False),
+        (1.23, False),
+        (Decimal("1.2"), False),
+        (datetime(2022, 11, 3), False),
+        (timedelta(2), False),
+        (Action("", {}), False),
+        ([], False),
+        ({}, False),
+        (NamedVariable(NamedVariableType.NOW), True),
+        (NamedVariable(NamedVariableType.DERSETTING_SET_MAX_W), True),
+        (Constant(1.23), True),
+        (Constant(timedelta(5)), True),
+        (Expression(OperationType.ADD, Constant(1.23), NamedVariable(NamedVariableType.NOW)), True),
+    ],
+)
+def test_is_resolvable_variable(input: Any, expected: bool):
+    result = is_resolvable_variable(input)
+    assert isinstance(result, bool)
+    assert result == expected

@@ -37,7 +37,7 @@ def test_TestProcedures_validate_raises_exception(filename: str):
 
 def test_TestProcedures_action_parameter_types():
     """Tests that lists/dicts/constants/datetimes can all be encoded/decoded via the yaml action definition"""
-    cfg = TestProcedureConfig.from_yamlfile(path=Path("tests/data/config_action_parameters.yaml"))
+    cfg = TestProcedureConfig.from_yamlfile(path=Path("tests/data/config_action_parameters.yaml"), skip_validation=True)
     test_proc = cfg.test_procedures["CUSTOM-01"]
     step = test_proc.steps["Step-1"]
     action = step.actions[0]

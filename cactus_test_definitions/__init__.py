@@ -1,27 +1,30 @@
+from cactus_test_definitions.actions import Action
+from cactus_test_definitions.errors import (
+    TestProcedureDefinitionError,
+    UnparseableVariableExpressionError,
+    UnresolvableVariableError,
+)
 from cactus_test_definitions.test_procedures import (
-    Action,
     Event,
     Preconditions,
     Step,
     TestProcedure,
     TestProcedureConfig,
-    TestProcedureDefinitionError,
     TestProcedureId,
     TestProcedures,
 )
-
 from cactus_test_definitions.variable_expressions import (
-    Expression,
     Constant,
     ConstantType,
+    Expression,
     NamedVariable,
-    OperationType,
     NamedVariableType,
-    try_extract_variable_expression,
-    parse_variable_expression_body,
-    parse_time_delta,
+    OperationType,
     parse_binary_expression,
+    parse_time_delta,
     parse_unary_expression,
+    parse_variable_expression_body,
+    try_extract_variable_expression,
 )
 
 __version__ = "0.0.1"
@@ -41,6 +44,8 @@ __all__ = [
     "ConstantType",
     "NamedVariable",
     "OperationType",
+    "UnresolvableVariableError",
+    "UnparseableVariableExpressionError",
     "NamedVariableType",
     "try_extract_variable_expression",
     "parse_variable_expression_body",

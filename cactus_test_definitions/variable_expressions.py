@@ -6,6 +6,8 @@ from re import match, search
 from tokenize import NAME, NUMBER, OP, STRING, TokenError, TokenInfo, generate_tokens
 from typing import Any
 
+from cactus_test_definitions.errors import UnparseableVariableExpressionError
+
 ConstantType = timedelta | int | float
 
 
@@ -60,19 +62,6 @@ class Expression:
     operation: OperationType
     lhs_operand: NamedVariable | Constant  # left hand side operand
     rhs_operand: NamedVariable | Constant  # right hand side operand
-
-
-class UnresolvableVariableError(Exception):
-    """Raised whenever a NamedVariable cannot be resolved at test execution time (eg: database doesn't have the
-    requisite information)"""
-
-    pass
-
-
-class UnparseableVariableExpressionError(Exception):
-    """Raised whenever a raw string cannot parse to a NamedVariable/Expression"""
-
-    pass
 
 
 def parse_time_delta(var_body: str) -> timedelta:
@@ -236,3 +225,8 @@ def try_extract_variable_expression(body: Any) -> str | None:
         raise ValueError("Variable expressions must ONLY be a single variable with no other text")
 
     return variable_expression
+
+
+def is_resolvable_variable(v: Any) -> bool:
+    """Returns True if the supplied value is a variable definition that requires resolving"""
+    return isinstance(v, NamedVariable) or isinstance(v, Expression) or isinstance(v, Constant)
