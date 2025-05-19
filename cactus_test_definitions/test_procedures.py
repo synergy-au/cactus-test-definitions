@@ -7,7 +7,9 @@ from typing import Any, Iterable
 import yaml
 import yaml_include
 from cactus_test_definitions.actions import Action, validate_action_parameters
+from cactus_test_definitions.checks import Check, validate_check_parameters
 from cactus_test_definitions.errors import TestProcedureDefinitionError
+from cactus_test_definitions.events import Event, validate_event_parameters
 from dataclass_wizard import YAMLWizard
 
 
@@ -18,12 +20,6 @@ class TestProcedureId(StrEnum):
 
 
 @dataclass
-class Event:
-    type: str
-    parameters: dict
-
-
-@dataclass
 class Step:
     event: Event
     actions: list[Action]
@@ -31,7 +27,8 @@ class Step:
 
 @dataclass
 class Preconditions:
-    db: str
+    db: str | None = None
+    actions: list[Action] | None = None  # To be executed as the test case first "starts"
 
 
 @dataclass
@@ -42,7 +39,8 @@ class TestProcedure:
     classes: list[str]
     steps: dict[str, Step]
     envoy_environment_variables: dict[str, Any] | None = None
-    preconditions: Preconditions | None = None
+    preconditions: Preconditions | None = None  # These execute during "init" and setup the test for a valid start state
+    checks: list[Check] | None = None  # Checks execute as a test finalizes for additional validation
 
 
 @dataclass
@@ -59,8 +57,29 @@ class TestProcedures(YAMLWizard):
     version: str
     test_procedures: dict[str, TestProcedure]
 
+    def _do_action_validate(self, procedure: TestProcedure, procedure_name: str, location: str, action: Action):
+        """Handles the full validation of an action's definition for a parent procedure.
+
+        procedure: The parent TestProcedure for action
+        procedure_name: The name of procedure (used for labelling errors)
+        location: Where in procedure can you find action? (used for labelling errors)
+        action: The action to validate
+
+        raises TestProcedureDefinitionError on failure
+        """
+        validate_action_parameters(procedure_name, location, action)
+
+        # Provide additional "action specific" validation
+        match action.type:
+            case "enable-listeners" | "remove-listeners":
+                for listener_step_name in action.parameters["listeners"]:
+                    if listener_step_name not in procedure.steps.keys():
+                        raise TestProcedureDefinitionError(
+                            f"{procedure_name}.{location}. Refers to unknown step '{listener_step_name}'."
+                        )
+
     def _validate_actions(self):
-        """Validate actions of test procedure steps
+        """Validate actions of test procedure steps / preconditions
 
         Ensure,
         - action has the correct parameters
@@ -68,21 +87,43 @@ class TestProcedures(YAMLWizard):
         """
 
         for test_procedure_name, test_procedure in self.test_procedures.items():
+            # Validate actions in the preconditions
+            if test_procedure.preconditions and test_procedure.preconditions.actions:
+                for action in test_procedure.preconditions.actions:
+                    self._do_action_validate(test_procedure, test_procedure_name, "Precondition", action)
+
+            # Validate actions that exist on steps
             for step_name, step in test_procedure.steps.items():
                 for action in step.actions:
-                    validate_action_parameters(test_procedure_name, step_name, action)
+                    self._do_action_validate(test_procedure, test_procedure_name, step_name, action)
 
-                    # Provide additional "action specific" validation
-                    match action.type:
-                        case "enable-listeners" | "remove-listeners":
-                            for listener_step_name in action.parameters["listeners"]:
-                                if listener_step_name not in test_procedure.steps.keys():
-                                    raise TestProcedureDefinitionError(
-                                        f"{test_procedure_name}.{step_name}. Refers to unknown step '{listener_step_name}'."  # noqa: E501
-                                    )
+    def _validate_checks(self):
+        """Validate checks of test procedures
+
+        Ensure,
+        - check has the correct parameters
+        """
+
+        for test_procedure_name, test_procedure in self.test_procedures.items():
+            if test_procedure.checks:
+                for check in test_procedure.checks:
+                    validate_check_parameters(test_procedure_name, check)
+
+    def _validate_events(self):
+        """Validate events of test procedure steps
+
+        Ensure,
+        - event has the correct parameters
+        """
+
+        for test_procedure_name, test_procedure in self.test_procedures.items():
+            for step_name, step in test_procedure.steps.items():
+                validate_event_parameters(test_procedure_name, step_name, step.event)
 
     def validate(self):
         self._validate_actions()
+        self._validate_checks()
+        self._validate_events()
 
 
 class TestProcedureConfig:
