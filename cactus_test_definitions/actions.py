@@ -55,6 +55,7 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ActionParameterSchema]] = {
         "opModExpLimW": ActionParameterSchema(False, ActionParameterType.Float),
         "opModGenLimW": ActionParameterSchema(False, ActionParameterType.Float),
         "opModLoadLimW": ActionParameterSchema(False, ActionParameterType.Float),
+        "setGradW": ActionParameterSchema(False, ActionParameterType.Float),
     },
     "create-der-control": {
         "start": ActionParameterSchema(True, ActionParameterType.DateTime),
