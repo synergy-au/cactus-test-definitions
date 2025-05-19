@@ -1,11 +1,12 @@
-from cactus_test_definitions.actions import Action
+from cactus_test_definitions.actions import ACTION_PARAMETER_SCHEMA, Action
+from cactus_test_definitions.checks import CHECK_PARAMETER_SCHEMA, Check
 from cactus_test_definitions.errors import (
     TestProcedureDefinitionError,
     UnparseableVariableExpressionError,
     UnresolvableVariableError,
 )
+from cactus_test_definitions.events import EVENT_PARAMETER_SCHEMA, Event
 from cactus_test_definitions.test_procedures import (
-    Event,
     Preconditions,
     Step,
     TestProcedure,
@@ -34,6 +35,10 @@ __all__ = [
     "TestProcedureDefinitionError",
     "Event",
     "Action",
+    "ACTION_PARAMETER_SCHEMA",
+    "Check",
+    "CHECK_PARAMETER_SCHEMA",
+    "EVENT_PARAMETER_SCHEMA",
     "Step",
     "Preconditions",
     "TestProcedure",
