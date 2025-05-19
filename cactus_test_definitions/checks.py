@@ -35,6 +35,10 @@ class Check:
 
 # The parameter schema for each action, keyed by the action name
 CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
+    "all-steps-complete": {"ignored_steps": ParameterSchema(False, ParameterType.ListString)},
+    "der-settings-contents": {},
+    "der-capability-contents": {},
+    "der-status-contents": {},
     "readings-site-active-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-site-reactive-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-site-voltage": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},

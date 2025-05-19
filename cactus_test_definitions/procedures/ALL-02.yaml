@@ -3,10 +3,17 @@ Category: Registration
 Classes:
   - A
   - DR-A
-Envoy-Environment-Variables:
-  ENABLE_NOTIFICATIONS: "False"
+Checks:
+  - type: all-steps-complete
+    parameters: {}
+  - type: der-capability-contents
+    parameters: {}
+  - type: der-settings-contents
+    parameters: {}
+  - type: der-status-contents
+    parameters: {}
 Steps:
-  ALL-02-001:
+  GET-DCAP:
     event:
       type: GET-request-received
       parameters:
@@ -15,15 +22,13 @@ Steps:
       - type: enable-listeners
         parameters:
           listeners:
-            - ALL-02-002
-            - ALL-02-003
-            - ALL-02-004
-            - ALL-02-005
+            - GET-EDEV
+            - GET-TM
       - type: remove-listeners
         parameters:
           listeners:
-            - ALL-02-001
-  ALL-02-002:
+            - GET-DCAP
+  GET-EDEV:
     event:
       type: GET-request-received
       parameters:
@@ -32,15 +37,22 @@ Steps:
       - type: enable-listeners
         parameters:
           listeners:
-            - ALL-02-002
-            - ALL-02-003
-            - ALL-02-004
-            - ALL-02-005
+            - POST-EDEV
       - type: remove-listeners
         parameters:
           listeners:
-            - ALL-02-002
-  ALL-02-003:
+            - GET-EDEV
+  GET-TM:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /tm
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - GET-TM
+  POST-EDEV:
     event:
       type: POST-request-received
       parameters:
@@ -49,45 +61,18 @@ Steps:
       - type: enable-listeners
         parameters:
           listeners:
-            - ALL-02-002
-            - ALL-02-003
-            - ALL-02-004
-            - ALL-02-005
+            - GET-DER
       - type: remove-listeners
         parameters:
           listeners:
-            - ALL-02-003
-  ALL-02-004:
-    event:
-      type: GET-request-received
-      parameters:
-        endpoint: /tm
-    actions:
-      - type: enable-listeners
-        parameters:
-          listeners:
-            - ALL-02-002
-            - ALL-02-003
-            - ALL-02-004
-            - ALL-02-005
-      - type: remove-listeners
-        parameters:
-          listeners:
-            - ALL-02-004
-  ALL-02-005:
+            - POST-EDEV
+  GET-DER:
     event:
       type: GET-request-received
       parameters:
         endpoint: /edev/1/der
     actions:
-      - type: enable-listeners
-        parameters:
-          listeners:
-            - ALL-02-002
-            - ALL-02-003
-            - ALL-02-004
-            - ALL-02-005
       - type: remove-listeners
         parameters:
           listeners:
-            - ALL-02-005
+            - GET-DER

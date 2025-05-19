@@ -60,6 +60,10 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     },
     "communications-loss": {},
     "communications-restore": {},
+    "register-end-device": {
+        "nmi": ParameterSchema(False, ParameterType.String),
+        "registration_pin": ParameterSchema(False, ParameterType.Integer),
+    },
 }
 VALID_ACTION_NAMES: set[str] = set(ACTION_PARAMETER_SCHEMA.keys())
 

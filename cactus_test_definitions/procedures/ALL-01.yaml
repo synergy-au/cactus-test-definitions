@@ -4,9 +4,17 @@ Classes:
   - A
   - DR-A
 Preconditions:
-  db: preconditions/ALL-01.sql
+  actions:
+    - type: register-end-device
+      parameters:
+        registration_pin: 11223
+        nmi: '1122334455'
+Checks:
+  - type: all-steps-complete
+    parameters: {}
+      
 Steps:
-  ALL-01-001:
+  GET-DCAP:
     event:
       type: GET-request-received
       parameters:
@@ -15,58 +23,43 @@ Steps:
       - type: enable-listeners
         parameters:
           listeners:
-            - ALL-01-002
-            - ALL-01-003
-            - ALL-01-004
+            - GET-EDEV-LIST
+            - GET-TM
+            - GET-DER
       - type: remove-listeners
         parameters:
           listeners:
-            - ALL-01-001
-  ALL-01-002:
+            - GET-DCAP
+
+  GET-EDEV-LIST:
     event:
       type: GET-request-received
       parameters:
         endpoint: /edev
     actions:
-      - type: enable-listeners
-        parameters:
-          listeners:
-            - ALL-01-002
-            - ALL-01-003
-            - ALL-01-004
       - type: remove-listeners
         parameters:
           listeners:
-            - ALL-01-002
-  ALL-01-003:
+            - GET-EDEV-LIST
+
+  GET-TM:
     event:
       type: GET-request-received
       parameters:
         endpoint: /tm
     actions:
-      - type: enable-listeners
-        parameters:
-          listeners:
-            - ALL-01-002
-            - ALL-01-003
-            - ALL-01-004
       - type: remove-listeners
         parameters:
           listeners:
-            - ALL-01-003
-  ALL-01-004:
+            - GET-TM
+
+  GET-DER:
     event:
       type: GET-request-received
       parameters:
         endpoint: /edev/1/der
     actions:
-      - type: enable-listeners
-        parameters:
-          listeners:
-            - ALL-01-002
-            - ALL-01-003
-            - ALL-01-004
       - type: remove-listeners
         parameters:
           listeners:
-            - ALL-01-004
+            - GET-DER
