@@ -24,7 +24,7 @@ jobs:
 
       - name: Run bandit
         run: |
-          bandit -r -c pyroject.toml .
+          bandit -r -c pyproject.toml .
 
   flake8_py312:
     runs-on: ubuntu-latest
