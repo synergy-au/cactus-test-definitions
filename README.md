@@ -26,16 +26,17 @@ A `TestProcedure` is a YAML configuration that describes how a CSIP-Aus Client t
 
 ### Steps/Events
 
-The most basic building block of a `TestProcedure` is a `Step`. Each `Step` will always define an `Event` which dictates some form of trigger based on client behavior (eg sending a particular request). When an `Event` is triggered, each of it's `Action` elements will fire which will in turn enable/disable additional `Steps` with new events and so on until the `TestProcedure` is complete.
+The most basic building block of a `TestProcedure` is a `Step`. Each `Step` will always define an `Event` which dictates some form of trigger based on client behavior (eg sending a particular request). When an `Event` is triggered, each of it's `Action` elements will fire which will in turn enable/disable additional `Steps` with new events and so on until the `TestProcedure` is complete. `Event`'s can also define a set of `Check` objects (see doco below) that can restrict an `Event` from triggering if any `Check` is returning False/fail.
 
 When a `TestProcedure` first starts, normally only a single `Step` will be active but more can be enabled/disabled.
 
 These are the currently defined `Event` types that a `Step` can define
 | **name** | **params** | **description** |
 | -------- | ---------- | --------------- |
-| `GET-request-received` | `endpoint: str` |  Triggers when a client sends a GET request to the nominated endpoint |
-| `POST-request-received` | `endpoint: str` |  Triggers when a client sends a POST request to the nominated endpoint |
+| `GET-request-received` | `endpoint: str` `serve_request_first: bool/None` |  Triggers when a client sends a GET request to the nominated endpoint. Will trigger BEFORE serving request to server unless `serve_request_first` is `True` in which case the event will be triggered AFTER the utility server has served the request (but before being proxied back to the device client) |
+| `POST-request-received` | `endpoint: str` `serve_request_first: bool/None` |  Triggers when a client sends a POST request to the nominated endpoint. Will trigger BEFORE serving request to server unless `serve_request_first` is `True` in which case the event will be triggered AFTER the utility server has served the request (but before being proxied back to the device client) |
 | `wait` | `duration_seconds: str` |  Triggers `duration_seconds` after being initially activated |
+
 
 ### Actions
 
@@ -65,7 +66,7 @@ A `Check` is a boolean test of the state of the utility server. They are typical
 | `connectionpoint-contents` | None | True if a `ConnectionPoint.id` has been set for the `EndDevice` under test |
 | `der-settings-contents` | None | True if a `DERSettings` has been set for the `EndDevice` under test |
 | `der-capability-contents` | None | True if a `DERCapability` has been set for the `EndDevice` under test |
-| `der-status-contents` | `genConnectStatus: bool/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
+| `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `readings-site-active-power` | `minimum_count: int` | True if MUP for site wide active power has `minimum_count` entries |
 | `readings-site-reactive-power` | `minimum_count: int` | True if MUP for site wide reactive power has `minimum_count` entries |
 | `readings-site-voltage` | `minimum_count: int` | True if MUP for site wide voltage has `minimum_count` entries |

@@ -7,6 +7,10 @@ TestProcedures:
   ALL-03: !include ALL-03.yaml
   ALL-04: !include ALL-04.yaml
   ALL-05: !include ALL-05.yaml
+  ALL-06: !include ALL-06.yaml
+  ALL-07: !include ALL-07.yaml
+  ALL-08: !include ALL-08.yaml
+  ALL-09: !include ALL-09.yaml
   OPT-1-IN-BAND: !include OPT-1-IN-BAND.yaml
   OPT-1-OUT-OF-BAND: !include OPT-1-OUT-OF-BAND.yaml
 

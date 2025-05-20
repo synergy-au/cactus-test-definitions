@@ -39,7 +39,10 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "connectionpoint-contents": {},
     "der-settings-contents": {},
     "der-capability-contents": {},
-    "der-status-contents": {"genConnectStatus": ParameterSchema(False, ParameterType.Integer)},
+    "der-status-contents": {
+        "genConnectStatus": ParameterSchema(False, ParameterType.Integer),
+        "operationalModeStatus": ParameterSchema(False, ParameterType.Integer),
+    },
     "readings-site-active-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-site-reactive-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-site-voltage": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},

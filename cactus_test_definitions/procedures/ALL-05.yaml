@@ -2,6 +2,7 @@ Description: Individual Readings
 Category: Monitoring
 Classes:
   - A
+
 Checks:
   - type: all-steps-complete
     parameters: {}

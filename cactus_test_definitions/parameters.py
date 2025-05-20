@@ -37,7 +37,7 @@ def is_valid_parameter_type(expected_type: ParameterType, value: Any) -> bool:
     if is_resolvable_variable(value):
         return True  # Too hard to validate variable expressions. Make it a runtime concern
 
-    match (expected_type):
+    match expected_type:
         case ParameterType.String:
             return isinstance(value, str)
         case ParameterType.Integer:

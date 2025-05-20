@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
+from cactus_test_definitions.checks import Check
 from cactus_test_definitions.errors import TestProcedureDefinitionError
 from cactus_test_definitions.parameters import (
     ParameterSchema,
@@ -16,10 +17,14 @@ from cactus_test_definitions.variable_expressions import (
 @dataclass
 class Event:
     """An event represents some form of client/other criteria occurring (trigger). When an event trigger is met,
-    any associated actions with the parent Step will be run."""
+    any associated actions with the parent Step will be run.
+
+    Events can have checks that must be all returned True/Pass at the moment the event is triggered otherwise
+    the event trigger will be ignored."""
 
     type: str  # The type of event being listened for
     parameters: dict[str, Any]  # Any parameters to the event listener
+    checks: list[Check] | None = None  # This event will be blocked from triggering if any of these checks return False
 
     def __post_init__(self):
         """Some parameter values might contain variable expressions (eg: a string "$now") that needs to be replaced
@@ -32,8 +37,14 @@ class Event:
 
 # The parameter schema for each event, keyed by the event name
 EVENT_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
-    "GET-request-received": {"endpoint": ParameterSchema(True, ParameterType.String)},
-    "POST-request-received": {"endpoint": ParameterSchema(True, ParameterType.String)},
+    "GET-request-received": {
+        "endpoint": ParameterSchema(True, ParameterType.String),
+        "serve_request_first": ParameterSchema(False, ParameterType.Boolean),
+    },
+    "POST-request-received": {
+        "endpoint": ParameterSchema(True, ParameterType.String),
+        "serve_request_first": ParameterSchema(False, ParameterType.Boolean),
+    },
     "wait": {"duration_seconds": ParameterSchema(True, ParameterType.Integer)},
 }
 VALID_EVENT_NAMES: set[str] = set(EVENT_PARAMETER_SCHEMA.keys())

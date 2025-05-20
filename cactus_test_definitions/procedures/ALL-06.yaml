@@ -1,0 +1,48 @@
+Description: Connection Status
+Category: Monitoring
+Classes:
+  - A
+
+Checks:
+  - type: all-steps-complete
+    parameters: {}
+    
+Steps:
+  
+  POST-DERSTATUS-DISCONNECT:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+      # Only trigger this if the server has an updated DERStatus
+      checks:
+        - type: der-status-contents
+          parameters: 
+            genConnectStatus: 0
+    actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - POST-DERSTATUS-CONNECT
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - POST-DERSTATUS-DISCONNECT
+  
+  POST-DERSTATUS-CONNECT:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+      # Only trigger this if the server has an updated DERStatus
+      checks:
+        - type: der-status-contents
+          parameters: 
+            genConnectStatus: 1
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - POST-DERSTATUS-CONNECT

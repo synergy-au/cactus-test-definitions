@@ -1,0 +1,66 @@
+Description: Capabilities and Settings
+Category: Monitoring
+Classes:
+  - A
+  
+Checks:
+  - type: all-steps-complete
+    parameters: {}
+  - type: der-capability-contents
+    parameters: {}
+  - type: der-settings-contents
+    parameters: {}
+  - type: der-status-contents
+    parameters: {}
+
+Steps:
+  
+  GET-DER:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/der
+    actions:
+      - type: enable-listeners
+        parameters:
+          listeners:
+            - POST-DERSTATUS
+            - POST-DERCAPABILITY
+            - POST-DERSETTINGS
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - GET-DER
+
+  POST-DERSTATUS:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - POST-DERSTATUS
+  
+  POST-DERCAPABILITY:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/dercap
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - POST-DERCAPABILITY
+
+  POST-DERSETTINGS:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/derg
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - POST-DERSETTINGS
