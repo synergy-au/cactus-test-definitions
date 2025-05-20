@@ -4,7 +4,10 @@ This repository contains YAML test procedure definitions for use with the CSIP-A
 
 This repository also provides Python dataclasses to make it easier for Python code to work with these definitions. In addition, there are also helper functions for creating valid instances of these dataclasses directly from the YAML test procedure definition files.
 
-## Testing
+Test Procedures can be found in the [cactus_test_definitions/procedures/](cactus_test_definitions/procedures/) directory
+
+
+## Development / Testing
 
 This repository also contains a small number of tests that verify that test definitions can be sucessfully converted to their equivalent python dataclasses.
 
