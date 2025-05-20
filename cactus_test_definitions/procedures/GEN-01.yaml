@@ -1,0 +1,33 @@
+Description: Active Control – Export Limit
+Category: Control
+Classes:
+  - G
+
+Checks:
+  - type: all-steps-complete
+    parameters: {}
+
+Preconditions:
+  actions:
+    - type: set-poll-rate
+      parameters:
+        rate_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 300
+        opModExpLimW: 0
+    
+Steps:
+  GET-DERC:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+    actions:
+      - type: remove-listeners
+        parameters:
+          listeners:
+            - GET-DERC
+          
+  
