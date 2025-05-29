@@ -178,6 +178,7 @@ parameters:
 The following are all the `NamedVariable` types currently implemented
 
 | **name** | **description** |
+| -------- | --------------- |
 | `$now` | Resolves to the current moment in time (timezone aware). Returns a datetime |
 | `$setMaxW` | Resolves to the last supplied value to `DERSetting.setMaxW` as an integer. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
 
