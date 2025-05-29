@@ -23,7 +23,7 @@ def test_from_yamlfile():
 @pytest.mark.parametrize(
     "filename",
     [
-        # No 'listeners' parameters defined for enable-listeners action (NOT-A-VALID-PARAMETER-NAME supplied instead)
+        # No 'steps' parameters defined for enable-steps action (NOT-A-VALID-PARAMETER-NAME supplied instead)
         "tests/data/config_with_errors1.yaml",
         # Action refers to step "NOT-A-VALID-STEP"
         "tests/data/config_with_errors2.yaml",

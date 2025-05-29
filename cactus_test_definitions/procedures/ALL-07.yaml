@@ -3,9 +3,10 @@ Category: Monitoring
 Classes:
   - A
 
-Checks:
-  - type: all-steps-complete
-    parameters: {}
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
     
 Steps:
   
@@ -21,13 +22,13 @@ Steps:
           parameters: 
             operationalModeStatus: 0
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - POST-DERSTATUS-CONNECT
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - POST-DERSTATUS-DISCONNECT
   
   POST-DERSTATUS-CONNECT:
@@ -42,7 +43,7 @@ Steps:
           parameters: 
             operationalModeStatus: 1
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - POST-DERSTATUS-CONNECT

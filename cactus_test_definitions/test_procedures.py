@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 from importlib import resources
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Iterable
 
 import yaml
 import yaml_include
@@ -14,33 +14,70 @@ from dataclass_wizard import YAMLWizard
 
 
 class TestProcedureId(StrEnum):
+    """The set of all available test ID's
+
+    This should be kept in sync with the current set of test procedures loaded from the procedures directory"""
+
     __test__ = False  # Prevent pytest from picking up this class
     ALL_01 = "ALL-01"
     ALL_02 = "ALL-02"
+    ALL_03 = "ALL-03"
+    ALL_04 = "ALL-04"
+    ALL_05 = "ALL-05"
+    ALL_06 = "ALL-06"
+    ALL_07 = "ALL-07"
+    ALL_08 = "ALL-08"
+    ALL_09 = "ALL-09"
+    ALL_10 = "ALL-10"
+    GEN_01 = "GEN-01"
+    GEN_02 = "GEN-02"
+    LOA_01 = "LOA-01"
+    LOA_02 = "LOA-02"
+    OPT_1_IN_BAND = "OPT-1-IN-BAND"
+    OPT_1_OUT_OF_BAND = "OPT-1-OUT-OF-BAND"
 
 
 @dataclass
 class Step:
-    event: Event
-    actions: list[Action]
+    """A step is a part of the test procedure that waits for some form of event before running a set of actions.
+
+    It's common for a step to activate other "steps" so that the state of the active test procedure can "evolve" in
+    response to client behaviour"""
+
+    event: Event  # The event to act as a trigger
+    actions: list[Action]  # The actions to execute when the trigger is met
 
 
 @dataclass
 class Preconditions:
-    db: str | None = None
+    """Preconditions are run during the "initialization" state that precedes the start of a test. They typically
+    allow for the setup of the test.
+
+    Checks are also included to prevent a client from starting a test before they have correctly met preconditions"""
+
     actions: list[Action] | None = None  # To be executed as the test case first "starts"
+    checks: list[Check] | None = None  # Will prevent move from "init" state to "started" state of a test if any fail
+
+
+@dataclass
+class Criteria:
+    """Criteria represent the final pass/fail analysis run after a TestProcedure completion. They can consider both
+    the final state of the test system as well as the interactions that happened while it was running"""
+
+    checks: list[Check] | None = None  # These should be run at test procedure finalization to determine pass/fail
 
 
 @dataclass
 class TestProcedure:
+    """Top level object for collecting everything relevant to a single TestProcedure"""
+
     __test__ = False  # Prevent pytest from picking up this class
-    description: str
-    category: str
-    classes: list[str]
+    description: str  # Metadata from test definitions
+    category: str  # Metadata from test definitions
+    classes: list[str]  # Metadata from test definitions
     steps: dict[str, Step]
-    envoy_environment_variables: dict[str, Any] | None = None
     preconditions: Preconditions | None = None  # These execute during "init" and setup the test for a valid start state
-    checks: list[Check] | None = None  # Checks execute as a test finalizes for additional validation
+    criteria: Criteria | None = None  # How will success/failure of this procedure be determined?
 
 
 @dataclass
@@ -71,11 +108,11 @@ class TestProcedures(YAMLWizard):
 
         # Provide additional "action specific" validation
         match action.type:
-            case "enable-listeners" | "remove-listeners":
-                for listener_step_name in action.parameters["listeners"]:
-                    if listener_step_name not in procedure.steps.keys():
+            case "enable-steps" | "remove-steps":
+                for step_name in action.parameters["steps"]:
+                    if step_name not in procedure.steps.keys():
                         raise TestProcedureDefinitionError(
-                            f"{procedure_name}.{location}. Refers to unknown step '{listener_step_name}'."
+                            f"{procedure_name}.{location}. Refers to unknown step '{step_name}'."
                         )
 
     def _validate_actions(self):
@@ -105,8 +142,8 @@ class TestProcedures(YAMLWizard):
         """
 
         for test_procedure_name, test_procedure in self.test_procedures.items():
-            if test_procedure.checks:
-                for check in test_procedure.checks:
+            if test_procedure.criteria and test_procedure.criteria.checks:
+                for check in test_procedure.criteria.checks:
                     validate_check_parameters(test_procedure_name, check)
 
     def _validate_events(self):

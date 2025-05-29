@@ -3,22 +3,23 @@ Category: Monitoring
 Classes:
   - A
 
-Checks:
-  - type: all-steps-complete
-    parameters: {}
-  # Test is ~7 minutes of waiting which should leave enough time for one post @ 300 seconds and 2 posts at 60 seconds
-  - type: readings-site-active-power
-    parameters: {"minimum_count": 3} 
-  - type: readings-site-reactive-power
-    parameters: {"minimum_count": 3}
-  - type: readings-site-voltage
-    parameters: {"minimum_count": 3}
-  - type: readings-der-active-power
-    parameters: {"minimum_count": 3}
-  - type: readings-der-reactive-power
-    parameters: {"minimum_count": 3}
-  - type: readings-der-voltage
-    parameters: {"minimum_count": 3}
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    # Test is ~7 minutes of waiting which should leave enough time for one post @ 300 seconds and 2 posts at 60 seconds
+    - type: readings-site-active-power
+      parameters: {"minimum_count": 3} 
+    - type: readings-site-reactive-power
+      parameters: {"minimum_count": 3}
+    - type: readings-site-voltage
+      parameters: {"minimum_count": 3}
+    - type: readings-der-active-power
+      parameters: {"minimum_count": 3}
+    - type: readings-der-reactive-power
+      parameters: {"minimum_count": 3}
+    - type: readings-der-voltage
+      parameters: {"minimum_count": 3}
 
 
 Steps:
@@ -33,14 +34,14 @@ Steps:
       - type: set-post-rate
         parameters:
           rate_seconds: 300
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - GET-MUP-UPDATED
             - WAIT-TILL-END
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-MUP-INITIAL
 
   # On second poll - update the post rate
@@ -53,13 +54,13 @@ Steps:
       - type: set-post-rate
         parameters:
           rate_seconds: 60
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - GET-MUP-UPDATED
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-MUP-INITIAL
 
   # On second poll - update the post rate
@@ -69,9 +70,9 @@ Steps:
       parameters:
         duration_seconds: 420
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - WAIT-TILL-END
       
   

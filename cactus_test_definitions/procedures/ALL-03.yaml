@@ -3,15 +3,16 @@ Category: Registration
 Classes:
   - A
   
-Checks:
-  - type: all-steps-complete
-    parameters: {}
-  - type: der-capability-contents
-    parameters: {}
-  - type: der-settings-contents
-    parameters: {}
-  - type: der-status-contents
-    parameters: {}
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    - type: der-capability-contents
+      parameters: {}
+    - type: der-settings-contents
+      parameters: {}
+    - type: der-status-contents
+      parameters: {}
 
 Steps:
   GET-REGISTRATION:
@@ -20,7 +21,7 @@ Steps:
       parameters:
         endpoint: /edev/1/rg
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-REGISTRATION

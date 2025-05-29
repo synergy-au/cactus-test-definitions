@@ -8,9 +8,11 @@ Preconditions:
     - type: register-end-device
       parameters:
         registration_pin: 11223
-Checks:
-  - type: all-steps-complete
-    parameters: {}
+        
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
       
 Steps:
   GET-DCAP:
@@ -19,15 +21,15 @@ Steps:
       parameters:
         endpoint: /dcap
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - GET-EDEV-LIST
             - GET-TM
             - GET-DER
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-DCAP
 
   GET-EDEV-LIST:
@@ -36,9 +38,9 @@ Steps:
       parameters:
         endpoint: /edev
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-EDEV-LIST
 
   GET-TM:
@@ -47,9 +49,9 @@ Steps:
       parameters:
         endpoint: /tm
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-TM
 
   GET-DER:
@@ -58,8 +60,8 @@ Steps:
       parameters:
         endpoint: /edev/1/der
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-DER
 

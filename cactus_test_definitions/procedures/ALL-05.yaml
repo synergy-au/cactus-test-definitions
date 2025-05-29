@@ -3,23 +3,24 @@ Category: Monitoring
 Classes:
   - A
 
-Checks:
-  - type: all-steps-complete
-    parameters: {}
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
 
-  # Test is ~8 minutes of waiting which should leave enough time for at least 7 reading posts
-  - type: readings-site-active-power
-    parameters: {"minimum_count": 7} 
-  - type: readings-site-reactive-power
-    parameters: {"minimum_count": 7}
-  - type: readings-site-voltage
-    parameters: {"minimum_count": 7}
-  - type: readings-der-active-power
-    parameters: {"minimum_count": 7}
-  - type: readings-der-reactive-power
-    parameters: {"minimum_count": 7}
-  - type: readings-der-voltage
-    parameters: {"minimum_count": 7}
+    # Test is ~8 minutes of waiting which should leave enough time for at least 7 reading posts
+    - type: readings-site-active-power
+      parameters: {"minimum_count": 7} 
+    - type: readings-site-reactive-power
+      parameters: {"minimum_count": 7}
+    - type: readings-site-voltage
+      parameters: {"minimum_count": 7}
+    - type: readings-der-active-power
+      parameters: {"minimum_count": 7}
+    - type: readings-der-reactive-power
+      parameters: {"minimum_count": 7}
+    - type: readings-der-voltage
+      parameters: {"minimum_count": 7}
 
 Preconditions:
   actions:
@@ -37,13 +38,13 @@ Steps:
       parameters:
         endpoint: /mup
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - POST-MUP
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-MUP
           
   POST-MUP:
@@ -52,13 +53,13 @@ Steps:
       parameters:
         endpoint: /mup
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - GET-MUP-2
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - POST-MUP
 
   GET-MUP-2:
@@ -67,13 +68,13 @@ Steps:
       parameters:
         endpoint: /mup
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - SET-CONTROL
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-MUP-2
 
   SET-CONTROL:
@@ -88,13 +89,13 @@ Steps:
           duration_seconds: 300
           opModImpLimW: 0
           opModExpLimW: 0
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - WAIT-CONTROL
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - SET-CONTROL
 
   # This just lets the test run for a few more posts after the control comes into effect
@@ -104,7 +105,7 @@ Steps:
       parameters:
         duration_seconds: 180 # Wait for at least 4 sets of readings to arrive (with post rate 60 seconds)
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - WAIT-CONTROL
