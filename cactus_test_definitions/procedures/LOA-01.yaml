@@ -3,9 +3,10 @@ Category: Control
 Classes:
   - L
 
-Checks:
-  - type: all-steps-complete
-    parameters: {}
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
 
 Preconditions:
   actions:
@@ -25,9 +26,9 @@ Steps:
       parameters:
         endpoint: /edev/1/derp/1/derc
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-DERC
           
   

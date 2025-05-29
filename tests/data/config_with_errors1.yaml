@@ -18,15 +18,15 @@ TestProcedures:
           parameters:
             endpoint: /dcap
         actions:
-          - type: enable-listeners
+          - type: enable-steps
             parameters:
               NOT-A-VALID-PARAMETER-NAME:
                 - ALL-01-002
                 - ALL-01-003
                 - ALL-01-004
-          - type: remove-listeners
+          - type: remove-steps
             parameters:
-              listeners:
+              steps:
                 - ALL-01-001
       ALL-01-002:
         listener-enabled: false
@@ -35,15 +35,15 @@ TestProcedures:
           parameters:
             endpoint: /edev
         actions:
-          - type: enable-listeners
+          - type: enable-steps
             parameters:
-              listeners:
+              steps:
                 - ALL-01-002
                 - ALL-01-003
                 - ALL-01-004
-          - type: remove-listeners
+          - type: remove-steps
             parameters:
-              listeners:
+              steps:
                 - ALL-01-002
       ALL-01-003:
         listener-enabled: false
@@ -52,15 +52,15 @@ TestProcedures:
           parameters:
             endpoint: /tm
         actions:
-          - type: enable-listeners
+          - type: enable-steps
             parameters:
-              listeners:
+              steps:
                 - ALL-01-002
                 - ALL-01-003
                 - ALL-01-004
-          - type: remove-listeners
+          - type: remove-steps
             parameters:
-              listeners:
+              steps:
                 - ALL-01-003
       ALL-01-004:
         listener-enabled: false
@@ -69,13 +69,13 @@ TestProcedures:
           parameters:
             endpoint: /edev/1/der
         actions:
-          - type: enable-listeners
+          - type: enable-steps
             parameters:
-              listeners:
+              steps:
                 - ALL-01-002
                 - ALL-01-003
                 - ALL-01-004
-          - type: remove-listeners
+          - type: remove-steps
             parameters:
-              listeners:
+              steps:
                 - ALL-01-004

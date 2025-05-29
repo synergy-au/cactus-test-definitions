@@ -12,9 +12,9 @@ from cactus_test_definitions.errors import TestProcedureDefinitionError
     "action, is_valid",
     [
         (Action("foo", {}), False),
-        (Action("enable-listeners", {"listeners": []}), True),
-        (Action("enable-listeners", {"listeners": ["other-step"]}), True),
-        (Action("enable-listeners", {"listeners": ["other-step"], "unused-param": 123}), False),  # extra param
+        (Action("enable-steps", {"steps": []}), True),
+        (Action("enable-steps", {"steps": ["other-step"]}), True),
+        (Action("enable-steps", {"steps": ["other-step"], "unused-param": 123}), False),  # extra param
         (Action("set-default-der-control", {}), True),
         (Action("set-default-der-control", {"opModImpLimW": 12.3, "opModExpLimW": 14}), True),
         (Action("set-default-der-control", {"opModImpLimW": 12.3, "opModExpLimW": "Invalid"}), False),  # bad type

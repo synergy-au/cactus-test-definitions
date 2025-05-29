@@ -3,15 +3,16 @@ Category: Monitoring
 Classes:
   - A
   
-Checks:
-  - type: all-steps-complete
-    parameters: {}
-  - type: der-capability-contents
-    parameters: {}
-  - type: der-settings-contents
-    parameters: {}
-  - type: der-status-contents
-    parameters: {}
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    - type: der-capability-contents
+      parameters: {}
+    - type: der-settings-contents
+      parameters: {}
+    - type: der-status-contents
+      parameters: {}
 
 Steps:
   
@@ -21,15 +22,15 @@ Steps:
       parameters:
         endpoint: /edev/1/der
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - POST-DERSTATUS
             - POST-DERCAPABILITY
             - POST-DERSETTINGS
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-DER
 
   POST-DERSTATUS:
@@ -38,9 +39,9 @@ Steps:
       parameters:
         endpoint: /edev/1/der/1/ders
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - POST-DERSTATUS
   
   POST-DERCAPABILITY:
@@ -49,9 +50,9 @@ Steps:
       parameters:
         endpoint: /edev/1/der/1/dercap
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - POST-DERCAPABILITY
 
   POST-DERSETTINGS:
@@ -60,7 +61,7 @@ Steps:
       parameters:
         endpoint: /edev/1/der/1/derg
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - POST-DERSETTINGS

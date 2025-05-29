@@ -29,8 +29,8 @@ class Action:
 
 # The parameter schema for each action, keyed by the action name
 ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
-    "enable-listeners": {"listeners": ParameterSchema(True, ParameterType.ListString)},
-    "remove-listeners": {"listeners": ParameterSchema(True, ParameterType.ListString)},
+    "enable-steps": {"steps": ParameterSchema(True, ParameterType.ListString)},
+    "remove-steps": {"steps": ParameterSchema(True, ParameterType.ListString)},
     "set-default-der-control": {
         "opModImpLimW": ParameterSchema(False, ParameterType.Float),
         "opModExpLimW": ParameterSchema(False, ParameterType.Float),

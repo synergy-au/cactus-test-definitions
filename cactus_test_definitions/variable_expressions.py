@@ -46,7 +46,7 @@ class Constant:
 @dataclass
 class NamedVariable:
     """A "NamedVariable" is value that can only be resolved at point during a test procedure execution (eg: as a
-    listener action is being applied). There are a fixed set of known variable types defined by NamedVariableType.
+    Step's action is being applied). There are a fixed set of known variable types defined by NamedVariableType.
 
     Failures during resolving a variable (eg database doesn't have the data) MUST raise an exception
     """
@@ -152,7 +152,7 @@ def parse_variable_expression_body(var_body: str) -> NamedVariable | Expression 
 
     $(now) - Will return a tz aware datetime corresponding to the current moment in time
     $(now - '5 minute') - Same as above, but offset 5 minutes in the past
-    $(0.5 * DERSetting.setMaxW) - 50% of the currently configured setMaxW for the current EndDevice
+    $(0.5 * setMaxW) - 50% of the currently configured setMaxW for the current EndDevice
     """
     if not var_body:
         raise UnparseableVariableExpressionError("var_body is empty/None")

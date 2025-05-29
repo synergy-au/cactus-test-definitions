@@ -2,17 +2,20 @@ Description: Connection Point Registration (In Band EndDevice Registration)
 Category: Registration
 Classes:
   - C
-Checks:
-  - type: all-steps-complete
-    parameters: {}
-  - type: der-capability-contents
-    parameters: {}
-  - type: der-settings-contents
-    parameters: {}
-  - type: der-status-contents
-    parameters: {}
-  - type: connectionpoint-contents
-    parameters: {}
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    - type: der-capability-contents
+      parameters: {}
+    - type: der-settings-contents
+      parameters: {}
+    - type: der-status-contents
+      parameters: {}
+    - type: connectionpoint-contents
+      parameters: {}
+
 Steps:
   GET-DCAP:
     event:
@@ -20,14 +23,14 @@ Steps:
       parameters:
         endpoint: /dcap
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - GET-EDEV
             - GET-TM
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-DCAP
 
   GET-EDEV:
@@ -36,13 +39,13 @@ Steps:
       parameters:
         endpoint: /edev
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - POST-EDEV
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-EDEV
 
   GET-TM:
@@ -51,9 +54,9 @@ Steps:
       parameters:
         endpoint: /tm
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-TM
 
   POST-EDEV:
@@ -62,14 +65,14 @@ Steps:
       parameters:
         endpoint: /edev
     actions:
-      - type: enable-listeners
+      - type: enable-steps
         parameters:
-          listeners:
+          steps:
             - GET-DER
             - POST-CP
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - POST-EDEV
 
   GET-DER:
@@ -78,9 +81,9 @@ Steps:
       parameters:
         endpoint: /edev/1/der
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - GET-DER
 
   POST-CP:
@@ -89,7 +92,7 @@ Steps:
       parameters:
         endpoint: /edev/1/cp
     actions:
-      - type: remove-listeners
+      - type: remove-steps
         parameters:
-          listeners:
+          steps:
             - POST-CP
