@@ -3,6 +3,7 @@ Category: Registration
 Classes:
   - A
   - DR-A
+
 Criteria:
   checks:
     - type: all-steps-complete
@@ -13,6 +14,7 @@ Criteria:
       parameters: {}
     - type: der-status-contents
       parameters: {}
+      
 Steps:
   GET-DCAP:
     event:

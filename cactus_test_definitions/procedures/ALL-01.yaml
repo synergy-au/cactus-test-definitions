@@ -3,6 +3,7 @@ Category: Registration
 Classes:
   - A
   - DR-A
+  
 Preconditions:
   actions:
     - type: register-end-device
