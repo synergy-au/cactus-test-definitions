@@ -103,7 +103,7 @@ Steps:
     event:
       type: wait
       parameters:
-        duration_seconds: 180 # Wait for at least 4 sets of readings to arrive (with post rate 60 seconds)
+        duration_seconds: 180 # Wait for at least 3 sets of readings to arrive (with post rate 60 seconds)
     actions:
       - type: remove-steps
         parameters:
