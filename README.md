@@ -105,13 +105,14 @@ actions:
 | -------- | ---------- | --------------- |
 | `enable-steps` | `steps: list[str]` | The names of `Step`'s that will be activated |
 | `remove-steps` | `steps: list[str]` | The names of `Step`'s that will be deactivated (if active) |
+| `finish-test` | None | When activated, the current test will be finished (shutdown) and all `Criteria` evaluated as if the client had requested finalization. |
 | `set-default-der-control` | `opModImpLimW: float/None` `opModExpLimW: float/None` `opModLoadLimW: float/None` `setGradW: float/None` | Updates the DefaultDERControl's parameters with the specified values. |
 | `create-der-control` | `start: datetime` `duration_seconds: int` `pow_10_multipliers: int/None` `primacy: int/None` `randomizeStart_seconds: int/None` `opModEnergize: bool/None` `opModConnect: bool/None` `opModImpLimW: float/None` `opModExpLimW: float/None` `opModGenLimW: float/None` `opModLoadLimW: float/None`| Creates a DERControl with the specified start/duration and values |
 | `cancel-active-der-controls` | None | Cancels all active DERControls |
 | `set-poll-rate` | `rate_seconds: int` | Updates the server poll rate for ALL list endpoints |
 | `set-post-rate` | `rate_seconds: int` | Updates the server post rate for ALL endpoints listing a postRate |
-| `communications-loss` | None | Simulates a full outage for the server (from the perspective of the client) |
-| `communications-restore` | None | Reverses any active `communications-loss` state |
+| `communications-status` | `enabled: bool` | If `enabled: true` simulates a full outage for the server (from the perspective of the client). Defaults to `enabled: false` at test start |
+| `edev-registration-links` | `enabled: bool` | If `enabled: false` `EndDevice` entities will NOT encode `RegistrationLink` elements. Defaults to `enabled: true` at test start |
 | `register-end-device` | `nmi: str/none` `registration_pin: int/None` | Creates a new `EndDevice`, optionally with the specified ConnectionPoint ID or PIN |
 
 

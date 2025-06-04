@@ -99,6 +99,7 @@ Steps:
             - SET-CONTROL
 
   # This just lets the test run for a few more posts after the control comes into effect
+  # after which, we will force the test to shutdown (as Criteria is partially defined by this ONLY running for a few posts)
   WAIT-CONTROL:
     event:
       type: wait
@@ -109,3 +110,5 @@ Steps:
         parameters:
           steps:
             - WAIT-CONTROL
+      - type: finish-test
+        parameters: {}

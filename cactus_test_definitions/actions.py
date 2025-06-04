@@ -31,6 +31,7 @@ class Action:
 ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "enable-steps": {"steps": ParameterSchema(True, ParameterType.ListString)},
     "remove-steps": {"steps": ParameterSchema(True, ParameterType.ListString)},
+    "finish-test": {},
     "set-default-der-control": {
         "opModImpLimW": ParameterSchema(False, ParameterType.Float),
         "opModExpLimW": ParameterSchema(False, ParameterType.Float),
@@ -58,8 +59,8 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "set-post-rate": {
         "rate_seconds": ParameterSchema(True, ParameterType.Integer),
     },
-    "communications-loss": {},
-    "communications-restore": {},
+    "communications-status": {"enabled": ParameterSchema(True, ParameterType.Boolean)},
+    "edev-registration-links": {"enabled": ParameterSchema(True, ParameterType.Boolean)},
     "register-end-device": {
         "nmi": ParameterSchema(False, ParameterType.String),
         "registration_pin": ParameterSchema(False, ParameterType.Integer),

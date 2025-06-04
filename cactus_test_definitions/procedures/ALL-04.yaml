@@ -3,8 +3,11 @@ Category: Registration
 Classes:
   - A
 
-envoy_environment_variables:
-  DISABLE_EDEV_REGISTRATION_LINK: 'True'
+Preconditions:
+  actions:
+    - type: 'edev-registration-links'
+      parameters:
+        enabled: false
 
 Criteria:
   checks:
