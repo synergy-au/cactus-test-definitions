@@ -70,8 +70,10 @@ Steps:
 These are the currently defined `Event` types that a `Step` can define
 | **name** | **params** | **description** |
 | -------- | ---------- | --------------- |
-| `GET-request-received` | `endpoint: str` `serve_request_first: bool/None` |  Triggers when a client sends a GET request to the nominated endpoint. Will trigger BEFORE serving request to server unless `serve_request_first` is `True` in which case the event will be triggered AFTER the utility server has served the request (but before being proxied back to the device client) |
+| `GET-request-received`  | `endpoint: str` `serve_request_first: bool/None` |  Triggers when a client sends a GET request to the nominated endpoint. Will trigger BEFORE serving request to server unless `serve_request_first` is `True` in which case the event will be triggered AFTER the utility server has served the request (but before being proxied back to the device client) |
 | `POST-request-received` | `endpoint: str` `serve_request_first: bool/None` |  Triggers when a client sends a POST request to the nominated endpoint. Will trigger BEFORE serving request to server unless `serve_request_first` is `True` in which case the event will be triggered AFTER the utility server has served the request (but before being proxied back to the device client) |
+| `PUT-request-received` | `endpoint: str` `serve_request_first: bool/None` |  Triggers when a client sends a PUT request to the nominated endpoint. Will trigger BEFORE serving request to server unless `serve_request_first` is `True` in which case the event will be triggered AFTER the utility server has served the request (but before being proxied back to the device client) |
+| `DELETE-request-received` | `endpoint: str` `serve_request_first: bool/None` |  Triggers when a client sends a DELETE request to the nominated endpoint. Will trigger BEFORE serving request to server unless `serve_request_first` is `True` in which case the event will be triggered AFTER the utility server has served the request (but before being proxied back to the device client) |
 | `wait` | `duration_seconds: str` |  Triggers `duration_seconds` after being initially activated |
 
 

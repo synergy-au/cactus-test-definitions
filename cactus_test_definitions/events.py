@@ -45,6 +45,14 @@ EVENT_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "endpoint": ParameterSchema(True, ParameterType.String),
         "serve_request_first": ParameterSchema(False, ParameterType.Boolean),
     },
+    "PUT-request-received": {
+        "endpoint": ParameterSchema(True, ParameterType.String),
+        "serve_request_first": ParameterSchema(False, ParameterType.Boolean),
+    },
+    "DELETE-request-received": {
+        "endpoint": ParameterSchema(True, ParameterType.String),
+        "serve_request_first": ParameterSchema(False, ParameterType.Boolean),
+    },
     "wait": {"duration_seconds": ParameterSchema(True, ParameterType.Integer)},
 }
 VALID_EVENT_NAMES: set[str] = set(EVENT_PARAMETER_SCHEMA.keys())
