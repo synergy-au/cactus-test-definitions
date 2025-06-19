@@ -1,0 +1,119 @@
+Description: Default Control – Load Limit
+Category: Control
+Classes:
+  - L
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  actions:
+    - type: set-poll-rate
+      parameters:
+        rate_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 600
+        opModLoadLimW: $(setMaxW * 2)
+    - type: set-default-der-control
+      parameters:
+        opModLoadLimW: $(setMaxW * 0.3)
+    
+Steps:
+  # This will be the first poll - the client will see the existing control but it will be cancelled immediately after
+  GET-DERC-1:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+        serve_request_first: true # Run this AFTER server receives the request
+    actions:
+      - type: cancel-active-der-controls
+        parameters: {}
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-DERC-2
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC-1
+
+  # On this poll, client will discover control was cancelled and a new control will be added at 200% of setMaxW
+  GET-DERC-2:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+        serve_request_first: true # Run this AFTER server receives the request
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 600
+          opModLoadLimW: $(setMaxW * 2)
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC-2
+      
+  # Waits for the new control to finish (with a bit of overtime)
+  WAIT-CONTROL-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 660
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-DERC-3
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END
+  
+  # On this poll, client will discover control the DefaultDERControl is cancelled and a new 0W control is in place
+  GET-DERC-3:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 600
+          opModLoadLimW: 0
+      - type: set-default-der-control
+        parameters:
+          cancelled: true
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-DERC-4
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC-3
+
+  # On this poll, client will discover control the 0W control is cancelled
+  GET-DERC-4:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+    actions:
+      - type: cancel-active-der-controls
+        parameters: {}
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC-4

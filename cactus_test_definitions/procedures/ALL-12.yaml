@@ -1,0 +1,93 @@
+Description: Default Controls – Ramp Rate
+Category: Control
+Classes:
+  - A
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  actions:
+    - type: set-default-der-control
+      parameters:
+        setGradW: 100 # hundredths of a percent - this is 1%
+
+Steps:
+
+  # On first poll of default control - reset default setGradW and then wait for an updated POLL 
+  # and a request to update DERSettings
+  GET-DEFAULT-DERC:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/dderc
+    actions:
+      - type: set-default-der-control
+        parameters:
+          setGradW: 27 # hundredths of a percent - this is 0.27%
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-DEFAULT-DERC-UPDATED
+            - POST-DERSETTINGS-SET-GRAD-W
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DEFAULT-DERC
+
+  # This will wait until the client POST's a DERSettings with the 1% setGradW
+  POST-DERSETTINGS-SET-GRAD-W:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+    checks:
+      type: der-settings-contents
+      parameters:
+        setGradW: 100
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-DEFAULT-DERC-UPDATED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSETTINGS-SET-GRAD-W
+
+
+  GET-DEFAULT-DERC-UPDATED:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/dderc
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSETTINGS-SET-GRAD-W-DEFAULT
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DEFAULT-DERC-UPDATED
+
+  # This will wait until the client POST's a DERSettings with the 0.27% setGradW
+  POST-DERSETTINGS-SET-GRAD-W-DEFAULT:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+    checks:
+      type: der-settings-contents
+      parameters:
+        setGradW: 27
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSETTINGS-SET-GRAD-W-DEFAULT
+ 

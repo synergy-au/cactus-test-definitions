@@ -108,7 +108,7 @@ actions:
 | `enable-steps` | `steps: list[str]` | The names of `Step`'s that will be activated |
 | `remove-steps` | `steps: list[str]` | The names of `Step`'s that will be deactivated (if active) |
 | `finish-test` | None | When activated, the current test will be finished (shutdown) and all `Criteria` evaluated as if the client had requested finalization. |
-| `set-default-der-control` | `opModImpLimW: float/None` `opModExpLimW: float/None` `opModLoadLimW: float/None` `setGradW: float/None` | Updates the DefaultDERControl's parameters with the specified values. |
+| `set-default-der-control` | `opModImpLimW: float/None` `opModExpLimW: float/None` `opModLoadLimW: float/None` `setGradW: float/None` `cancelled: bool/None` | Updates the DefaultDERControl's parameters with the specified values. If `cancelled` is `true`, all unspecified values will be set to None. |
 | `create-der-control` | `start: datetime` `duration_seconds: int` `pow_10_multipliers: int/None` `primacy: int/None` `randomizeStart_seconds: int/None` `opModEnergize: bool/None` `opModConnect: bool/None` `opModImpLimW: float/None` `opModExpLimW: float/None` `opModGenLimW: float/None` `opModLoadLimW: float/None`| Creates a DERControl with the specified start/duration and values |
 | `cancel-active-der-controls` | None | Cancels all active DERControls |
 | `set-poll-rate` | `rate_seconds: int` | Updates the server poll rate for ALL list endpoints |
@@ -145,7 +145,7 @@ checks:
 | -------- | ---------- | --------------- |
 | `all-steps-complete` | `ignored_steps: list[str]/None` | True if every `Step` in a `TestProcedure` has been deactivated (excepting any ignored steps) |
 | `connectionpoint-contents` | None | True if a `ConnectionPoint.id` has been set for the `EndDevice` under test |
-| `der-settings-contents` | None | True if a `DERSettings` has been set for the `EndDevice` under test |
+| `der-settings-contents` | `setGradW: int/None` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `der-capability-contents` | None | True if a `DERCapability` has been set for the `EndDevice` under test |
 | `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `readings-site-active-power` | `minimum_count: int` | True if MUP for site wide active power has `minimum_count` entries |

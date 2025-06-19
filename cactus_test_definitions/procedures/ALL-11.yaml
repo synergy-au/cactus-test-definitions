@@ -10,9 +10,6 @@ Criteria:
 
 Preconditions:
   actions:
-    - type: register-end-device # out-of-band registration for simplicity 
-      parameters:
-        registration_pin: 11223
     - type: set-poll-rate
       parameters:
         rate_seconds: 300
@@ -25,19 +22,57 @@ Preconditions:
 Steps:
   GET-DERC:
     event:
-      type: POST-request-received
+      type: GET-request-received
       parameters:
         endpoint: /edev/1/derp/1/derc
     actions:
-      - type: add-steps
+      - type: enable-steps
         parameters:
           steps:
             - WAIT-TILL-END
-    actions:
+            - POST-DERSTATUS-DISCONNECT
       - type: remove-steps
         parameters:
           steps:
             - GET-DERC
+
+  # This will wait until the client POST's a DERStatus saying it has disconnected
+  POST-DERSTATUS-DISCONNECT:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+    checks:
+      type: der-status-contents
+      parameters:
+        genConnectStatus: 0
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-RECONNECT
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-DISCONNECT
+
+  # This will wait until the client POST's a DERStatus saying it has reconnected
+  POST-DERSTATUS-RECONNECT:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+    checks:
+      type: der-status-contents
+      parameters:
+        genConnectStatus: 1
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-RECONNECT
           
   WAIT-TILL-END:
     event:
@@ -49,3 +84,5 @@ Steps:
         parameters:
           steps:
             - WAIT-TILL-END
+      - type: finish-test
+        parameters: {}
