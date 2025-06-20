@@ -1,0 +1,133 @@
+Description: Subscribe
+Category: Control
+Classes:
+  - S
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    - type: all-notifications-transmitted
+      parameters: {}
+
+Preconditions:
+  actions:
+    - type: register-end-device
+      parameters: {}
+        
+    
+    # Start by enabling everything at the beginning as each step is (mostly) independent of the others
+    - type: enable-steps
+      parameters:
+        steps:
+            - POST-SUBSCRIPTION-EDEV
+            - POST-SUBSCRIPTION-FSAL
+            - POST-SUBSCRIPTION-DERP
+            - POST-SUBSCRIPTION-DERC
+            - POST-SUBSCRIPTION-DEFAULT-DERC
+
+Steps:
+
+  # Wait for a subscription to /edev and then update the active EndDevice's postRate to trigger a notification
+  POST-SUBSCRIPTION-EDEV:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/sub
+        serve_request_first: true
+      checks:
+        - type: subscription-contents
+          parameters: 
+            subscribed_resource: /edev
+    actions:
+      - type: update-end-device
+        parameters:
+          postRate: 30
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SUBSCRIPTION-EDEV
+
+  # Wait for a subscription to /edev/1/fsa and then update the active fsa list to trigger a notification
+  POST-SUBSCRIPTION-FSAL:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/sub
+        serve_request_first: true
+      checks:
+        - type: subscription-contents
+          parameters: 
+            subscribed_resource: /edev/1/fsa
+    actions:
+      - type: update-fsa
+        parameters:
+          pollRate: 30
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SUBSCRIPTION-FSAL
+
+
+  # Wait for a subscription to /edev/1/derp and then update the active DERProgram list to trigger a notification
+  POST-SUBSCRIPTION-DERP:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/sub
+        serve_request_first: true
+      checks:
+        - type: subscription-contents
+          parameters: 
+            subscribed_resource: /edev/1/derp
+    actions:
+      - type: create-der-program
+        parameters:
+          primacy: 99
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SUBSCRIPTION-DERP
+
+  # Wait for a subscription to /edev/1/derp/1/derc and then create a DERControl to trigger a notification
+  POST-SUBSCRIPTION-DERC:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/sub
+        serve_request_first: true
+      checks:
+        - type: subscription-contents
+          parameters: 
+            subscribed_resource: /edev/1/derp/1/derc
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 600
+          primacy: 99
+          opModExpLimW: 0
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SUBSCRIPTION-DERC
+
+  # Wait for a subscription to /edev/1/derp/1/dderc and then update the DefaultDERControl to trigger a notification
+  POST-SUBSCRIPTION-DEFAULT-DERC:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/sub
+        serve_request_first: true
+      checks:
+        - type: subscription-contents
+          parameters: 
+            subscribed_resource: /edev/1/derp/1/dderc
+    actions:
+      - type: set-default-der-control
+        parameters:
+          opModImpLimW: 1234
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SUBSCRIPTION-DEFAULT-DERC

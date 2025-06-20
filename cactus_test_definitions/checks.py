@@ -36,6 +36,7 @@ class Check:
 # The parameter schema for each action, keyed by the action name
 CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "all-steps-complete": {"ignored_steps": ParameterSchema(False, ParameterType.ListString)},
+    "all-notifications-transmitted": {},
     "connectionpoint-contents": {},
     "der-settings-contents": {
         "setGradW": ParameterSchema(False, ParameterType.Integer),  # Hundredths of a percent / second
@@ -51,6 +52,7 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "readings-der-active-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-der-reactive-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-der-voltage": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
+    "subscription-contents": {"subscribed_resource": ParameterSchema(True, ParameterType.String)},
 }
 VALID_CHECK_NAMES: set[str] = set(CHECK_PARAMETER_SCHEMA.keys())
 

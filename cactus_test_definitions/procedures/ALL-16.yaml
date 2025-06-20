@@ -1,0 +1,65 @@
+Description: Default Controls – Ramp Rate
+Category: Control
+Classes:
+  - A
+  - S
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    - type: all-notifications-transmitted
+      parameters: {}
+
+Preconditions:
+  actions:
+    - type: register-end-device
+      parameters: {}
+    - type: set-poll-rate
+      parameters:
+        rate_seconds: 900 # Set this to a large value - we want to test they respond due to notification - not polling
+    
+Steps:
+  # NOTE: This particular test definition heavily implies that a subscription is required but never sets it as a 
+  # precondition / test procedure step. This test definition will treat the subscription creation as mandatory.
+  #
+  # Wait for a subscription to /edev/1/derp/1/dderc and then update the DefaultDERControl to trigger a notification
+  POST-SUBSCRIPTION-DEFAULT-DERC:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/sub
+        serve_request_first: true
+      checks:
+        - type: subscription-contents
+          parameters: 
+            subscribed_resource: /edev/1/derp/1/dderc
+    actions:
+      - type: set-default-der-control
+        parameters:
+          setGradW: 100 # hundredths of a percent - this is 1%
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSETTINGS-SET-GRAD-W
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SUBSCRIPTION-DEFAULT-DERC
+
+  # This will wait until the client POST's a DERSettings with the 1% setGradW
+  POST-DERSETTINGS-SET-GRAD-W:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+    checks:
+      type: der-settings-contents
+      parameters:
+        setGradW: 100
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSETTINGS-SET-GRAD-W

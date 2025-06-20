@@ -14,13 +14,26 @@ TestProcedures:
   ALL-10: !include ALL-10.yaml
   ALL-11: !include ALL-11.yaml
   ALL-12: !include ALL-12.yaml
+  ALL-13: !include ALL-13.yaml
+  ALL-14: !include ALL-14.yaml
+  ALL-15: !include ALL-15.yaml
+  ALL-16: !include ALL-16.yaml
   GEN-01: !include GEN-01.yaml
   GEN-02: !include GEN-02.yaml
   GEN-03: !include GEN-03.yaml
   GEN-04: !include GEN-04.yaml
+  GEN-05: !include GEN-05.yaml
+  GEN-06: !include GEN-06.yaml
+  GEN-07: !include GEN-07.yaml
+  GEN-08: !include GEN-08.yaml
   LOA-01: !include LOA-01.yaml
   LOA-02: !include LOA-02.yaml
   LOA-03: !include LOA-03.yaml
+  LOA-04: !include LOA-04.yaml
+  LOA-05: !include LOA-05.yaml
+  LOA-06: !include LOA-06.yaml
+  LOA-07: !include LOA-07.yaml
+  LOA-08: !include LOA-08.yaml
   OPT-1-IN-BAND: !include OPT-1-IN-BAND.yaml
   OPT-1-OUT-OF-BAND: !include OPT-1-OUT-OF-BAND.yaml
 

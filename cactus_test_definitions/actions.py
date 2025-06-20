@@ -53,6 +53,9 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "opModGenLimW": ParameterSchema(False, ParameterType.Float),
         "opModLoadLimW": ParameterSchema(False, ParameterType.Float),
     },
+    "create-der-program": {
+        "primacy": ParameterSchema(True, ParameterType.Integer),
+    },
     "cancel-active-der-controls": {},
     "set-poll-rate": {
         "rate_seconds": ParameterSchema(True, ParameterType.Integer),
@@ -65,6 +68,12 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "register-end-device": {
         "nmi": ParameterSchema(False, ParameterType.String),
         "registration_pin": ParameterSchema(False, ParameterType.Integer),
+    },
+    "update-end-device": {
+        "postRate": ParameterSchema(False, ParameterType.Integer),
+    },
+    "update-fsa": {
+        "pollRate": ParameterSchema(False, ParameterType.Integer),
     },
 }
 VALID_ACTION_NAMES: set[str] = set(ACTION_PARAMETER_SCHEMA.keys())

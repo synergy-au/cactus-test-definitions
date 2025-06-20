@@ -109,14 +109,16 @@ actions:
 | `remove-steps` | `steps: list[str]` | The names of `Step`'s that will be deactivated (if active) |
 | `finish-test` | None | When activated, the current test will be finished (shutdown) and all `Criteria` evaluated as if the client had requested finalization. |
 | `set-default-der-control` | `opModImpLimW: float/None` `opModExpLimW: float/None` `opModLoadLimW: float/None` `setGradW: float/None` `cancelled: bool/None` | Updates the DefaultDERControl's parameters with the specified values. If `cancelled` is `true`, all unspecified values will be set to None. |
-| `create-der-control` | `start: datetime` `duration_seconds: int` `pow_10_multipliers: int/None` `primacy: int/None` `randomizeStart_seconds: int/None` `opModEnergize: bool/None` `opModConnect: bool/None` `opModImpLimW: float/None` `opModExpLimW: float/None` `opModGenLimW: float/None` `opModLoadLimW: float/None`| Creates a DERControl with the specified start/duration and values |
+| `create-der-control` | `start: datetime` `duration_seconds: int` `pow_10_multipliers: int/None` `primacy: int/None` `randomizeStart_seconds: int/None` `opModEnergize: bool/None` `opModConnect: bool/None` `opModImpLimW: float/None` `opModExpLimW: float/None` `opModGenLimW: float/None` `opModLoadLimW: float/None`| Creates a DERControl with the specified start/duration and values. A new DERProgram will be created with primacy if no such DERProgram already exists |
+| `create-der-program` | `primacy: int` | Creates a DERProgram with the specified primacy |
 | `cancel-active-der-controls` | None | Cancels all active DERControls |
 | `set-poll-rate` | `rate_seconds: int` | Updates the server poll rate for ALL list endpoints |
 | `set-post-rate` | `rate_seconds: int` | Updates the server post rate for ALL endpoints listing a postRate |
 | `communications-status` | `enabled: bool` | If `enabled: true` simulates a full outage for the server (from the perspective of the client). Defaults to `enabled: false` at test start |
 | `edev-registration-links` | `enabled: bool` | If `enabled: false` `EndDevice` entities will NOT encode `RegistrationLink` elements. Defaults to `enabled: true` at test start |
-| `register-end-device` | `nmi: str/none` `registration_pin: int/None` | Creates a new `EndDevice`, optionally with the specified ConnectionPoint ID or PIN |
-
+| `register-end-device` | `nmi: str/None` `registration_pin: int/None` | Creates a new `EndDevice`, optionally with the specified ConnectionPoint ID or PIN |
+| `update-end-device` | `postRate: int/None` | Updates the active `EndDevice` with the specified values |
+| `update-fsa` | `pollRate: int/None` | Updates the current FSA list with the specified values |
 
 ### Checks
 
@@ -144,6 +146,7 @@ checks:
 | **name** | **params** | **description** |
 | -------- | ---------- | --------------- |
 | `all-steps-complete` | `ignored_steps: list[str]/None` | True if every `Step` in a `TestProcedure` has been deactivated (excepting any ignored steps) |
+| `all-notifications-transmitted` | None | True if every transmitted notification (pub/sub) has been received with a HTTP success code response from the subscription notification URI |
 | `connectionpoint-contents` | None | True if a `ConnectionPoint.id` has been set for the `EndDevice` under test |
 | `der-settings-contents` | `setGradW: int/None` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `der-capability-contents` | None | True if a `DERCapability` has been set for the `EndDevice` under test |

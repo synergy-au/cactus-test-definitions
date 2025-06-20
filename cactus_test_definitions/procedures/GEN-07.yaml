@@ -1,0 +1,128 @@
+Description: Default Controls – Export Limit
+Category: Control
+Classes:
+  - G
+  - S
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    - type: all-notifications-transmitted
+      parameters: {}
+
+Preconditions:
+  actions:
+    - type: register-end-device
+      parameters: {}
+    - type: set-poll-rate
+      parameters:
+        rate_seconds: 1800 # Set this to a large value - we want to test they respond due to notification - not polling
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 300
+        opModExpLimW: $(setMaxW * 2)
+    
+Steps:
+  # NOTE: This particular test definition heavily implies that a subscription is required but never sets it as a 
+  # precondition / test procedure step. This test definition will treat the subscription creation as mandatory.
+  #
+  # Wait for a subscription to /edev/1/derp/1/dderc and then start updating DefaultDERControl
+  POST-SUBSCRIPTION-DEFAULT-DERC:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/sub
+        serve_request_first: true
+      checks:
+        - type: subscription-contents
+          parameters: 
+            subscribed_resource: /edev/1/derp/1/dderc
+    actions:
+      - type: set-default-der-control
+        parameters:
+          opModExpLimW: $(setMaxW * 0.3)
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CANCELLATION
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SUBSCRIPTION-DEFAULT-DERC
+
+  WAIT-CANCELLATION:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 60
+    actions:
+      - type: cancel-active-der-controls
+        parameters: {}
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CANCELLATION
+
+  WAIT-CONTROL:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 60
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 600
+          opModExpLimW: $(setMaxW * 2)
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-FINISH
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL
+
+  WAIT-CONTROL-FINISH:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 660
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 600
+          opModExpLimW: 0
+      - type: set-default-der-control
+        parameters:
+          cancelled: true
+
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-FINISH
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CANCELLED-FINISH
+
+  WAIT-CANCELLED-FINISH:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 60
+    actions:
+      - type: cancel-active-der-controls
+        parameters: {}
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CANCELLED-FINISH
+      
