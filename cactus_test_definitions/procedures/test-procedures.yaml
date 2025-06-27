@@ -18,6 +18,8 @@ TestProcedures:
   ALL-14: !include ALL-14.yaml
   ALL-15: !include ALL-15.yaml
   ALL-16: !include ALL-16.yaml
+  ALL-17: !include ALL-17.yaml
+  ALL-18: !include ALL-18.yaml
   GEN-01: !include GEN-01.yaml
   GEN-02: !include GEN-02.yaml
   GEN-03: !include GEN-03.yaml
