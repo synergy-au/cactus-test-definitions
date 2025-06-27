@@ -1,0 +1,265 @@
+Description: Control Responses
+Category: Control
+Classes:
+  - A
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  actions:
+    - type: register-end-device
+      parameters: {}
+    - type: set-poll-rate
+      parameters:
+        rate_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 120
+        opModImpLimW: $(setMaxW * 2)
+    
+Steps:
+
+  # Step 1 - Wait for first "Received" response
+  POST-RESPONSE-RECEIVED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 1
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-RESPONSE-STARTED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-RESPONSE-RECEIVED
+
+  # Step 2 - Wait for first "Started" response
+  POST-RESPONSE-STARTED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 2
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-RESPONSE-COMPLETED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-RESPONSE-STARTED
+
+  # Step 3/4 - Wait for first "Completed" response and create DERControl in 5 minutes time
+  POST-RESPONSE-COMPLETED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 3
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-SECOND-RESPONSE-RECEIVED
+      - type: create-der-control
+        parameters:
+          start: $(now + '5 minutes')
+          duration_seconds: 600
+          opModImpLimW: $(setMaxW * 2)
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-RESPONSE-COMPLETED
+
+  # Step 4 - Wait for second "Received" response
+  POST-SECOND-RESPONSE-RECEIVED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 1
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-SECOND-RESPONSE-STARTED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SECOND-RESPONSE-RECEIVED
+
+  # Step 5 - Wait for second "Started" response then cancel control
+  POST-SECOND-RESPONSE-STARTED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 1
+    actions:
+      - type: cancel-active-der-controls
+        parameters: {}
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-SECOND-RESPONSE-CANCELLED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SECOND-RESPONSE-STARTED
+
+
+  # Step 6 - Wait for second "Cancelled" response - Configure control starting in 10
+  POST-SECOND-RESPONSE-CANCELLED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 6
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now + '10 minutes')
+          duration_seconds: 120
+          opModImpLimW: 0
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-THIRD-RESPONSE-RECEIVED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-SECOND-RESPONSE-CANCELLED
+
+  # Step 7 - Wait for third "Received" response then cancel it before it begins
+  POST-THIRD-RESPONSE-RECEIVED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 1
+    actions:
+      - type: cancel-active-der-controls
+        parameters: {}
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-THIRD-RESPONSE-CANCELLED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-THIRD-RESPONSE-RECEIVED
+
+  # Step 8 - Wait for the cancellation response, then configure a new control starting in 10
+  POST-THIRD-RESPONSE-CANCELLED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 6
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now + '10 minutes')
+          duration_seconds: 600
+          opModImpLimW: $(setMaxW * 2)
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-FOURTH-RESPONSE-RECEIVED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-THIRD-RESPONSE-CANCELLED
+
+  # Step 9 - wait for the next received - then schedule an overlapping control
+  POST-FOURTH-RESPONSE-RECEIVED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 1
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now + '10 minutes')
+          duration_seconds: 60
+          opModImpLimW: 0
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-FOURTH-RESPONSE-SUPERSEDED
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-FOURTH-RESPONSE-RECEIVED
+
+  # Wait for the superseded response
+  POST-FOURTH-RESPONSE-SUPERSEDED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/rsps/site_control/rsp
+        serve_request_first: true
+    checks:
+      - type: response-contents
+        parameters: 
+          latest: true
+          status: 7
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-FOURTH-RESPONSE-RECEIVED

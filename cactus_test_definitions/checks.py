@@ -53,6 +53,10 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "readings-der-reactive-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-der-voltage": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "subscription-contents": {"subscribed_resource": ParameterSchema(True, ParameterType.String)},
+    "response-contents": {
+        "latest": ParameterSchema(False, ParameterType.Boolean),
+        "status": ParameterSchema(False, ParameterType.Boolean),
+    },
 }
 VALID_CHECK_NAMES: set[str] = set(CHECK_PARAMETER_SCHEMA.keys())
 

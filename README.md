@@ -157,7 +157,7 @@ checks:
 | `readings-der-active-power` | `minimum_count: int` | True if MUP for DER active power has `minimum_count` entries |
 | `readings-der-reactive-power` | `minimum_count: int` | True if MUP for DER reactive power has `minimum_count` entries |
 | `readings-der-voltage` | `minimum_count: int` | True if MUP for DER voltage has `minimum_count` entries |
-
+| `response-contents` | `latest: bool/None` `status: int/None` | True if at least one received Response matches the filter. `latest` will only consider the most recent received Response.  |
 
 ### Parameter Variable Resolution
 

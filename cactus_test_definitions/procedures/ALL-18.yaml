@@ -1,0 +1,67 @@
+Description: Update Function Set Assignments Poll Rate
+Category: Control
+Classes:
+  - A
+  - DR-A
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  actions:
+    - type: register-end-device
+      parameters: {}
+    - type: set-poll-rate
+      parameters:
+        rate_seconds: 300 
+    
+Steps:
+
+  # As the client polls the FSA list - update the poll rate to 60 seconds
+  # Give them 120 seconds to poll again before shutting everything down
+  GET-FSA-LIST:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/fsa
+
+    actions:
+      - type: update-fsa
+        parameters:
+          pollRate: 60 
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-FSA-LIST-AGAIN
+            - WAIT-TEST-END
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-FSA-LIST
+
+  WAIT-TEST-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 120
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-TEST-END
+      - type: finish-test
+        parameters: {}
+
+  GET-FSA-LIST-AGAIN:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/fsa
+
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-FSA-LIST-AGAIN
