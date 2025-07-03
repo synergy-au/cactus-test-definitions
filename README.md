@@ -147,7 +147,7 @@ checks:
 | -------- | ---------- | --------------- |
 | `all-steps-complete` | `ignored_steps: list[str]/None` | True if every `Step` in a `TestProcedure` has been deactivated (excepting any ignored steps) |
 | `all-notifications-transmitted` | None | True if every transmitted notification (pub/sub) has been received with a HTTP success code response from the subscription notification URI |
-| `connectionpoint-contents` | None | True if a `ConnectionPoint.id` has been set for the `EndDevice` under test |
+| `end-device-contents` | `has_connection_point_id: bool/None` | True if an `EndDevice` is registered and optionally has the specified contents. `has_connection_point_id` (if True) will check whether the active `EndDevice` has `ConnectionPoint.id` specified. |
 | `der-settings-contents` | `setGradW: int/None` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `der-capability-contents` | None | True if a `DERCapability` has been set for the `EndDevice` under test |
 | `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |

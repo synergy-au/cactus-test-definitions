@@ -13,8 +13,9 @@ Criteria:
   checks:
     - type: all-steps-complete
       parameters: {}
-    - type: connectionpoint-contents
-      parameters: {}
+    - type: end-device-contents
+      parameters:
+        has_connection_point_id: true
       
 Steps:
   GET-DCAP:

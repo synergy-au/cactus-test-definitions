@@ -37,7 +37,9 @@ class Check:
 CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "all-steps-complete": {"ignored_steps": ParameterSchema(False, ParameterType.ListString)},
     "all-notifications-transmitted": {},
-    "connectionpoint-contents": {},
+    "end-device-contents": {
+        "has_connection_point_id": ParameterSchema(False, ParameterType.Boolean),
+    },
     "der-settings-contents": {
         "setGradW": ParameterSchema(False, ParameterType.Integer),  # Hundredths of a percent / second
     },
