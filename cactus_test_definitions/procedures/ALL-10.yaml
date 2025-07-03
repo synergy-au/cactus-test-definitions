@@ -10,9 +10,10 @@ Criteria:
 
 Preconditions:
   actions:
-    - type: set-poll-rate
+    - type: set-comms-rate
       parameters:
-        rate_seconds: 300
+        der_list_poll_seconds: 300
+        derp_list_poll_seconds: 300
     - type: create-der-control
       parameters:
         start: $(now + '5 minutes')

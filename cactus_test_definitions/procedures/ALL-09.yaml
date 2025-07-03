@@ -31,9 +31,9 @@ Steps:
       parameters:
         endpoint: /mup
     actions:
-      - type: set-post-rate
+      - type: set-comms-rate
         parameters:
-          rate_seconds: 300
+          mup_post_seconds: 300
       - type: enable-steps
         parameters:
           steps:
@@ -51,9 +51,9 @@ Steps:
       parameters:
         endpoint: /mup
     actions:
-      - type: set-post-rate
+      - type: set-comms-rate
         parameters:
-          rate_seconds: 60
+          mup_post_seconds: 60
       - type: enable-steps
         parameters:
           steps:

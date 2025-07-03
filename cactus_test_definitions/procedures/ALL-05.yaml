@@ -24,12 +24,10 @@ Criteria:
 
 Preconditions:
   actions:
-    - type: set-post-rate
+    - type: set-comms-rate
       parameters:
-        rate_seconds: 60
-    - type: set-poll-rate
-      parameters:
-        rate_seconds: 60
+        der_list_poll_seconds: 60
+        mup_post_seconds: 60
 
 Steps:
   GET-MUP:

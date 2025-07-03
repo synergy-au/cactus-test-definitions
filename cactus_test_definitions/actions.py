@@ -57,23 +57,20 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "primacy": ParameterSchema(True, ParameterType.Integer),
     },
     "cancel-active-der-controls": {},
-    "set-poll-rate": {
-        "rate_seconds": ParameterSchema(True, ParameterType.Integer),
-    },
-    "set-post-rate": {
-        "rate_seconds": ParameterSchema(True, ParameterType.Integer),
+    "set-comms-rate": {
+        "dcap_poll_seconds": ParameterSchema(False, ParameterType.Integer),
+        "edev_post_seconds": ParameterSchema(False, ParameterType.Integer),
+        "edev_list_poll_seconds": ParameterSchema(False, ParameterType.Integer),
+        "fsa_list_poll_seconds": ParameterSchema(False, ParameterType.Integer),
+        "derp_list_poll_seconds": ParameterSchema(False, ParameterType.Integer),
+        "der_list_poll_seconds": ParameterSchema(False, ParameterType.Integer),
+        "mup_post_seconds": ParameterSchema(False, ParameterType.Integer),
     },
     "communications-status": {"enabled": ParameterSchema(True, ParameterType.Boolean)},
     "edev-registration-links": {"enabled": ParameterSchema(True, ParameterType.Boolean)},
     "register-end-device": {
         "nmi": ParameterSchema(False, ParameterType.String),
         "registration_pin": ParameterSchema(False, ParameterType.Integer),
-    },
-    "update-end-device": {
-        "postRate": ParameterSchema(False, ParameterType.Integer),
-    },
-    "update-fsa": {
-        "pollRate": ParameterSchema(False, ParameterType.Integer),
     },
 }
 VALID_ACTION_NAMES: set[str] = set(ACTION_PARAMETER_SCHEMA.keys())

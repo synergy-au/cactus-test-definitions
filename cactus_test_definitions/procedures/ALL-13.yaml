@@ -40,9 +40,9 @@ Steps:
           parameters: 
             subscribed_resource: /edev
     actions:
-      - type: update-end-device
+      - type: set-comms-rate
         parameters:
-          postRate: 30
+          edev_post_seconds: 30
       - type: remove-steps
         parameters:
           steps:
@@ -60,9 +60,9 @@ Steps:
           parameters: 
             subscribed_resource: /edev/1/fsa
     actions:
-      - type: update-fsa
+      - type: set-comms-rate
         parameters:
-          pollRate: 30
+          fsa_list_poll_seconds: 30
       - type: remove-steps
         parameters:
           steps:

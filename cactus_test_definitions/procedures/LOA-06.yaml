@@ -15,9 +15,11 @@ Preconditions:
   actions:
     - type: register-end-device
       parameters: {}
-    - type: set-poll-rate
+    - type: set-comms-rate
       parameters:
-        rate_seconds: 900 # Set this to a large value - we want to test they respond due to notification - not polling
+        # Set this to a large value - we want to test they respond due to notification - not polling
+        der_list_poll_seconds: 1800
+        derp_list_poll_seconds: 1800
     - type: create-der-control
       parameters:
         start: $(now)

@@ -1,8 +1,7 @@
-Description: Update Function Set Assignments Poll Rate
+Description: Update DER Program Poll Rate
 Category: Control
 Classes:
   - A
-  - DR-A
 
 Criteria:
   checks:
@@ -15,17 +14,17 @@ Preconditions:
       parameters: {}
     - type: set-comms-rate
       parameters:
-        fsa_list_poll_seconds: 300
+        fsa_list_poll_seconds: 120
     
 Steps:
 
   # As the client polls the FSA list - update the poll rate to 60 seconds
   # Give them 120 seconds to poll again before shutting everything down
-  GET-FSA-LIST:
+  GET-DERP-LIST-1:
     event:
       type: GET-request-received
       parameters:
-        endpoint: /edev/1/fsa
+        endpoint: /edev/1/derp
 
     actions:
       - type: set-comms-rate
