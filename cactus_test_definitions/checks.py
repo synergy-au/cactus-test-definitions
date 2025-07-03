@@ -57,7 +57,7 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "subscription-contents": {"subscribed_resource": ParameterSchema(True, ParameterType.String)},
     "response-contents": {
         "latest": ParameterSchema(False, ParameterType.Boolean),
-        "status": ParameterSchema(False, ParameterType.Boolean),
+        "status": ParameterSchema(False, ParameterType.Integer),
     },
 }
 VALID_CHECK_NAMES: set[str] = set(CHECK_PARAMETER_SCHEMA.keys())
