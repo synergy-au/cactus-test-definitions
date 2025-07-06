@@ -69,7 +69,7 @@ Steps:
             - POST-SUBSCRIPTION-FSAL
 
 
-  # Wait for a subscription to /edev/1/derp and then update the active DERProgram list to trigger a notification
+  # Wait for a subscription to /edev/1/fsa/1/derp and then update the active DERProgram list to trigger a notification
   POST-SUBSCRIPTION-DERP:
     event:
       type: POST-request-received
@@ -79,7 +79,7 @@ Steps:
       checks:
         - type: subscription-contents
           parameters: 
-            subscribed_resource: /edev/1/derp
+            subscribed_resource: /edev/1/fsa/1/derp
     actions:
       - type: create-der-program
         parameters:

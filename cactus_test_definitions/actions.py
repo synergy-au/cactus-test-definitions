@@ -45,6 +45,7 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "duration_seconds": ParameterSchema(True, ParameterType.Integer),
         "pow_10_multipliers": ParameterSchema(False, ParameterType.Integer),
         "primacy": ParameterSchema(False, ParameterType.Integer),
+        "fsa_id": ParameterSchema(False, ParameterType.Integer),
         "randomizeStart_seconds": ParameterSchema(False, ParameterType.Integer),
         "opModEnergize": ParameterSchema(False, ParameterType.Boolean),
         "opModConnect": ParameterSchema(False, ParameterType.Boolean),
@@ -55,6 +56,7 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     },
     "create-der-program": {
         "primacy": ParameterSchema(True, ParameterType.Integer),
+        "fsa_id": ParameterSchema(False, ParameterType.Integer),
     },
     "cancel-active-der-controls": {},
     "set-comms-rate": {
