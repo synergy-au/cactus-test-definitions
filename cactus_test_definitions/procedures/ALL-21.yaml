@@ -1,0 +1,69 @@
+Description: Randomisation
+Category: Control
+Classes:
+  - A
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
+  actions:
+    - type: set-comms-rate
+      parameters:
+        fsa_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
+        der_list_poll_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: ${now}
+        duration_seconds: 120
+        randomizeStart_seconds: 60
+        opModExpLimW: ${setMaxW * 2}
+    - type: create-der-control
+      parameters:
+        start: ${now + '120 seconds'}
+        duration_seconds: 120
+        randomizeStart_seconds: 60
+        opModExpLimW: ${setMaxW * 2}
+    - type: create-der-control
+      parameters:
+        start: ${now + '240 seconds'}
+        duration_seconds: 120
+        randomizeStart_seconds: 60
+        opModExpLimW: ${setMaxW * 2}
+    - type: create-der-control
+      parameters:
+        start: ${now + '360 seconds'}
+        duration_seconds: 120
+        randomizeStart_seconds: 60
+        opModExpLimW: ${setMaxW * 2}
+    - type: create-der-control
+      parameters:
+        start: ${now + '480 seconds'}
+        duration_seconds: 120
+        randomizeStart_seconds: 60
+        opModExpLimW: ${setMaxW * 2}
+    
+    
+Steps:
+
+  # We don't have a "is random enough" check - it is expected that will be evaluated by a human administering the test
+  # specifically looking at the response timings
+  WAIT-TEST-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 660
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-TEST-END
+      - type: finish-test
+        parameters: {}
+
