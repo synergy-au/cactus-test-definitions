@@ -41,6 +41,7 @@ class TestProcedureId(StrEnum):
     ALL_20 = "ALL-20"
     ALL_21 = "ALL-21"
     ALL_22 = "ALL-22"
+    ALL_23 = "ALL-23"
     GEN_01 = "GEN-01"
     GEN_02 = "GEN-02"
     GEN_03 = "GEN-03"

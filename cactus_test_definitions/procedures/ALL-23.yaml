@@ -1,0 +1,52 @@
+Description: Validation of Scaling Factors
+Category: Control
+Classes:
+  - A
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  actions:
+    - type: set-comms-rate
+      parameters:
+        der_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 60
+        opModExpLimW: $(setMaxW * 2)
+        opModImpLimW: $(setMaxW * 2)
+    - type: create-der-control
+      parameters:
+        start: $(now + '1 minute')
+        duration_seconds: 60
+        opModExpLimW: $(setMaxW * 0.3)
+        opModImpLimW: $(setMaxW * 0.3)
+        pow_10_multipliers: 2
+    - type: create-der-control
+      parameters:
+        start: $(now + '2 minutes')
+        duration_seconds: 60
+        opModExpLimW: $(setMaxW * 0.4)
+        opModImpLimW: $(setMaxW * 0.4)
+        pow_10_multipliers: 1
+    
+Steps:
+  # This particular test is validated by out of band methods for compliance (or non compliance) to the DOEs
+  # (eg readings from a power meter)
+  WAIT-TEST-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 660
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-TEST-END
+      - type: finish-test
+        parameters: {}
