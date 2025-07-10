@@ -1,0 +1,122 @@
+Description: Communication Loss
+Category: Control
+Classes:
+  - A
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
+  actions:
+    - type: set-comms-rate
+      parameters:
+        fsa_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
+        der_list_poll_seconds: 60
+        mup_post_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 120
+        opModExpLimW: $(setMaxW * 2)
+        opModImpLimW: $(setMaxW * 2)
+    - type: set-default-der-control
+      parameters:
+        opModImpLimW: 0  
+        opModExpLimW: 0
+    
+Steps:
+
+  
+  # Wait for the client to pickup the updated DefaultDERControl
+  GET-DEFAULT-DERC:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/dderc
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-SHORT-PERIOD
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DEFAULT-DERC
+
+  # Wait for a period - but not long enough for the active control to expire then kill the comms
+  WAIT-SHORT-PERIOD:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 10
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-SHORT-PERIOD
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END
+      - type: communications-status
+        parameters:
+          enabled: false
+
+  # Wait for the active control to expire and for an additional 5 minutes to pass (comms is already disabled)
+  WAIT-CONTROL-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 420
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-TEST-FINISH
+            - GET-DERC-AFTER-COMMS-RESTORE
+      - type: communications-status
+        parameters:
+          enabled: true
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 300
+          opModExpLimW: $(setMaxW * 2)
+          opModImpLimW: $(setMaxW * 2)
+
+  # Make sure that the client has started polling again
+  GET-DERC-AFTER-COMMS-RESTORE:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC-AFTER-COMMS-RESTORE
+
+  # Let the current control run for a period before shutting down.
+  WAIT-TEST-FINISH:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 120
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-TEST-FINISH
+      - type: finish-test
+        parameters: {}
+

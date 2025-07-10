@@ -20,34 +20,34 @@ Preconditions:
         der_list_poll_seconds: 60
     - type: create-der-control
       parameters:
-        start: ${now}
+        start: $(now)
         duration_seconds: 120
         randomizeStart_seconds: 60
-        opModExpLimW: ${setMaxW * 2}
+        opModExpLimW: $(setMaxW * 2)
     - type: create-der-control
       parameters:
-        start: ${now + '120 seconds'}
+        start: $(now + '120 seconds')
         duration_seconds: 120
         randomizeStart_seconds: 60
-        opModExpLimW: ${setMaxW * 2}
+        opModExpLimW: $(setMaxW * 2)
     - type: create-der-control
       parameters:
-        start: ${now + '240 seconds'}
+        start: $(now + '240 seconds')
         duration_seconds: 120
         randomizeStart_seconds: 60
-        opModExpLimW: ${setMaxW * 2}
+        opModExpLimW: $(setMaxW * 2)
     - type: create-der-control
       parameters:
-        start: ${now + '360 seconds'}
+        start: $(now + '360 seconds')
         duration_seconds: 120
         randomizeStart_seconds: 60
-        opModExpLimW: ${setMaxW * 2}
+        opModExpLimW: $(setMaxW * 2)
     - type: create-der-control
       parameters:
-        start: ${now + '480 seconds'}
+        start: $(now + '480 seconds')
         duration_seconds: 120
         randomizeStart_seconds: 60
-        opModExpLimW: ${setMaxW * 2}
+        opModExpLimW: $(setMaxW * 2)
     
     
 Steps:

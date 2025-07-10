@@ -38,7 +38,7 @@ Steps:
       - type: remove-steps
         parameters:
           steps:
-            - GET-FSA-LIST
+            - GET-DERP-LIST-1
 
   WAIT-TEST-END:
     event:
