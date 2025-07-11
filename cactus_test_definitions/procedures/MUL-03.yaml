@@ -1,0 +1,45 @@
+Description: Validate DERCapability and DERSettings For Multiple DER
+Category: Monitoring
+Classes:
+  - M
+  
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    - type: der-capability-contents
+      parameters: {}
+    - type: der-settings-contents
+      parameters: {}
+    - type: der-status-contents
+      parameters: {}
+
+Steps:
+  
+  POST-DERSETTINGS-FIRST:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/derg
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSETTINGS-FIRST
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSETTINGS-UPDATED
+      
+  # There is little we can automatically validate - this test will rely on the lab technician to validate the 
+  # DERSettings being reported in the output report
+  POST-DERSETTINGS-UPDATED:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/derg
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSETTINGS-UPDATED

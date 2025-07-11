@@ -1,0 +1,67 @@
+Description: Returning DERStatus Values for Multiple DER
+Category: Monitoring
+Classes:
+  - M
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+
+Preconditions:
+  checks:
+    - type: der-status-contents
+      parameters: 
+        genConnectStatus: 1
+  actions:
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 900
+        opModExpLimW: $(setMaxW * 2)
+        opModImpLimW: $(setMaxW * 2)
+
+Steps:
+  
+  # The client powers off one DER
+  POST-DERSTATUS-FIRST-DISCONNECT:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+      # Only trigger this if the server has an updated DERStatus
+      checks:
+        - type: der-status-contents
+          parameters: 
+            operationalModeStatus: 2
+            genConnectStatus: 7 # Bits 0, 1 and 2 are all set
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-FULL-DISCONNECT
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-FIRST-DISCONNECT
+  
+  # The client powers off all remaining DER
+  POST-DERSTATUS-FULL-DISCONNECT:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+        serve_request_first: true # Run this AFTER server receives the request
+      # Only trigger this if the server has an updated DERStatus
+      checks:
+        - type: der-status-contents
+          parameters: 
+            operationalModeStatus: 1
+            genConnectStatus: 0 # Bits 0, 1 and 2 are all NOT set
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-FULL-DISCONNECT

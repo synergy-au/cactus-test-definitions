@@ -58,6 +58,9 @@ class TestProcedureId(StrEnum):
     LOA_06 = "LOA-06"
     LOA_07 = "LOA-07"
     LOA_08 = "LOA-08"
+    MUL_01 = "MUL-01"
+    MUL_02 = "MUL-02"
+    MUL_03 = "MUL-03"
     OPT_1_IN_BAND = "OPT-1-IN-BAND"
     OPT_1_OUT_OF_BAND = "OPT-1-OUT-OF-BAND"
 

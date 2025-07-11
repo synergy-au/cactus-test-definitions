@@ -41,6 +41,9 @@ TestProcedures:
   LOA-06: !include LOA-06.yaml
   LOA-07: !include LOA-07.yaml
   LOA-08: !include LOA-08.yaml
+  MUL-01: !include MUL-01.yaml
+  MUL-02: !include MUL-02.yaml
+  MUL-03: !include MUL-03.yaml
   OPT-1-IN-BAND: !include OPT-1-IN-BAND.yaml
   OPT-1-OUT-OF-BAND: !include OPT-1-OUT-OF-BAND.yaml
 
