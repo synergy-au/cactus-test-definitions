@@ -53,6 +53,7 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "opModExpLimW": ParameterSchema(False, ParameterType.Float),
         "opModGenLimW": ParameterSchema(False, ParameterType.Float),
         "opModLoadLimW": ParameterSchema(False, ParameterType.Float),
+        "opModFixedW": ParameterSchema(False, ParameterType.Float),
     },
     "create-der-program": {
         "primacy": ParameterSchema(True, ParameterType.Integer),
