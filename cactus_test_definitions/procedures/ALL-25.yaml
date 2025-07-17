@@ -1,58 +1,55 @@
-Description: Active Controls – Disconnect
-Category: Control
+Description: De-energisation of DER
+Category: DER
 Classes:
-  - A
-  - S
+  - DER-A
 
 Criteria:
   checks:
     - type: all-steps-complete
       parameters: {}
-    - type: all-notifications-transmitted
-      parameters: {}
 
 Preconditions:
-  actions:
-    - type: register-end-device
+  checks: 
+    - type: end-device-contents
       parameters: {}
+    - type: der-settings-contents
+      parameters: {}
+  actions:
     - type: set-comms-rate
       parameters:
-        # Set this to a large value - we want to test they respond due to notification - not polling
-        der_list_poll_seconds: 900
-        derp_list_poll_seconds: 900
+        der_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
+        mup_post_seconds: 60
     - type: create-der-control
       parameters:
         start: $(now)
         duration_seconds: 300
-        opModConnect: true
+        opModExpLimW: $(setMaxW * 2)
+        opModImpLimW: $(setMaxW * 2)
     
 Steps:
-  # NOTE: This particular test definition heavily implies that a subscription is required but never sets it as a 
-  # precondition / test procedure step. This test definition will treat the subscription creation as mandatory.
-  #
-  # Wait for a subscription to /edev/1/derp/1/derc and then add a DERControl in the near future
-  POST-SUBSCRIPTION-DERC:
+  # Step 1 - create opModEnergize=false control
+  GET-DERC:
     event:
-      type: POST-request-received
+      type: GET-request-received
       parameters:
-        endpoint: /edev/1/sub
-        serve_request_first: true
-      checks:
-        - type: subscription-contents
-          parameters: 
-            subscribed_resource: /edev/1/derp/1/derc
+        endpoint: /edev/1/derp/1/derc
     actions:
       - type: create-der-control
         parameters:
           start: $(now)
-          duration_seconds: 600
-          opModConnect: false
+          duration_seconds: 300
+          opModEnergize: false
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-DISCONNECT
       - type: remove-steps
         parameters:
           steps:
-            - POST-SUBSCRIPTION-DERC
+            - GET-DERC
 
-
+  # Step 1 - wait for the client to report de-energize - then trigger a new re-energize control
   POST-DERSTATUS-DISCONNECT:
     event:
       type: POST-request-received
@@ -63,22 +60,23 @@ Steps:
       checks:
         - type: der-status-contents
           parameters: 
-            genConnectStatus_bit0: false
+            genConnectStatus_bit2: false
     actions:
-      - type: enable-steps
-        parameters:
-          steps:
-            - POST-DERSTATUS-CONNECT
-      - type: create-der-control
-        parameters:
-          start: $(now)
-          duration_seconds: 600
-          opModConnect: true
       - type: remove-steps
         parameters:
           steps:
             - POST-DERSTATUS-DISCONNECT
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 300
+          opModEnergize: true
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-CONNECT
 
+  # Step 2 - Wait for re-energize
   POST-DERSTATUS-CONNECT:
     event:
       type: POST-request-received
@@ -95,3 +93,5 @@ Steps:
         parameters:
           steps:
             - POST-DERSTATUS-CONNECT
+
+  

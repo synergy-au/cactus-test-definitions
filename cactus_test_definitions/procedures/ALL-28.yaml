@@ -1,0 +1,73 @@
+Description: Validate Operating Telemetry
+Category: DER
+Classes:
+  - DER-A
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+    # Test is ~11 minutes of waiting which should leave enough time for at least 10 reading posts
+    - type: readings-site-active-power
+      parameters: {"minimum_count": 10} 
+    - type: readings-der-active-power
+      parameters: {"minimum_count": 10}
+
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
+    - type: der-settings-contents
+      parameters: {}
+  actions:
+    - type: set-comms-rate
+      parameters:
+        der_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
+        mup_post_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 120
+        opModExpLimW: $(setMaxW * 2)
+        opModImpLimW: $(setMaxW * 2)
+    - type: create-der-control
+      parameters:
+        start: $(now + '2 minutes')
+        duration_seconds: 120
+        opModExpLimW: $(setMaxW * 0.3)
+        opModImpLimW: $(setMaxW * 0.3)
+    - type: create-der-control
+      parameters:
+        start: $(now + '4 minutes')
+        duration_seconds: 120
+        opModExpLimW: $(setMaxW * 0.2)
+        opModImpLimW: $(setMaxW * 0.2)
+    - type: create-der-control
+      parameters:
+        start: $(now + '6 minutes')
+        duration_seconds: 120
+        opModExpLimW: $(setMaxW * 0.1)
+        opModImpLimW: $(setMaxW * 0.1)
+    - type: create-der-control
+      parameters:
+        start: $(now + '8 minutes')
+        duration_seconds: 120
+        opModExpLimW: 0
+        opModImpLimW: 0
+
+Steps:
+  
+  WAIT-TEST-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 660 # Wait for all controls to expire
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-TEST-END
+      - type: finish-test
+        parameters: {}

@@ -1,0 +1,64 @@
+Description: Response to Cancelled Export Control
+Category: DER
+Classes:
+  - DER-G
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  checks: 
+    - type: end-device-contents
+      parameters: {}
+    - type: der-settings-contents
+      parameters: {}
+  actions:
+    - type: set-comms-rate
+      parameters:
+        der_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
+        mup_post_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 300
+        opModExpLimW: $(setMaxW * 2)
+    - type: set-default-der-control
+      parameters:
+        opModExpLimW: $(setMaxW * 0.3)
+    
+Steps:
+  GET-DERC:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+    actions:
+      - type: cancel-active-der-controls
+        parameters: {}
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-TILL-END
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC
+
+  # Run the test for a short while after cancellation to capture any readings
+  WAIT-TILL-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 120
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-TILL-END
+      - type: finish-test
+        parameters: {}
+
+  

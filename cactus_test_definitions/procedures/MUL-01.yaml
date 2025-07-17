@@ -13,7 +13,7 @@ Preconditions:
   checks:
     - type: der-status-contents
       parameters: 
-        genConnectStatus: 1
+        genConnectStatus_bit0: true
   actions:
     - type: create-der-control
       parameters:
@@ -36,7 +36,9 @@ Steps:
         - type: der-status-contents
           parameters: 
             operationalModeStatus: 2
-            genConnectStatus: 7 # Bits 0, 1 and 2 are all set
+            genConnectStatus_bit0: true
+            genConnectStatus_bit1: true
+            genConnectStatus_bit2: true
     actions:
       - type: enable-steps
         parameters:
@@ -59,7 +61,9 @@ Steps:
         - type: der-status-contents
           parameters: 
             operationalModeStatus: 1
-            genConnectStatus: 0 # Bits 0, 1 and 2 are all NOT set
+            genConnectStatus_bit0: false
+            genConnectStatus_bit1: false
+            genConnectStatus_bit2: false
     actions:
       - type: remove-steps
         parameters:

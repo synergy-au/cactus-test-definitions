@@ -47,7 +47,7 @@ Steps:
     checks:
       type: der-status-contents
       parameters:
-        genConnectStatus: 0
+        genConnectStatus_bit0: false
     actions:
       - type: enable-steps
         parameters:
@@ -68,7 +68,7 @@ Steps:
     checks:
       type: der-status-contents
       parameters:
-        genConnectStatus: 1
+        genConnectStatus_bit0: true
     actions:
       - type: remove-steps
         parameters:

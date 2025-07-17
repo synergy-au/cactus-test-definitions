@@ -113,7 +113,7 @@ actions:
 | `create-der-program` | `primacy: int` `fsa_id: int/None` | Creates a DERProgram with the specified primacy. Will be assigned under FunctionSetAssignment 1 unless `fsa_id` says otherwise. |
 | `cancel-active-der-controls` | None | Cancels all active DERControls |
 | `set-comms-rate` | `dcap_poll_seconds: int/None` `edev_post_seconds: int/None` `edev_list_poll_seconds: int/None` `fsa_list_poll_seconds: int/None` `derp_list_poll_seconds: int/None` `der_list_poll_seconds: int/None` `mup_post_seconds: int/None` | Updates one or more post/poll rates for various resources. For non list resources, the rate will apply to all resources. Unspecified values will not update existing server values. |
-| `communications-status` | `enabled: bool` | If `enabled: true` simulates a full outage for the server (from the perspective of the client). Defaults to `enabled: false` at test start |
+| `communications-status` | `enabled: bool` | If `enabled: false` simulates a full outage for the server (from the perspective of the client). There are many potential outage classes (eg: networking, DNS, software, performance issues) - for consistency the recommended outage simulation is for all requests to be served with a HTTP 500. Defaults to `enabled: true` at test start |
 | `edev-registration-links` | `enabled: bool` | If `enabled: false` `EndDevice` entities will NOT encode `RegistrationLink` elements. Defaults to `enabled: true` at test start |
 | `register-end-device` | `nmi: str/None` `registration_pin: int/None` | Creates a new `EndDevice`, optionally with the specified ConnectionPoint ID or PIN |
 
@@ -148,7 +148,7 @@ checks:
 | `end-device-contents` | `has_connection_point_id: bool/None` | True if an `EndDevice` is registered and optionally has the specified contents. `has_connection_point_id` (if True) will check whether the active `EndDevice` has `ConnectionPoint.id` specified. |
 | `der-settings-contents` | `setGradW: int/None` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `der-capability-contents` | None | True if a `DERCapability` has been set for the `EndDevice` under test |
-| `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
+| `der-status-contents` | `genConnectStatus: int/None` `genConnectStatus_bit0: bool/None` `genConnectStatus_bit1: bool/None` `genConnectStatus_bit2: bool/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values). `genConnectStatus` can be asserted in aggregate or bit by bit. |
 | `readings-site-active-power` | `minimum_count: int` | True if MUP for site wide active power has `minimum_count` entries |
 | `readings-site-reactive-power` | `minimum_count: int` | True if MUP for site wide reactive power has `minimum_count` entries |
 | `readings-site-voltage` | `minimum_count: int` | True if MUP for site wide voltage has `minimum_count` entries |

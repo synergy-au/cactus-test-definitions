@@ -1,0 +1,106 @@
+Description: Persisting Settings Through Reconnection
+Category: DER
+Classes:
+  - DER-A
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
+
+  actions:
+    - type: set-comms-rate
+      parameters:
+        der_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
+        mup_post_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 120
+        opModExpLimW: $(setMaxW * 0.3)
+        opModImpLimW: $(setMaxW * 0.3)
+
+Steps:
+  
+  # We will wait until the client picks up the DERControl before killing the comms
+  GET-DERC:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+        serve_request_first: true
+    actions:
+      - type: communications-status
+        parameters:
+          enabled: false
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-COMMS-RESTART
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC
+
+  # Wait for a few polls before restarting comms
+  WAIT-COMMS-RESTART:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 180 # Wait for a few polls
+    actions:
+      - type: communications-status
+        parameters:
+          enabled: true
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-UPDATED-DERC
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-COMMS-RESTART
+      
+
+  # Once re-established - wait for them to poll and then serve an updated DERControl 
+  GET-UPDATED-DERC:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 600
+          opModExpLimW: $(setMaxW * 0.5)
+          opModImpLimW: $(setMaxW * 0.5)
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-TEST-FINISH
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-UPDATED-DERC
+
+  # Wait for a few polls before shutting the test down
+  WAIT-TEST-FINISH:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 120
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-TEST-FINISH
+      - type: finish-test
+        parameters: {}
+    
