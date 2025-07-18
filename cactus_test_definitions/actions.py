@@ -33,6 +33,7 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "remove-steps": {"steps": ParameterSchema(True, ParameterType.ListString)},
     "finish-test": {},
     "set-default-der-control": {
+        "derp_id": ParameterSchema(False, ParameterType.Integer),
         "opModImpLimW": ParameterSchema(False, ParameterType.Float),
         "opModExpLimW": ParameterSchema(False, ParameterType.Float),
         "opModGenLimW": ParameterSchema(False, ParameterType.Float),

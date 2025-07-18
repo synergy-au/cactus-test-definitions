@@ -39,6 +39,7 @@ TestProcedures:
   GEN-07: !include GEN-07.yaml
   GEN-08: !include GEN-08.yaml
   GEN-09: !include GEN-09.yaml
+  GEN-10: !include GEN-10.yaml
   LOA-01: !include LOA-01.yaml
   LOA-02: !include LOA-02.yaml
   LOA-03: !include LOA-03.yaml
@@ -48,6 +49,7 @@ TestProcedures:
   LOA-07: !include LOA-07.yaml
   LOA-08: !include LOA-08.yaml
   LOA-09: !include LOA-09.yaml
+  LOA-10: !include LOA-10.yaml
   MUL-01: !include MUL-01.yaml
   MUL-02: !include MUL-02.yaml
   MUL-03: !include MUL-03.yaml
