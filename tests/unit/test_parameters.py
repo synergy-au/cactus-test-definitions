@@ -81,6 +81,15 @@ def test_is_valid_parameter_type_skipped_values(value: Any, type: ParameterType)
         (ParameterType.ListString, False, False),
         (ParameterType.ListString, True, False),
         (ParameterType.ListString, 123, False),
+        (ParameterType.HexBinary, "AB", True),
+        (ParameterType.HexBinary, "XY", False),
+        (ParameterType.HexBinary, 12, False),
+        (ParameterType.HexBinary, ["AB"], False),
+        (ParameterType.HexBinary, 0.0, False),
+        (ParameterType.HexBinary, [12], False),
+        (ParameterType.HexBinary, 1.2, False),
+        (ParameterType.HexBinary, Decimal("1.0"), False),
+        (ParameterType.HexBinary, True, False),
     ],
 )
 def test_is_valid_parameter_type(type: ParameterType, value: Any, expected: bool):

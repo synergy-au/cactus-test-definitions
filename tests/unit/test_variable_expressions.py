@@ -140,9 +140,9 @@ def test_parse_time_delta(unquoted_raw: str, expected: timedelta | type[Exceptio
         ('"0.12 days"', Constant(timedelta(days=0.12))),
         (" \t  '-4.56 hours' \t  ", Constant(timedelta(hours=-4.56))),
         ("now", NamedVariable(NamedVariableType.NOW)),
-        ("NOW", NamedVariable(NamedVariableType.NOW)),  # case insensitive
+        ("NOW", UnparseableVariableExpressionError),  # case sensitive
         ("setMaxW", NamedVariable(NamedVariableType.DERSETTING_SET_MAX_W)),
-        ("SETMAXW", NamedVariable(NamedVariableType.DERSETTING_SET_MAX_W)),  # case insensitive
+        ("SETMAXW", UnparseableVariableExpressionError),  # case sensitive
         ("foo", UnparseableVariableExpressionError),  # unknown named variable
         (
             "0.5 * 0.2",
@@ -168,6 +168,43 @@ def test_parse_time_delta(unquoted_raw: str, expected: timedelta | type[Exceptio
             'now + "3 day"',
             Expression(OperationType.ADD, NamedVariable(NamedVariableType.NOW), Constant(timedelta(days=3))),
         ),
+        (
+            '"3 day" < "5 day"',
+            Expression(OperationType.LT, Constant(timedelta(days=3)), Constant(timedelta(days=5))),
+        ),
+        (
+            "rtgMaxW / 2",
+            Expression(OperationType.DIVIDE, NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_W), Constant(2)),
+        ),
+        ("setMaxVA", NamedVariable(NamedVariableType.DERSETTING_SET_MAX_VA)),
+        ("setMaxVar", NamedVariable(NamedVariableType.DERSETTING_SET_MAX_VAR)),
+        ("setMaxChargeRateW", NamedVariable(NamedVariableType.DERSETTING_SET_MAX_CHARGE_RATE_W)),
+        ("setMaxDischargeRateW", NamedVariable(NamedVariableType.DERSETTING_SET_MAX_DISCHARGE_RATE_W)),
+        ("setMaxWh", NamedVariable(NamedVariableType.DERSETTING_SET_MAX_WH)),
+        (
+            "rtgMaxVar == 5.0",
+            Expression(OperationType.EQ, NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_VAR), Constant(5.0)),
+        ),
+        (
+            "rtgMaxW != 0.5",
+            Expression(OperationType.NE, NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_W), Constant(0.5)),
+        ),
+        (
+            "rtgMaxChargeRateW <= 0.5",
+            Expression(
+                OperationType.LTE, NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_CHARGE_RATE_W), Constant(0.5)
+            ),
+        ),
+        (
+            "rtgMaxDischargeRateW > 0.5",
+            Expression(
+                OperationType.GT, NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_DISCHARGE_RATE_W), Constant(0.5)
+            ),
+        ),
+        (
+            "rtgMaxWh >= 0.5",
+            Expression(OperationType.GTE, NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_WH), Constant(0.5)),
+        ),
         ("now + foo", UnparseableVariableExpressionError),
         ("now foo +", UnparseableVariableExpressionError),
         ("now foo ", UnparseableVariableExpressionError),
@@ -183,9 +220,41 @@ def test_parse_variable_expression_body(
 
     if isinstance(expected, type):
         with pytest.raises(expected):
-            parse_variable_expression_body(var_body)
+            parse_variable_expression_body(var_body, None)
     else:
-        actual = parse_variable_expression_body(var_body)
+        actual = parse_variable_expression_body(var_body, None)
+        assert isinstance(actual, NamedVariable) or isinstance(actual, Constant) or isinstance(actual, Expression)
+        assert actual == expected, f"Input string: {var_body}"
+
+
+@pytest.mark.parametrize(
+    "var_body,expected,param_key",
+    [
+        (
+            "this < rtgMaxVA",
+            Expression(
+                OperationType.LT,
+                NamedVariable(NamedVariableType.DERSETTING_SET_MAX_VA),
+                NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_VA),
+            ),
+            "setMaxVA",
+        ),
+        (
+            "this < rtgMaxVA",
+            UnparseableVariableExpressionError,
+            "someUndefinedNamedVariable",
+        ),
+    ],
+)
+def test_parse_variable_expression_body_this(
+    var_body: str, expected: type[Exception] | NamedVariable | Constant | Expression, param_key: str | None
+) -> None:
+    """Parsing to ensure that variable bodies that contain `this` parse (or fail) as expected"""
+    if isinstance(expected, type):
+        with pytest.raises(expected):
+            parse_variable_expression_body(var_body, param_key)
+    else:
+        actual = parse_variable_expression_body(var_body, param_key)
         assert isinstance(actual, NamedVariable) or isinstance(actual, Constant) or isinstance(actual, Expression)
         assert actual == expected, f"Input string: {var_body}"
 
