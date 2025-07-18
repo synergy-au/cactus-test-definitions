@@ -18,6 +18,7 @@ class ParameterType(IntEnum):
     Boolean = auto()
     DateTime = auto()  # TZ aware datetime
     ListString = auto()  # List of strings
+    HexBinary = auto()
 
 
 @dataclass(frozen=True)
@@ -57,6 +58,12 @@ def is_valid_parameter_type(expected_type: ParameterType, value: Any) -> bool:
             return isinstance(value, datetime)
         case ParameterType.ListString:
             return isinstance(value, list) and all((isinstance(e, str) for e in value))
+        case ParameterType.HexBinary:
+            try:
+                int(value, 16)
+                return True
+            except Exception:
+                return False
 
     raise TestProcedureDefinitionError(f"Unexpected ParameterType: {ParameterType}")
 

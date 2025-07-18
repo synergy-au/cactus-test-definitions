@@ -42,8 +42,29 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     },
     "der-settings-contents": {
         "setGradW": ParameterSchema(False, ParameterType.Integer),  # Hundredths of a percent / second
+        "doeModesEnabled": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set
+        "modesEnabled": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set
+        "setMaxVA": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "setMaxVar": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "setMaxW": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "setMaxChargeRateW": ParameterSchema(False, ParameterType.Boolean),
+        "setMaxDischargeRateW": ParameterSchema(False, ParameterType.Boolean),
+        "setMaxWh": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
     },
-    "der-capability-contents": {},
+    "der-capability-contents": {
+        "doeModesSupported": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set
+        "modesSupported": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set
+        "rtgMaxVA": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "rtgMaxVar": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "rtgMaxW": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "rtgMaxChargeRateW": ParameterSchema(
+            False, ParameterType.Boolean
+        ),  # Expected expression that evaluates to boolean
+        "rtgMaxDischargeRateW": ParameterSchema(
+            False, ParameterType.Boolean
+        ),  # Expected expression that evaluates to boolean
+        "rtgMaxWh": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+    },
     "der-status-contents": {
         "genConnectStatus": ParameterSchema(False, ParameterType.Integer),
         "genConnectStatus_bit0": ParameterSchema(False, ParameterType.Boolean),
