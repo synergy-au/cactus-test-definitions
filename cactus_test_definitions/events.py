@@ -32,7 +32,7 @@ class Event:
         for k, v in self.parameters.items():
             variable_expr = try_extract_variable_expression(v)
             if variable_expr:
-                self.parameters[k] = parse_variable_expression_body(variable_expr)
+                self.parameters[k] = parse_variable_expression_body(variable_expr, k)
 
 
 # The parameter schema for each event, keyed by the event name

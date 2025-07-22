@@ -1,13 +1,11 @@
 import pytest
-from cactus_test_definitions.actions import (
-    Action,
-)
 from cactus_test_definitions.errors import TestProcedureDefinitionError
 from cactus_test_definitions.events import Event, validate_event_parameters
+from cactus_test_definitions import variable_expressions as varexps
 
 
 @pytest.mark.parametrize(
-    "action, is_valid",
+    "event, is_valid",
     [
         (Event("foo", {}), False),  # Unknown check
         (Event("wait", {}), False),
@@ -17,9 +15,22 @@ from cactus_test_definitions.events import Event, validate_event_parameters
         (Event("GET-request-received", {"endpoint": "/dcap"}), True),
     ],
 )
-def test_validate_event_parameters(action: Action, is_valid: bool):
+def test_validate_event_parameters(event: Event, is_valid: bool):
     if is_valid:
-        validate_event_parameters("foo", "bar", action)
+        validate_event_parameters("foo", "bar", event)
     else:
         with pytest.raises(TestProcedureDefinitionError):
-            validate_event_parameters("foo", "bar", action)
+            validate_event_parameters("foo", "bar", event)
+
+
+def test_event_expression() -> None:
+    """Tests the creation of an Event that has an expression as one of its parameters"""
+    type_str = "some_event"
+    params = {"setMaxW": "$(this < rtgMaxW)"}
+    event = Event(type_str, params)
+
+    check_set_max_w = event.parameters["setMaxW"]
+    assert isinstance(check_set_max_w, varexps.Expression)
+    assert check_set_max_w.operation == varexps.OperationType.LT
+    assert check_set_max_w.lhs_operand == varexps.NamedVariable(varexps.NamedVariableType.DERSETTING_SET_MAX_W)
+    assert check_set_max_w.rhs_operand == varexps.NamedVariable(varexps.NamedVariableType.DERCAPABILITY_RTG_MAX_W)
