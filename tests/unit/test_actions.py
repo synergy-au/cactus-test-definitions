@@ -35,9 +35,9 @@ def test_action_expression() -> None:
     """Tests the creation of an Action that has an expression as one of its parameters"""
     type_str = "some_action"
     params = {"setMaxW": "$(this == rtgMaxW)"}
-    event = Action(type_str, params)
+    action = Action(type_str, params)
 
-    check_set_max_w = event.parameters["setMaxW"]
+    check_set_max_w = action.parameters["setMaxW"]
     assert isinstance(check_set_max_w, varexps.Expression)
     assert check_set_max_w.operation == varexps.OperationType.EQ
     assert check_set_max_w.lhs_operand == varexps.NamedVariable(varexps.NamedVariableType.DERSETTING_SET_MAX_W)
