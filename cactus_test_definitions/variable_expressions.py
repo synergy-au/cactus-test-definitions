@@ -216,9 +216,7 @@ def parse_unary_expression(token: Token) -> Constant | NamedVariable:
     raise UnparseableVariableExpressionError(f"Unable to parse token {token}")
 
 
-def parse_binary_expression(
-    lhs_token: Token, operation: Token, rhs_token: Token
-) -> Expression:
+def parse_binary_expression(lhs_token: Token, operation: Token, rhs_token: Token) -> Expression:
 
     if operation.type != tokenize.OP:
         raise UnparseableVariableExpressionError(f"Expected an operation (eg + - / *) but found {operation}")
