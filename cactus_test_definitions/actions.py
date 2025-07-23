@@ -48,6 +48,7 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "primacy": ParameterSchema(False, ParameterType.Integer),
         "fsa_id": ParameterSchema(False, ParameterType.Integer),
         "randomizeStart_seconds": ParameterSchema(False, ParameterType.Integer),
+        "ramp_time_seconds": ParameterSchema(False, ParameterType.Float),
         "opModEnergize": ParameterSchema(False, ParameterType.Boolean),
         "opModConnect": ParameterSchema(False, ParameterType.Boolean),
         "opModImpLimW": ParameterSchema(False, ParameterType.Float),
