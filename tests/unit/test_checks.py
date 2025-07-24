@@ -12,9 +12,12 @@ from cactus_test_definitions import variable_expressions as varexps
         (Check("readings-site-active-power", {"minimum_count": "3"}), False),
         (Check("readings-site-active-power", {"minimum_count": 3}), True),
         (Check("der-settings-contents", {"setGradW": 27}), True),
-        (Check("der-settings-contents", {"doeModesEnabled": "0f"}), True),
-        (Check("der-settings-contents", {"modesEnabled": "E"}), True),
-        (Check("der-settings-contents", {"doeModesEnabled": 12}), False),
+        (Check("der-settings-contents", {"doeModesEnabled_set": "0f"}), True),
+        (Check("der-settings-contents", {"doeModesEnabled_unset": "0f"}), True),
+        (Check("der-settings-contents", {"modesEnabled_set": "E"}), True),
+        (Check("der-settings-contents", {"modesEnabled_unset": "E"}), True),
+        (Check("der-settings-contents", {"doeModesEnabled_set": 12}), False),
+        (Check("der-settings-contents", {"doeModesEnabled_unset": 12}), False),
     ],
 )
 def test_validate_check_parameters(check: Check, is_valid: bool):
