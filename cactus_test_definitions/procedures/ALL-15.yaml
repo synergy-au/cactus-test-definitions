@@ -47,6 +47,10 @@ Steps:
           start: $(now)
           duration_seconds: 600
           opModConnect: false
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-DISCONNECT
       - type: remove-steps
         parameters:
           steps:

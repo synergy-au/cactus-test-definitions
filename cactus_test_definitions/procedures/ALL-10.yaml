@@ -27,11 +27,10 @@ Steps:
       parameters:
         endpoint: /edev/1/derp/1/derc
     actions:
-      - type: add-steps
+      - type: enable-steps
         parameters:
           steps:
             - WAIT-TILL-END
-    actions:
       - type: remove-steps
         parameters:
           steps:

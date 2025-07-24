@@ -49,10 +49,6 @@ Steps:
       parameters:
         setGradW: 100
     actions:
-      - type: enable-steps
-        parameters:
-          steps:
-            - GET-DEFAULT-DERC-UPDATED
       - type: remove-steps
         parameters:
           steps:

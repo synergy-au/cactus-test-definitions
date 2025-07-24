@@ -109,11 +109,11 @@ Steps:
       - type: enable-steps
         parameters:
           steps:
-            - WAIT-CONTROL-FINISH
+            - WAIT-CANCELLED-FINISH
       - type: remove-steps
         parameters:
           steps:
-            - WAIT-CANCELLED-FINISH
+            - WAIT-CONTROL-FINISH
 
   WAIT-CANCELLED-FINISH:
     event:

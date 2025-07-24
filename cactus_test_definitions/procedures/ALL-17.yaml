@@ -262,4 +262,4 @@ Steps:
       - type: remove-steps
         parameters:
           steps:
-            - POST-FOURTH-RESPONSE-RECEIVED
+            - POST-FOURTH-RESPONSE-SUPERSEDED

@@ -20,7 +20,6 @@ Preconditions:
     - type: enable-steps
       parameters:
         steps:
-            - POST-SUBSCRIPTION-EDEV
             - POST-SUBSCRIPTION-FSAL
             - POST-SUBSCRIPTION-DERP
             - POST-SUBSCRIPTION-DERC
