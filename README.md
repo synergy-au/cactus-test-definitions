@@ -146,9 +146,9 @@ checks:
 | `all-steps-complete` | `ignored_steps: list[str]/None` | True if every `Step` in a `TestProcedure` has been deactivated (excepting any ignored steps) |
 | `all-notifications-transmitted` | None | True if every transmitted notification (pub/sub) has been received with a HTTP success code response from the subscription notification URI |
 | `end-device-contents` | `has_connection_point_id: bool/None` | True if an `EndDevice` is registered and optionally has the specified contents. `has_connection_point_id` (if True) will check whether the active `EndDevice` has `ConnectionPoint.id` specified. |
-| `der-settings-contents` | `setGradW: int/None` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
-| `der-capability-contents` | None | True if a `DERCapability` has been set for the `EndDevice` under test |
-| `der-status-contents` | `genConnectStatus: int/None` `genConnectStatus_bit0: bool/None` `genConnectStatus_bit1: bool/None` `genConnectStatus_bit2: bool/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values). `genConnectStatus` can be asserted in aggregate or bit by bit. |
+| `der-settings-contents` | `setGradW: int/None` `doeModesEnabled_set: hex/none` `doeModesEnabled_unset: hex/none` `modesEnabled_set: hex/none` `modesEnabled_unset: hex/none` `setMaxVA: bool/none` `setMaxVar: bool/none` `setMaxW: bool/none` `setMaxChargeRateW: bool/none` `setMaxDischargeRateW: bool/none` `setMaxWh: bool/none` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
+| `der-capability-contents` | `doeModesSupported_set: hex/none` `doeModesSupported_unset: hex/none` `modesSupported_set: hex/none` `modesSupported_unset: hex/none` `rtgMaxVA: bool/none` `rtgMaxVar: bool/none` `rtgMaxW: bool/none` `rtgMaxChargeRateW: bool/none` `rtgMaxDischargeRateW: bool/none` `rtgMaxWh: bool/none` | True if a `DERCapability` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
+| `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `readings-site-active-power` | `minimum_count: int` | True if MUP for site wide active power has `minimum_count` entries |
 | `readings-site-reactive-power` | `minimum_count: int` | True if MUP for site wide reactive power has `minimum_count` entries |
 | `readings-site-voltage` | `minimum_count: int` | True if MUP for site wide voltage has `minimum_count` entries |
@@ -156,6 +156,12 @@ checks:
 | `readings-der-reactive-power` | `minimum_count: int` | True if MUP for DER reactive power has `minimum_count` entries |
 | `readings-der-voltage` | `minimum_count: int` | True if MUP for DER voltage has `minimum_count` entries |
 | `response-contents` | `latest: bool/None` `status: int/None` | True if at least one received Response matches the filter. `latest` will only consider the most recent received Response.  |
+
+#### Hexbinary Parameters for Bitwise Operations
+`doeModesEnabled_set` `modesEnabled_set` `doeModesSupported_set` and `modesSupported_set` all expect a hexbinary string to be supplied, which contains the hi assertion bits to be equal to one e.g. `doeModesEnabled_set: "03"` would test to ensure that at least bits 0 and 1 are set hi (==1) for the given `DERSetting.doeModesEnabled`, ignoring all others
+The corresponding `_unset` performs the inverse operation such that every bit set to 1 in the mask is expected to correspond to a zero in the corresponding value e.g. `doeModesEnabled_unset: "03"` would test to ensure that at least bits 0 and 1 are set lo (==0) for the given `DERSetting.doeModesEnabled`, ignoring all others
+
+If a common bit is set between a `_set` and `_unset` corresponding pair of parameters, the check will always fail.
 
 ### Parameter Variable Resolution
 
@@ -184,7 +190,20 @@ The following are all the `NamedVariable` types currently implemented
 | **name** | **description** |
 | -------- | --------------- |
 | `$now` | Resolves to the current moment in time (timezone aware). Returns a datetime |
-| `$setMaxW` | Resolves to the last supplied value to `DERSetting.setMaxW` as an integer. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
+| `$this` | Self reference to a parameter that is supplied as the key for the parameter check. Must have a corresponding NamedVariable that it can resolve to, derived from the key e.g `setMaxW`
+| `$setMaxW` | Resolves to the last supplied value to `DERSetting.setMaxW` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
+| `$setMaxVA` | Resolves to the last supplied value to `DERSetting.setMaxVA` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
+| `$setMaxVar` | Resolves to the last supplied value to `DERSetting.setMaxVar` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
+| `$setMaxChargeRateW` | Resolves to the last supplied value to `DERSetting.setMaxChargeRateW` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
+| `$setMaxDischargeRateW` | Resolves to the last supplied value to `DERSetting.setMaxDischargeRateW` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
+| `$setMaxWh` | Resolves to the last supplied value to `DERSetting.setMaxWh` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
+| `$rtgMaxVA` | Resolves to last supplied `DERCapability.rtgMaxVA` as a number. Raises exceptions if value hasn't been set, causing test to fail.
+| `$rtgMaxVar` | Resolves to last supplied `DERCapability.rtgMaxVar` as a number. Raises exceptions if value hasn't been set, causing test to fail.
+| `$rtgMaxW` | Resolves to last supplied `DERCapability.rtgMaxW` as a number. Raises exceptions if value hasn't been set, causing test to fail.
+| `$rtgMaxChargeRateW` | Resolves to last supplied `DERCapability.rtgMaxChargeRateW` as a number. Raises exceptions if value hasn't been set, causing test to fail.
+| `$rtgMaxDischargeRateW` | Resolves to last supplied `DERCapability.rtgMaxDischargeRateW` as a number. Raises exceptions if value hasn't been set, causing test to fail.
+| `$rtgMaxWh` | Resolves to last supplied `DERCapability.rtgMaxWh` as a number. Raises exceptions if value hasn't been set, causing test to fail.
+
 
 Placeholder variables can also be used in some rudimentary expressions to make variations on the returned value. For example:
 
@@ -193,6 +212,10 @@ parameters:
     number_param: $(setMaxW / 2)
     text_param: Text Content
     date_param: $(now - '5 mins')
+    setMaxW: $(this < rtgMaxW)
+    setMaxVA: $(this >= rtgMaxWh)
 ```
 
 Would resolve similar to above, but instead `number_param` will be half of the last supplied value to `DERSetting.setMaxW` and `date_param` will be set to 5 minutes prior to now.
+`setMaxW` param will return boolean result `DERSettings.setMaxW` is less than `DERCapability.rtgMaxW`.
+`setMaxVA` param will return boolean result `DERSettings.setMaxVA` is greather than or equal to `DERCapability.rtgMaxWh`.

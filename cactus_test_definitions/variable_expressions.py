@@ -3,12 +3,46 @@ from datetime import timedelta
 from enum import IntEnum, auto
 from io import StringIO
 from re import match, search
-from tokenize import NAME, NUMBER, OP, STRING, TokenError, TokenInfo, generate_tokens
+import tokenize
 from typing import Any
 
 from cactus_test_definitions.errors import UnparseableVariableExpressionError
 
 ConstantType = timedelta | int | float
+
+
+@dataclass
+class Token:
+    """Custom token implementaion
+
+    Attributes:
+        string: representation of original token from input
+        type: the kind of token found, an enum directly related from tokenize
+        line: the input line that the token belongs
+        start: coordinates of the token start wrt input
+        end: coordinates of the token end wrt input
+        param_key: optional to help with the special case of backfilling a self reference (i.e $this)
+            to its underlying named value
+    """
+
+    string: str
+    type: int
+    line: str
+    start: tuple[int, int]
+    end: tuple[int, int]
+    param_key: str | None = None
+
+    @staticmethod
+    def from_token_info(token_info: tokenize.TokenInfo, param_key: str | None = None) -> "Token":
+        """Takes a tokenize.TokenInfo and returns an internal Token"""
+        return Token(
+            string=token_info.string,
+            type=token_info.type,
+            line=token_info.line,
+            start=token_info.start,
+            end=token_info.start,
+            param_key=param_key,
+        )
 
 
 class NamedVariableType(IntEnum):
@@ -19,6 +53,19 @@ class NamedVariableType(IntEnum):
     # MUST resolve to the "DERSetting.setMaxW" of the current EndDevice under test. Value in Watts
     # Referenced in a test definition as $(setMaxW)
     DERSETTING_SET_MAX_W = auto()
+    DERSETTING_SET_MAX_VA = auto()
+    DERSETTING_SET_MAX_VAR = auto()
+    DERSETTING_SET_MAX_CHARGE_RATE_W = auto()
+    DERSETTING_SET_MAX_DISCHARGE_RATE_W = auto()
+    DERSETTING_SET_MAX_WH = auto()
+
+    # Must resolve to DERCapablity of the current EndDevice under test
+    DERCAPABILITY_RTG_MAX_VA = auto()  # VA ( after multiplier applied), reference $rtgMaxVA
+    DERCAPABILITY_RTG_MAX_VAR = auto()  # VAr ( atfer multiplier applied), reference $rtgMaxVar
+    DERCAPABILITY_RTG_MAX_W = auto()  # W ( after multiplier applied), reference $rtgMaxW
+    DERCAPABILITY_RTG_MAX_CHARGE_RATE_W = auto()  # W ( after multiiplier applied), reference $rtgMaxChargeRateW
+    DERCAPABILITY_RTG_MAX_DISCHARGE_RATE_W = auto()  # W ( after multiplier applied), reference $rtgMaxDischargeRateW
+    DERCAPABILITY_RTG_MAX_WH = auto()  # Wh ( after multiplier applied), reference $rtgMaxWh
 
 
 class OperationType(IntEnum):
@@ -26,6 +73,12 @@ class OperationType(IntEnum):
     SUBTRACT = auto()
     MULTIPLY = auto()
     DIVIDE = auto()
+    EQ = auto()
+    NE = auto()
+    LT = auto()
+    LTE = auto()
+    GT = auto()
+    GTE = auto()
 
 
 OPERATION_MAPPINGS = {
@@ -33,6 +86,12 @@ OPERATION_MAPPINGS = {
     "-": OperationType.SUBTRACT,
     "*": OperationType.MULTIPLY,
     "/": OperationType.DIVIDE,
+    "==": OperationType.EQ,
+    "!=": OperationType.NE,
+    "<": OperationType.LT,
+    "<=": OperationType.LTE,
+    ">": OperationType.GT,
+    ">=": OperationType.GTE,
 }
 
 
@@ -100,20 +159,50 @@ def parse_time_delta(var_body: str) -> timedelta:
         )
 
 
-def parse_unary_expression(token: TokenInfo) -> Constant | NamedVariable:
+def parse_unary_expression(token: Token) -> Constant | NamedVariable:
     """Parses a unary expression from a variable body"""
 
-    if token.type == NAME:
-        match token.string.lower():
+    if token.type == tokenize.NAME:
+        # expect that a variable name is properly defined with correct case
+        match token.string:
             case "now":
                 return NamedVariable(NamedVariableType.NOW)
-            case "setmaxw":
+            case "this":
+                if token.param_key == "this" or token.param_key is None:
+                    raise UnparseableVariableExpressionError(f"$this cannot resolve to parameter {token.param_key}")
+                # Modify token and maintain all other original data
+                token.string = token.param_key
+                token.param_key = None
+                return parse_unary_expression(token)
+            case "setMaxW":
                 return NamedVariable(NamedVariableType.DERSETTING_SET_MAX_W)
+            case "setMaxVA":
+                return NamedVariable(NamedVariableType.DERSETTING_SET_MAX_VA)
+            case "setMaxVar":
+                return NamedVariable(NamedVariableType.DERSETTING_SET_MAX_VAR)
+            case "setMaxChargeRateW":
+                return NamedVariable(NamedVariableType.DERSETTING_SET_MAX_CHARGE_RATE_W)
+            case "setMaxDischargeRateW":
+                return NamedVariable(NamedVariableType.DERSETTING_SET_MAX_DISCHARGE_RATE_W)
+            case "setMaxWh":
+                return NamedVariable(NamedVariableType.DERSETTING_SET_MAX_WH)
+            case "rtgMaxVA":
+                return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_VA)
+            case "rtgMaxVar":
+                return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_VAR)
+            case "rtgMaxW":
+                return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_W)
+            case "rtgMaxChargeRateW":
+                return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_CHARGE_RATE_W)
+            case "rtgMaxDischargeRateW":
+                return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_DISCHARGE_RATE_W)
+            case "rtgMaxWh":
+                return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_WH)
 
         raise UnparseableVariableExpressionError(f"'{token.string}' isn't recognized as a named variable")
 
     try:
-        if token.type == NUMBER:
+        if token.type == tokenize.NUMBER:
             if "." in token.string:
                 return Constant(float(token.string))
             else:
@@ -121,15 +210,15 @@ def parse_unary_expression(token: TokenInfo) -> Constant | NamedVariable:
     except ValueError:
         raise UnparseableVariableExpressionError(f"'{token.string}' can't be converted to a number")
 
-    if token.type == STRING:
+    if token.type == tokenize.STRING:
         return Constant(parse_time_delta(token.string))
 
     raise UnparseableVariableExpressionError(f"Unable to parse token {token}")
 
 
-def parse_binary_expression(lhs_token: TokenInfo, operation: TokenInfo, rhs_token: TokenInfo) -> Expression:
+def parse_binary_expression(lhs_token: Token, operation: Token, rhs_token: Token) -> Expression:
 
-    if operation.type != OP:
+    if operation.type != tokenize.OP:
         raise UnparseableVariableExpressionError(f"Expected an operation (eg + - / *) but found {operation}")
 
     operation_type = OPERATION_MAPPINGS.get(operation.string, None)
@@ -142,26 +231,37 @@ def parse_binary_expression(lhs_token: TokenInfo, operation: TokenInfo, rhs_toke
     return Expression(operation=operation_type, lhs_operand=lhs, rhs_operand=rhs)
 
 
-def parse_variable_expression_body(var_body: str) -> NamedVariable | Expression | Constant:
+def parse_variable_expression_body(var_body: str, param_key: str | None) -> NamedVariable | Expression | Constant:
     """Given a variable definition: $(now - '5 seconds') - this function should be passed contents of that variable
     definition (the string within the parentheses) eg: "now - '5 seconds'
 
-    returns a parsed NamedVariable or Expression or raises UnparseableVariableExpressionError otherwise
-
-    Cheat sheet of common variable patterns:
-
+    Common variable patterns include,
     $(now) - Will return a tz aware datetime corresponding to the current moment in time
     $(now - '5 minute') - Same as above, but offset 5 minutes in the past
     $(0.5 * setMaxW) - 50% of the currently configured setMaxW for the current EndDevice
+
+    Args:
+        var_body: parseable expression
+        param_key: the key that the expression body belongs e.g. setMaxW
+
+    Returns:
+        Parsed object
+
+    Raises:
+        UnparseableVariableExpressionError: on failed parsing attempt
     """
     if not var_body:
         raise UnparseableVariableExpressionError("var_body is empty/None")
 
     # Use the python parser to generate a simplified set of tokens representing the variable definition
+    # Convert these into the internal representation of a Token
     try:
-
-        var_tokens = [t for t in generate_tokens(StringIO(var_body).readline) if t.type in {NUMBER, OP, STRING, NAME}]
-    except TokenError as exc:
+        var_tokens = [
+            Token.from_token_info(t, param_key)
+            for t in tokenize.generate_tokens(StringIO(var_body).readline)
+            if t.type in {tokenize.NUMBER, tokenize.OP, tokenize.STRING, tokenize.NAME}
+        ]
+    except tokenize.TokenError as exc:
         raise UnparseableVariableExpressionError(f"Error tokenizing '{var_body}': {exc}")
 
     if len(var_tokens) == 1:

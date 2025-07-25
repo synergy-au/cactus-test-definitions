@@ -30,7 +30,7 @@ class Check:
         for k, v in self.parameters.items():
             variable_expr = try_extract_variable_expression(v)
             if variable_expr:
-                self.parameters[k] = parse_variable_expression_body(variable_expr)
+                self.parameters[k] = parse_variable_expression_body(variable_expr, k)
 
 
 # The parameter schema for each action, keyed by the action name
@@ -42,8 +42,33 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     },
     "der-settings-contents": {
         "setGradW": ParameterSchema(False, ParameterType.Integer),  # Hundredths of a percent / second
+        "doeModesEnabled_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
+        "doeModesEnabled_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
+        "modesEnabled_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
+        "modesEnabled_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
+        "setMaxVA": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "setMaxVar": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "setMaxW": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "setMaxChargeRateW": ParameterSchema(False, ParameterType.Boolean),
+        "setMaxDischargeRateW": ParameterSchema(False, ParameterType.Boolean),
+        "setMaxWh": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
     },
-    "der-capability-contents": {},
+    "der-capability-contents": {
+        "doeModesSupported_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
+        "doeModesSupported_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
+        "modesSupported_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
+        "modesSupported_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
+        "rtgMaxVA": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "rtgMaxVar": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "rtgMaxW": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "rtgMaxChargeRateW": ParameterSchema(
+            False, ParameterType.Boolean
+        ),  # Expected expression that evaluates to boolean
+        "rtgMaxDischargeRateW": ParameterSchema(
+            False, ParameterType.Boolean
+        ),  # Expected expression that evaluates to boolean
+        "rtgMaxWh": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+    },
     "der-status-contents": {
         "genConnectStatus": ParameterSchema(False, ParameterType.Integer),
         "genConnectStatus_bit0": ParameterSchema(False, ParameterType.Boolean),
