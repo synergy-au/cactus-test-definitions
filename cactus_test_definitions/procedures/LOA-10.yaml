@@ -297,7 +297,7 @@ Steps:
             - POST-DERC-3-RESPONSE-STARTED
 
   # (k, l) Wait for completed response on DERC 3
-  POST-DERC-3-RESPONSE-STARTED:
+  POST-DERC-3-RESPONSE-COMPLETED:
     event:
       type: POST-request-received
       parameters:
@@ -317,7 +317,7 @@ Steps:
       - type: remove-steps
         parameters:
           steps:
-            - POST-DERC-3-RESPONSE-STARTED
+            - POST-DERC-3-RESPONSE-COMPLETED
 
   # (m) (i) Configure the first DERControl on DERP1
   # (n)

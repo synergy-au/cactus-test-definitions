@@ -297,7 +297,7 @@ Steps:
             - POST-DERC-3-RESPONSE-STARTED
 
   # (k, l) Wait for completed response on DERC 3
-  POST-DERC-3-RESPONSE-STARTED:
+  POST-DERC-3-RESPONSE-COMPLETED:
     event:
       type: POST-request-received
       parameters:
@@ -317,7 +317,7 @@ Steps:
       - type: remove-steps
         parameters:
           steps:
-            - POST-DERC-3-RESPONSE-STARTED
+            - POST-DERC-3-RESPONSE-COMPLETED
 
   # (m, n) (i) Configure the first DERControl on DERP1
   GET-DERC-4:
@@ -355,8 +355,8 @@ Steps:
           start: $(now)
           duration_seconds: 1200 # 20 minutes
           opModExpLimW: $(setMaxW * 2)
-          fsa_id: 1
-          primacy: 1
+          fsa_id: 2
+          primacy: 2
       - type: enable-steps
         parameters:
           steps:
@@ -366,7 +366,7 @@ Steps:
           steps:
             - GET-DERC-5
 
-  # (o) Receive response started for DERControl 2
+  # (o) Receive response started for DERControl 4
   POST-DERC-4-RESPONSE-STARTED:
     event:
       type: POST-request-received
@@ -388,7 +388,7 @@ Steps:
           steps:
             - POST-DERC-4-RESPONSE-STARTED
 
-  # (o) Receive response started for DERControl 2
+  # (o) Receive response started for DERControl 5
   POST-DERC-5-RESPONSE-STARTED:
     event:
       type: POST-request-received

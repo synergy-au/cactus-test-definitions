@@ -79,3 +79,39 @@ def test_each_step_accessible(tp_id: str, tp: TestProcedure):
             assert (
                 enabled_count[step_name] == 1
             ), f"{step_name}: Each test should be added once - not expecting loops of steps"
+
+
+@pytest.mark.parametrize("tp_id, tp", ALL_TEST_PROCEDURES)
+def test_each_step_connected(tp_id: str, tp: TestProcedure):
+    """Interprets each test a graph of steps linking to other steps (via enable-steps). Passes if the test procedure
+    is fully connected from the first step (i.e. there are no isolated islands of steps that can't be reached from
+    the first step)"""
+
+    first_step = [k for k in tp.steps.keys()][0]
+    step_names = set(tp.steps.keys())
+
+    step_links_by_name: dict[str, list[str]] = {}
+    for step_name in step_names:
+        step = tp.steps[step_name]
+        child_step_names = [name for a in step.actions if a.type == "enable-steps" for name in a.parameters["steps"]]
+        step_links_by_name[step_name] = child_step_names
+
+    # Walk through our simple graph/tree - make sure we visit every node in that tree
+    def gather_connected_steps(links: dict[str, list[str]], node: str, visited_nodes: set[str]) -> None:
+        if node in visited_nodes:
+            return
+        visited_nodes.add(node)
+        for child in links[node]:
+            gather_connected_steps(links, child, visited_nodes)
+
+    visited_nodes: set[str] = set()
+    gather_connected_steps(step_links_by_name, first_step, visited_nodes)
+
+    # Also note that steps might be started as a precondition - so include those as visited too
+    if tp.preconditions and tp.preconditions.actions:
+        for n in [name for a in tp.preconditions.actions if a.type == "enable-steps" for name in a.parameters["steps"]]:
+            visited_nodes.add(n)
+
+    assert (
+        step_names == visited_nodes
+    ), "Missing entries here indicate a step (or steps) that can't be reached from the root node"

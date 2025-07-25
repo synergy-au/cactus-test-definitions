@@ -80,6 +80,27 @@ class TestProcedureId(StrEnum):
     OPT_1_OUT_OF_BAND = "OPT-1-OUT-OF-BAND"
 
 
+class UniqueKeyLoader(yaml.SafeLoader):
+    """Originally sourced from https://gist.github.com/pypt/94d747fe5180851196eb
+    Prevents duplicate keys from overwriting eachother instead of raising a ValueError.
+
+    eg - consider the following YAML, it will parse OK but should be treated as an error:
+
+    my_class:
+        key1: abc
+        key1: def
+    """
+
+    def construct_mapping(self, node, deep=False):
+        mapping = set()
+        for key_node, _ in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if key in mapping:
+                raise ValueError(f"Duplicate {key!r} key found in YAML.")
+            mapping.add(key)
+        return super().construct_mapping(node, deep)
+
+
 @dataclass
 class Step:
     """A step is a part of the test procedure that waits for some form of event before running a set of actions.
@@ -230,11 +251,17 @@ class TestProcedureConfig:
 
         # Modifies the pyyaml's load method to support references to external yaml files
         # through the `!include` directive.
-        yaml.add_constructor("!include", yaml_include.Constructor(base_dir=path.parent))
+        yaml.add_constructor(
+            "!include", constructor=yaml_include.Constructor(base_dir=path.parent), Loader=UniqueKeyLoader
+        )
 
         # ...because we are using YAMLWizard we need to supply a decoder and a Loader to
         # use this modified version.
-        test_procedures: TestProcedures = TestProcedures.from_yaml(yaml_contents, decoder=yaml.load, Loader=yaml.Loader)  # type: ignore # noqa: E501
+        test_procedures: TestProcedures = TestProcedures.from_yaml(
+            yaml_contents,
+            decoder=yaml.load,  # type: ignore
+            Loader=UniqueKeyLoader,
+        )
 
         if not skip_validation:
             test_procedures.validate()
