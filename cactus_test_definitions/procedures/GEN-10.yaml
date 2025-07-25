@@ -681,10 +681,6 @@ Steps:
         parameters:
           derp_id: 1
           opModExpLimW: $(setMaxW * 0.5)
-      - type: enable-steps
-        parameters:
-          steps:
-            - POST-DERC-10-RESPONSE-STARTED
       - type: remove-steps
         parameters:
           steps:

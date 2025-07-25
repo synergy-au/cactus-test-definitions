@@ -1,0 +1,53 @@
+Description: Tracking import-limit through variable load
+Category: DER
+Classes:
+  - DER-L
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
+
+  actions:
+    - type: set-comms-rate
+      parameters:
+        der_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
+        mup_post_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now)
+        duration_seconds: 60
+        opModExpLimW: $(setMaxW * 2)
+    - type: create-der-control
+      parameters:
+        start: $(now + '1 minute')
+        duration_seconds: 420
+        opModExpLimW: $(setMaxW * 0.2)
+
+Steps:
+
+  # This test is purely following a sequence of DERControls. It's expected that the following events occurs out of band:
+  # at t=0 - Test load is consuming 0W
+  # at t=120s - Test load is consuming 10% of setMaxW
+  # at t=300s - Test load is consuming 0W
+  #
+  # Validation MUST be performed by power meter to ensure that the DER is adjusting its power in response to changing 
+  # loads
+  WAIT-TEST-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 500
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-TEST-END
+      - type: finish-test
+        parameters: {}

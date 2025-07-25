@@ -54,14 +54,10 @@ Steps:
       - type: set-comms-rate
         parameters:
           mup_post_seconds: 60
-      - type: enable-steps
-        parameters:
-          steps:
-            - GET-MUP-UPDATED
       - type: remove-steps
         parameters:
           steps:
-            - GET-MUP-INITIAL
+            - GET-MUP-UPDATED
 
   # On second poll - update the post rate
   WAIT-TILL-END:
