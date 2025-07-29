@@ -215,7 +215,7 @@ The following are all the `NamedVariable` types currently implemented
 The following are csipaus.org/ns/v1.3-beta/storage extension specific `NamedVariable` types implemented
 
 | **name** | **description** |
-| `$setMinWh` | Resolves to the last supplied value to `DERSetting.setMinWh` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
+| `$setMinWh` | Resolves to the last supplied value to `DERSetting.setMinWh` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail)
 
 
 Placeholder variables can also be used in some rudimentary expressions to make variations on the returned value. For example:
