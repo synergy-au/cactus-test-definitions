@@ -213,6 +213,7 @@ The following are all the `NamedVariable` types currently implemented
 | `$rtgMaxWh` | Resolves to last supplied `DERCapability.rtgMaxWh` as a number. Raises exceptions if value hasn't been set, causing test to fail.
 
 The following are csipaus.org/ns/v1.3-beta/storage extension specific `NamedVariable` types implemented
+
 | **name** | **description** |
 | `$setMinWh` | Resolves to the last supplied value to `DERSetting.setMinWh` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail) |
 
