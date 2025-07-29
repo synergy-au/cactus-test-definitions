@@ -23,6 +23,9 @@ Criteria:
       parameters: {"minimum_count": 3}
 
 Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
   actions:
     - type: set-comms-rate
       parameters:

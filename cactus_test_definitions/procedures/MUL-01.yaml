@@ -11,6 +11,8 @@ Criteria:
 
 Preconditions:
   checks:
+    - type: end-device-contents
+      parameters: {}
     - type: der-status-contents
       parameters: 
         genConnectStatus_bit0: true

@@ -11,6 +11,9 @@ Criteria:
       parameters: {}
 
 Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
   actions:
     - type: register-end-device
       parameters: {}

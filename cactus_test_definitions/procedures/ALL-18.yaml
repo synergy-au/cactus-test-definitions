@@ -10,9 +10,10 @@ Criteria:
       parameters: {}
 
 Preconditions:
-  actions:
-    - type: register-end-device
+  checks:
+    - type: end-device-contents
       parameters: {}
+  actions:
     - type: set-comms-rate
       parameters:
         fsa_list_poll_seconds: 300

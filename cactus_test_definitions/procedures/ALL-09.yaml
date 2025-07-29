@@ -21,6 +21,10 @@ Criteria:
     - type: readings-der-voltage
       parameters: {"minimum_count": 3}
 
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
 
 Steps:
   
