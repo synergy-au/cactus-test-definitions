@@ -26,6 +26,14 @@ from cactus_test_definitions import variable_expressions as varexps
         (Action("set-default-der-control", {"opModImpLimW": 12.3, "opModExpLimW": "Invalid"}), False),  # bad type
         (Action("create-der-control", {"start": datetime(2022, 1, 3)}), False),  # Missing duration_seconds
         (Action("create-der-control", {"start": datetime(2022, 1, 3), "duration_seconds": 123}), True),
+        # storage extension specific
+        (
+            Action(
+                "create-der-control",
+                {"start": datetime(2022, 1, 3), "duration_seconds": 123, "opModStorageTargetW": 1.5},
+            ),
+            True,
+        ),
     ],
 )
 def test_validate_action_parameters(action: Action, is_valid: bool):
