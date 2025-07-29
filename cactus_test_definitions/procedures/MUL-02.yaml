@@ -26,6 +26,8 @@ Preconditions:
   checks:
     - type: end-device-contents
       parameters: {}
+    - type: der-settings-contents
+      parameters: {}
   actions:
     - type: set-comms-rate
       parameters:

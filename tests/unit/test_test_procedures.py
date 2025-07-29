@@ -1,3 +1,4 @@
+from cactus_test_definitions.variable_expressions import Expression
 import pytest
 from cactus_test_definitions.test_procedures import (
     TestProcedure,
@@ -132,5 +133,10 @@ def test_procedures_have_required_preconditions(tp_id: str, tp: TestProcedure):
         assert tp.preconditions.checks is not None 
         assert any([check.type == 'end-device-contents' for check in tp.preconditions.checks])
 
-    # Check 'der-settings-contents' present if precondition action references setMaxW
-    pass
+    # Check 'der-settings-contents' present if precondition action involves "opModImpLimW" or "opModGenLimW" expression parameters. NOTE: It is assumed that the expressions with be expressed in terms of setMaxW - we do not perform this check explicitly.
+    if tp.preconditions is not None and tp.preconditions.actions is not None:
+        for action in tp.preconditions.actions:
+            if action.type == "create-der-control" and action.parameters is not None:
+                if ("opModImpLimW" in action.parameters and type(action.parameters["opModImpLimW"]) == Expression) or ("opModGenLimW" in action.parameters and type(action.parameters["opModGenLimW"]) == Expression):
+                    assert tp.preconditions.checks is not None
+                    assert any([check.type == 'der-settings-contents' for check in tp.preconditions.checks])
