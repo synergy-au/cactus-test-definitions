@@ -1,3 +1,11 @@
+# Cactus Test Definitions - Forked for Synergy Storage Extension
+
+This is a forked project with a long lived branch which implements the CSIP-Aus storage extension (https://csipaus.org/ns/v1.3-beta/storage) proposed by Synergy
+
+The original project, which focuses implementation on the current accepted CSIP-Aus standards, is developed by [BSGIP here](https://github.com/bsgip/cactus-test-definitions)
+
+<br>
+
 # Cactus Test Definitions
 
 This repository contains YAML test procedure definitions for use with the CSIP-AUS Client Test Harness.
@@ -108,8 +116,8 @@ actions:
 | `enable-steps` | `steps: list[str]` | The names of `Step`'s that will be activated |
 | `remove-steps` | `steps: list[str]` | The names of `Step`'s that will be deactivated (if active) |
 | `finish-test` | None | When activated, the current test will be finished (shutdown) and all `Criteria` evaluated as if the client had requested finalization. |
-| `set-default-der-control` | `derp_id: int/None` `opModImpLimW: float/None` `opModExpLimW: float/None` `opModLoadLimW: float/None` `setGradW: float/None` `cancelled: bool/None` | Updates the DefaultDERControl's parameters with the specified values. If `cancelled` is `true`, all unspecified values will be set to None. If `derp_id` is specified, this will apply to the DERProgram with that value, otherwise it will apply to all DERPrograms |
-| `create-der-control` | `start: datetime` `duration_seconds: int` `pow_10_multipliers: int/None` `primacy: int/None` `fsa_id: int/None` `randomizeStart_seconds: int/None` `ramp_time_seconds: float/None` `opModEnergize: bool/None` `opModConnect: bool/None` `opModImpLimW: float/None` `opModExpLimW: float/None` `opModGenLimW: float/None` `opModLoadLimW: float/None` `opModFixedW: float/None` | Creates a DERControl with the specified start/duration and values. A new DERProgram will be created with primacy (and optionally under FunctionSetAssignment `fsa_id`) if no such DERProgram already exists |
+| `set-default-der-control` | `derp_id: int/None` `opModImpLimW: float/None` `opModExpLimW: float/None` `opModLoadLimW: float/None` `setGradW: float/None` `cancelled: bool/None` `opModStorageTargetW: float/None` | Updates the DefaultDERControl's parameters with the specified values. If `cancelled` is `true`, all unspecified values will be set to None. If `derp_id` is specified, this will apply to the DERProgram with that value, otherwise it will apply to all DERPrograms |
+| `create-der-control` | `start: datetime` `duration_seconds: int` `pow_10_multipliers: int/None` `primacy: int/None` `fsa_id: int/None` `randomizeStart_seconds: int/None` `ramp_time_seconds: float/None` `opModEnergize: bool/None` `opModConnect: bool/None` `opModImpLimW: float/None` `opModExpLimW: float/None` `opModGenLimW: float/None` `opModLoadLimW: float/None` `opModFixedW: float/None` `opModStorageTargetW: float/None` | Creates a DERControl with the specified start/duration and values. A new DERProgram will be created with primacy (and optionally under FunctionSetAssignment `fsa_id`) if no such DERProgram already exists |
 | `create-der-program` | `primacy: int` `fsa_id: int/None` | Creates a DERProgram with the specified primacy. Will be assigned under FunctionSetAssignment 1 unless `fsa_id` says otherwise. |
 | `cancel-active-der-controls` | None | Cancels all active DERControls |
 | `set-comms-rate` | `dcap_poll_seconds: int/None` `edev_post_seconds: int/None` `edev_list_poll_seconds: int/None` `fsa_list_poll_seconds: int/None` `derp_list_poll_seconds: int/None` `der_list_poll_seconds: int/None` `mup_post_seconds: int/None` | Updates one or more post/poll rates for various resources. For non list resources, the rate will apply to all resources. Unspecified values will not update existing server values. |
@@ -146,8 +154,8 @@ checks:
 | `all-steps-complete` | `ignored_steps: list[str]/None` | True if every `Step` in a `TestProcedure` has been deactivated (excepting any ignored steps) |
 | `all-notifications-transmitted` | None | True if every transmitted notification (pub/sub) has been received with a HTTP success code response from the subscription notification URI |
 | `end-device-contents` | `has_connection_point_id: bool/None` | True if an `EndDevice` is registered and optionally has the specified contents. `has_connection_point_id` (if True) will check whether the active `EndDevice` has `ConnectionPoint.id` specified. |
-| `der-settings-contents` | `setGradW: int/None` `doeModesEnabled_set: hex/none` `doeModesEnabled_unset: hex/none` `modesEnabled_set: hex/none` `modesEnabled_unset: hex/none` `setMaxVA: bool/none` `setMaxVar: bool/none` `setMaxW: bool/none` `setMaxChargeRateW: bool/none` `setMaxDischargeRateW: bool/none` `setMaxWh: bool/none` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
-| `der-capability-contents` | `doeModesSupported_set: hex/none` `doeModesSupported_unset: hex/none` `modesSupported_set: hex/none` `modesSupported_unset: hex/none` `rtgMaxVA: bool/none` `rtgMaxVar: bool/none` `rtgMaxW: bool/none` `rtgMaxChargeRateW: bool/none` `rtgMaxDischargeRateW: bool/none` `rtgMaxWh: bool/none` | True if a `DERCapability` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
+| `der-settings-contents` | `setGradW: int/None` `doeModesEnabled_set: hex/none` `doeModesEnabled_unset: hex/none` `modesEnabled_set: hex/none` `modesEnabled_unset: hex/none` `setMaxVA: bool/none` `setMaxVar: bool/none` `setMaxW: bool/none` `setMaxChargeRateW: bool/none` `setMaxDischargeRateW: bool/none` `setMaxWh: bool/none` `setMinWh: bool/none` `vppModesEnabled_set: hexbinary/none` `vppModesEnabled_unset: hexbinary/none` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
+| `der-capability-contents` | `doeModesSupported_set: hex/none` `doeModesSupported_unset: hex/none` `modesSupported_set: hex/none` `modesSupported_unset: hex/none` `rtgMaxVA: bool/none` `rtgMaxVar: bool/none` `rtgMaxW: bool/none` `rtgMaxChargeRateW: bool/none` `rtgMaxDischargeRateW: bool/none` `rtgMaxWh: bool/none` `vppModesSupported_set: hexbinary/none` `vppModesSupported_unset: hexbinary/none` | True if a `DERCapability` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `readings-site-active-power` | `minimum_count: int` | True if MUP for site wide active power has `minimum_count` entries |
 | `readings-site-reactive-power` | `minimum_count: int` | True if MUP for site wide reactive power has `minimum_count` entries |
@@ -203,6 +211,12 @@ The following are all the `NamedVariable` types currently implemented
 | `$rtgMaxChargeRateW` | Resolves to last supplied `DERCapability.rtgMaxChargeRateW` as a number. Raises exceptions if value hasn't been set, causing test to fail.
 | `$rtgMaxDischargeRateW` | Resolves to last supplied `DERCapability.rtgMaxDischargeRateW` as a number. Raises exceptions if value hasn't been set, causing test to fail.
 | `$rtgMaxWh` | Resolves to last supplied `DERCapability.rtgMaxWh` as a number. Raises exceptions if value hasn't been set, causing test to fail.
+
+The following are csipaus.org/ns/v1.3-beta/storage extension specific `NamedVariable` types implemented
+
+| **name** | **description** |
+| -------- | --------------- |
+| `$setMinWh` | Resolves to the last supplied value to `DERSetting.setMinWh` as a number. Can raise exceptions if this value hasn't been set (which will trigger a test evaluation to fail)
 
 
 Placeholder variables can also be used in some rudimentary expressions to make variations on the returned value. For example:

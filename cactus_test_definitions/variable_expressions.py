@@ -58,6 +58,8 @@ class NamedVariableType(IntEnum):
     DERSETTING_SET_MAX_CHARGE_RATE_W = auto()
     DERSETTING_SET_MAX_DISCHARGE_RATE_W = auto()
     DERSETTING_SET_MAX_WH = auto()
+    # Storage extension
+    DERSETTING_SET_MIN_WH = auto()
 
     # Must resolve to DERCapablity of the current EndDevice under test
     DERCAPABILITY_RTG_MAX_VA = auto()  # VA ( after multiplier applied), reference $rtgMaxVA
@@ -198,6 +200,9 @@ def parse_unary_expression(token: Token) -> Constant | NamedVariable:
                 return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_DISCHARGE_RATE_W)
             case "rtgMaxWh":
                 return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_WH)
+            # Storage extension
+            case "setMinWh":
+                return NamedVariable(NamedVariableType.DERSETTING_SET_MIN_WH)
 
         raise UnparseableVariableExpressionError(f"'{token.string}' isn't recognized as a named variable")
 

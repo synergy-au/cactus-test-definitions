@@ -46,18 +46,23 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "doeModesEnabled_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
         "modesEnabled_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
         "modesEnabled_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
+        "vppModesEnabled_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
+        "vppModesEnabled_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
         "setMaxVA": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
         "setMaxVar": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
         "setMaxW": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
         "setMaxChargeRateW": ParameterSchema(False, ParameterType.Boolean),
         "setMaxDischargeRateW": ParameterSchema(False, ParameterType.Boolean),
         "setMaxWh": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
+        "setMinWh": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
     },
     "der-capability-contents": {
         "doeModesSupported_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
         "doeModesSupported_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
         "modesSupported_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
         "modesSupported_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
+        "vppModesSupported_set": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to one
+        "vppModesSupported_unset": ParameterSchema(False, ParameterType.HexBinary),  # Minimum bits set to zero
         "rtgMaxVA": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
         "rtgMaxVar": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
         "rtgMaxW": ParameterSchema(False, ParameterType.Boolean),  # Expected expression that evaluates to boolean
