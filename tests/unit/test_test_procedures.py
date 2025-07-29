@@ -117,6 +117,7 @@ def test_each_step_connected(tp_id: str, tp: TestProcedure):
         step_names == visited_nodes
     ), "Missing entries here indicate a step (or steps) that can't be reached from the root node"
 
+
 @pytest.mark.parametrize("tp_id, tp", ALL_TEST_PROCEDURES)
 def test_procedures_have_required_preconditions(tp_id: str, tp: TestProcedure):
 
@@ -124,19 +125,26 @@ def test_procedures_have_required_preconditions(tp_id: str, tp: TestProcedure):
     enddevice_not_required = [
         "ALL-01",  # Out-of-band device registration
         "ALL-02",  # In-band registration during test procedure
-        "OPT-1-IN-BAND", # In-band device registration during test procedure
+        "OPT-1-IN-BAND",  # In-band device registration during test procedure
         "OPT-1-OUT-OF-BAND",  # Out-of-band device registration
-        "ALL-04"  # In-band device registration during test procedure
+        "ALL-04",  # In-band device registration during test procedure
     ]
     if tp_id not in enddevice_not_required:
         assert tp.preconditions is not None
-        assert tp.preconditions.checks is not None 
-        assert any([check.type == 'end-device-contents' for check in tp.preconditions.checks])
+        assert tp.preconditions.checks is not None
+        assert any([check.type == "end-device-contents" for check in tp.preconditions.checks])
 
-    # Check 'der-settings-contents' present if precondition action involves "opModImpLimW" or "opModGenLimW" expression parameters. NOTE: It is assumed that the expressions with be expressed in terms of setMaxW - we do not perform this check explicitly.
+    # Check 'der-settings-contents' present if precondition action involves "opModImpLimW" or "opModGenLimW"
+    # expression parameters.
+    # NOTE: It is assumed that the expressions with be expressed in terms of setMaxW - we do not perform this
+    # check explicitly.
     if tp.preconditions is not None and tp.preconditions.actions is not None:
         for action in tp.preconditions.actions:
             if action.type == "create-der-control" and action.parameters is not None:
-                if ("opModImpLimW" in action.parameters and type(action.parameters["opModImpLimW"]) == Expression) or ("opModGenLimW" in action.parameters and type(action.parameters["opModGenLimW"]) == Expression):
+                if (
+                    "opModImpLimW" in action.parameters and isinstance(action.parameters["opModImpLimW"], Expression)
+                ) or (
+                    "opModGenLimW" in action.parameters and isinstance(action.parameters["opModGenLimW"], Expression)
+                ):
                     assert tp.preconditions.checks is not None
-                    assert any([check.type == 'der-settings-contents' for check in tp.preconditions.checks])
+                    assert any([check.type == "der-settings-contents" for check in tp.preconditions.checks])
