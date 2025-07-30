@@ -1,9 +1,12 @@
-from cactus_test_definitions.variable_expressions import Expression
 import pytest
 from cactus_test_definitions.test_procedures import (
     TestProcedure,
     TestProcedureConfig,
     TestProcedureId,
+)
+from cactus_test_definitions.variable_expressions import (
+    NamedVariableType,
+    has_named_variable,
 )
 
 # Failures here will raise an issue in the test_from_yamlfile test
@@ -136,15 +139,21 @@ def test_procedures_have_required_preconditions(tp_id: str, tp: TestProcedure):
 
     # Check 'der-settings-contents' present if precondition action involves "opModImpLimW" or "opModGenLimW"
     # expression parameters.
-    # NOTE: It is assumed that the expressions with be expressed in terms of setMaxW - we do not perform this
-    # check explicitly.
     if tp.preconditions is not None and tp.preconditions.actions is not None:
         for action in tp.preconditions.actions:
             if action.type == "create-der-control" and action.parameters is not None:
                 if (
-                    "opModImpLimW" in action.parameters and isinstance(action.parameters["opModImpLimW"], Expression)
+                    "opModImpLimW" in action.parameters
+                    and has_named_variable(
+                        parameter_value=action.parameters["opModImpLimW"],
+                        named_variable=NamedVariableType.DERSETTING_SET_MAX_W,
+                    )
                 ) or (
-                    "opModGenLimW" in action.parameters and isinstance(action.parameters["opModGenLimW"], Expression)
+                    "opModGenLimW" in action.parameters
+                    and has_named_variable(
+                        parameter_value=action.parameters["opModGenLimW"],
+                        named_variable=NamedVariableType.DERSETTING_SET_MAX_W,
+                    )
                 ):
                     assert tp.preconditions.checks is not None
                     assert any([check.type == "der-settings-contents" for check in tp.preconditions.checks])
