@@ -137,23 +137,17 @@ def test_procedures_have_required_preconditions(tp_id: str, tp: TestProcedure):
         assert tp.preconditions.checks is not None
         assert any([check.type == "end-device-contents" for check in tp.preconditions.checks])
 
-    # Check 'der-settings-contents' present if precondition action involves "opModImpLimW" or "opModGenLimW"
-    # expression parameters.
+    # Check 'der-settings-contents' present if any precondition action parameter references setMaxW
     if tp.preconditions is not None and tp.preconditions.actions is not None:
         for action in tp.preconditions.actions:
             if action.parameters is not None:
-                if (
-                    "opModImpLimW" in action.parameters
-                    and has_named_variable(
-                        parameter_value=action.parameters["opModImpLimW"],
-                        named_variable=NamedVariableType.DERSETTING_SET_MAX_W,
-                    )
-                ) or (
-                    "opModGenLimW" in action.parameters
-                    and has_named_variable(
-                        parameter_value=action.parameters["opModGenLimW"],
-                        named_variable=NamedVariableType.DERSETTING_SET_MAX_W,
-                    )
+                if any(
+                    [
+                        has_named_variable(
+                            parameter_value=parameter, named_variable=NamedVariableType.DERSETTING_SET_MAX_W
+                        )
+                        for parameter in action.parameters.values()
+                    ]
                 ):
                     assert tp.preconditions.checks is not None
                     assert any([check.type == "der-settings-contents" for check in tp.preconditions.checks])
