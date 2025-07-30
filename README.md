@@ -165,6 +165,13 @@ checks:
 | `readings-der-voltage` | `minimum_count: int` | True if MUP for DER voltage has `minimum_count` entries |
 | `response-contents` | `latest: bool/None` `status: int/None` | True if at least one received Response matches the filter. `latest` will only consider the most recent received Response.  |
 
+The following are csipaus.org/ns/v1.3-beta/storage extension specific checks implemented
+
+| **name** | **params** | **description** |
+| -------- | ---------- | --------------- |
+| `readings-der-stored-energy` | `minimum_count: int` | True if MUP for DER stored energy has `minimum_count` entries |
+<br>
+
 #### Hexbinary Parameters for Bitwise Operations
 `doeModesEnabled_set` `modesEnabled_set` `doeModesSupported_set` and `modesSupported_set` all expect a hexbinary string to be supplied, which contains the hi assertion bits to be equal to one e.g. `doeModesEnabled_set: "03"` would test to ensure that at least bits 0 and 1 are set hi (==1) for the given `DERSetting.doeModesEnabled`, ignoring all others
 The corresponding `_unset` performs the inverse operation such that every bit set to 1 in the mask is expected to correspond to a zero in the corresponding value e.g. `doeModesEnabled_unset: "03"` would test to ensure that at least bits 0 and 1 are set lo (==0) for the given `DERSetting.doeModesEnabled`, ignoring all others
