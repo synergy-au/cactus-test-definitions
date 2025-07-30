@@ -14,6 +14,11 @@ Criteria:
     - type: der-status-contents
       parameters: {}
 
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
+
 Steps:
   
   POST-DERSETTINGS-FIRST:

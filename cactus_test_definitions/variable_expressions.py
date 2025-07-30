@@ -1,9 +1,9 @@
+import tokenize
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum, auto
 from io import StringIO
 from re import match, search
-import tokenize
 from typing import Any
 
 from cactus_test_definitions.errors import UnparseableVariableExpressionError
@@ -330,3 +330,24 @@ def try_extract_variable_expression(body: Any) -> str | None:
 def is_resolvable_variable(v: Any) -> bool:
     """Returns True if the supplied value is a variable definition that requires resolving"""
     return isinstance(v, NamedVariable) or isinstance(v, Expression) or isinstance(v, Constant)
+
+
+def has_named_variable(
+    parameter_value: NamedVariable | Expression | Constant, named_variable: NamedVariableType
+) -> bool:
+    """Return True if the supplied named variable is used in the the parameter 'parameter_value'"""
+
+    if isinstance(parameter_value, Constant):
+        return False
+
+    if isinstance(parameter_value, NamedVariable):
+        return parameter_value.variable == named_variable
+
+    if isinstance(parameter_value, Expression):
+        if isinstance(parameter_value.lhs_operand, NamedVariable):
+            if parameter_value.lhs_operand.variable == named_variable:
+                return True
+        if isinstance(parameter_value.rhs_operand, NamedVariable):
+            if parameter_value.rhs_operand.variable == named_variable:
+                return True
+        return False

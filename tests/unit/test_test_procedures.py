@@ -4,6 +4,10 @@ from cactus_test_definitions.test_procedures import (
     TestProcedureConfig,
     TestProcedureId,
 )
+from cactus_test_definitions.variable_expressions import (
+    NamedVariableType,
+    has_named_variable,
+)
 
 # Failures here will raise an issue in the test_from_yamlfile test
 ALL_TEST_PROCEDURES: list[tuple[str, TestProcedure]] = []
@@ -115,3 +119,35 @@ def test_each_step_connected(tp_id: str, tp: TestProcedure):
     assert (
         step_names == visited_nodes
     ), "Missing entries here indicate a step (or steps) that can't be reached from the root node"
+
+
+@pytest.mark.parametrize("tp_id, tp", ALL_TEST_PROCEDURES)
+def test_procedures_have_required_preconditions(tp_id: str, tp: TestProcedure):
+
+    # Check 'end-device-contents' present
+    enddevice_not_required = [
+        "ALL-01",  # Out-of-band device registration
+        "ALL-02",  # In-band registration during test procedure
+        "OPT-1-IN-BAND",  # In-band device registration during test procedure
+        "OPT-1-OUT-OF-BAND",  # Out-of-band device registration
+        "ALL-04",  # In-band device registration during test procedure
+    ]
+    if tp_id not in enddevice_not_required:
+        assert tp.preconditions is not None
+        assert tp.preconditions.checks is not None
+        assert any([check.type == "end-device-contents" for check in tp.preconditions.checks])
+
+    # Check 'der-settings-contents' present if any precondition action parameter references setMaxW
+    if tp.preconditions is not None and tp.preconditions.actions is not None:
+        for action in tp.preconditions.actions:
+            if action.parameters is not None:
+                if any(
+                    [
+                        has_named_variable(
+                            parameter_value=parameter, named_variable=NamedVariableType.DERSETTING_SET_MAX_W
+                        )
+                        for parameter in action.parameters.values()
+                    ]
+                ):
+                    assert tp.preconditions.checks is not None
+                    assert any([check.type == "der-settings-contents" for check in tp.preconditions.checks])

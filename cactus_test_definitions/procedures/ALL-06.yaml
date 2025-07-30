@@ -7,7 +7,12 @@ Criteria:
   checks:
     - type: all-steps-complete
       parameters: {}
-    
+
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
+
 Steps:
   
   POST-DERSTATUS-DISCONNECT:

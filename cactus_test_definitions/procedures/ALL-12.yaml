@@ -9,6 +9,9 @@ Criteria:
       parameters: {}
 
 Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
   actions:
     - type: set-default-der-control
       parameters:
