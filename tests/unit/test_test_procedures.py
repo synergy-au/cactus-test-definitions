@@ -141,7 +141,7 @@ def test_procedures_have_required_preconditions(tp_id: str, tp: TestProcedure):
     # expression parameters.
     if tp.preconditions is not None and tp.preconditions.actions is not None:
         for action in tp.preconditions.actions:
-            if action.type == "create-der-control" and action.parameters is not None:
+            if action.parameters is not None:
                 if (
                     "opModImpLimW" in action.parameters
                     and has_named_variable(
