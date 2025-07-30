@@ -87,6 +87,7 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "readings-der-active-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-der-reactive-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-der-voltage": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
+    "readings-der-stored-energy": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},  # Storage extension
     "subscription-contents": {"subscribed_resource": ParameterSchema(True, ParameterType.String)},
     "response-contents": {
         "latest": ParameterSchema(False, ParameterType.Boolean),
