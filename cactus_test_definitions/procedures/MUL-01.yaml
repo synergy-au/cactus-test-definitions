@@ -30,6 +30,8 @@ Steps:
   
   # The client powers off one DER
   POST-DERSTATUS-FIRST-DISCONNECT:
+    instructions:
+      - Power off one DER either by a hardware switch on the DER or by disconnection from the grid supply. Priority should be given to DER capable of generation.
     event:
       type: POST-request-received
       parameters:
@@ -55,6 +57,8 @@ Steps:
   
   # The client powers off all remaining DER
   POST-DERSTATUS-FULL-DISCONNECT:
+    instructions:
+      - Power off off remaining DER.
     event:
       type: POST-request-received
       parameters:

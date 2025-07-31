@@ -108,7 +108,8 @@ class Step:
     It's common for a step to activate other "steps" so that the state of the active test procedure can "evolve" in
     response to client behaviour
 
-    Instructions are out-of-band operations that need performing during the step e.g. disconnect DER from grid, disable power consumption etc.
+    Instructions are out-of-band operations that need performing during the step
+    e.g. disconnect DER from grid, disable power consumption etc.
     """
 
     event: Event  # The event to act as a trigger
@@ -123,7 +124,8 @@ class Preconditions:
 
     Checks are also included to prevent a client from starting a test before they have correctly met preconditions
 
-    Instructions are out-of-band operations that need performing at the start of the test procedure e.g. attached a load etc.
+    Instructions are out-of-band operations that need performing at the start of the test procedure
+    e.g. attach a load etc.
     """
 
     actions: list[Action] | None = None  # To be executed as the test case first "starts"
