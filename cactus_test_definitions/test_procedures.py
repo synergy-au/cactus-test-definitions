@@ -106,10 +106,14 @@ class Step:
     """A step is a part of the test procedure that waits for some form of event before running a set of actions.
 
     It's common for a step to activate other "steps" so that the state of the active test procedure can "evolve" in
-    response to client behaviour"""
+    response to client behaviour
+
+    Instructions are out-of-band operations that need performing during the step e.g. disconnect DER from grid, disable power consumption etc.
+    """
 
     event: Event  # The event to act as a trigger
     actions: list[Action]  # The actions to execute when the trigger is met
+    instructions: list[str] | None = None
 
 
 @dataclass
@@ -117,10 +121,14 @@ class Preconditions:
     """Preconditions are run during the "initialization" state that precedes the start of a test. They typically
     allow for the setup of the test.
 
-    Checks are also included to prevent a client from starting a test before they have correctly met preconditions"""
+    Checks are also included to prevent a client from starting a test before they have correctly met preconditions
+
+    Instructions are out-of-band operations that need performing at the start of the test procedure e.g. attached a load etc.
+    """
 
     actions: list[Action] | None = None  # To be executed as the test case first "starts"
     checks: list[Check] | None = None  # Will prevent move from "init" state to "started" state of a test if any fail
+    instructions: list[str] | None = None
 
 
 @dataclass

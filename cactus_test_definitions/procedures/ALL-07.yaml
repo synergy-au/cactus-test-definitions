@@ -16,6 +16,8 @@ Preconditions:
 Steps:
   
   POST-DERSTATUS-DISCONNECT:
+    instructions:
+      - Stop DER from generating or consuming active power.
     event:
       type: POST-request-received
       parameters:
@@ -37,6 +39,8 @@ Steps:
             - POST-DERSTATUS-DISCONNECT
   
   POST-DERSTATUS-CONNECT:
+    instructions:
+      - Re-enable ability of DER to generate or consume active power.
     event:
       type: POST-request-received
       parameters:
