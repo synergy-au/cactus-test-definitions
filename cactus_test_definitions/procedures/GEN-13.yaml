@@ -38,8 +38,9 @@ Steps:
 
   # This test is purely following a sequence of DERControls. It's expected that the following events occurs out of band:
   # at t=0 - Test load is consuming 0W
-  # at t=120s - Test load is consuming 10% of setMaxW
-  # at t=300s - Test load is consuming 0W
+  # at t=120s - Test load is consuming 20% of setMaxW
+  # at t=240s - Test load is consuming 10% of setMaxW
+  # at t=360s - Test load is consuming 0W
   #
   # Validation MUST be performed by power meter to ensure that the DER is adjusting its power in response to changing 
   # loads
