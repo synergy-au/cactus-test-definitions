@@ -30,7 +30,7 @@ Steps:
             - GET-EDEV-LIST
             - GET-TM
             - GET-DER
-            - POST-CP
+            - PUT-CP
       - type: remove-steps
         parameters:
           steps:
@@ -69,13 +69,13 @@ Steps:
           steps:
             - GET-DER
 
-  POST-CP:
+  PUT-CP:
     event:
-      type: POST-request-received
+      type: PUT-request-received
       parameters:
         endpoint: /edev/1/cp
     actions:
       - type: remove-steps
         parameters:
           steps:
-            - POST-CP
+            - PUT-CP
