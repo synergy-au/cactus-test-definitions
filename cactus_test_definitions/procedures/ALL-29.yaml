@@ -31,6 +31,8 @@ Steps:
   
   # We will wait until the client picks up the DERControl before killing the comms
   GET-DERC:
+    instructions:
+      - Power cycle (turn off then back on again) the communications client, and while it is offline, disable the communications interface between the client and utility server (e.g. by unplugging an appropriate network cable).
     event:
       type: GET-request-received
       parameters:
@@ -51,6 +53,8 @@ Steps:
 
   # Wait for a few polls before restarting comms
   WAIT-COMMS-RESTART:
+    instructions:
+      - Re-establish communications between the client and utility server (e.g. by plugging the network cable back in).
     event:
       type: wait
       parameters:

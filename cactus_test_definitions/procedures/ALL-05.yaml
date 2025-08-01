@@ -31,6 +31,9 @@ Preconditions:
       parameters:
         der_list_poll_seconds: 60
         mup_post_seconds: 60
+  instructions:
+    - Connect a test load electrically in parallel with the DER.
+    - Set the load to consume 25% of the DER's rated active power.
 
 Steps:
   GET-MUP:
