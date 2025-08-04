@@ -149,12 +149,12 @@ checks:
 | `der-settings-contents` | `setGradW: int/None` `doeModesEnabled_set: hex/none` `doeModesEnabled_unset: hex/none` `modesEnabled_set: hex/none` `modesEnabled_unset: hex/none` `setMaxVA: bool/none` `setMaxVar: bool/none` `setMaxW: bool/none` `setMaxChargeRateW: bool/none` `setMaxDischargeRateW: bool/none` `setMaxWh: bool/none` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `der-capability-contents` | `doeModesSupported_set: hex/none` `doeModesSupported_unset: hex/none` `modesSupported_set: hex/none` `modesSupported_unset: hex/none` `rtgMaxVA: bool/none` `rtgMaxVar: bool/none` `rtgMaxW: bool/none` `rtgMaxChargeRateW: bool/none` `rtgMaxDischargeRateW: bool/none` `rtgMaxWh: bool/none` | True if a `DERCapability` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
-| `readings-site-active-power` | `minimum_count: int` | True if MUP for site wide active power has `minimum_count` entries |
-| `readings-site-reactive-power` | `minimum_count: int` | True if MUP for site wide reactive power has `minimum_count` entries |
-| `readings-site-voltage` | `minimum_count: int` | True if MUP for site wide voltage has `minimum_count` entries |
-| `readings-der-active-power` | `minimum_count: int` | True if MUP for DER active power has `minimum_count` entries |
-| `readings-der-reactive-power` | `minimum_count: int` | True if MUP for DER reactive power has `minimum_count` entries |
-| `readings-der-voltage` | `minimum_count: int` | True if MUP for DER voltage has `minimum_count` entries |
+| `readings-site-active-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide active power with `minimum_count` entries |
+| `readings-site-reactive-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide reactive power with `minimum_count` entries |
+| `readings-site-voltage` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide voltage with `minimum_count` entries |
+| `readings-der-active-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER active power with `minimum_count` entries |
+| `readings-der-reactive-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER reactive power with `minimum_count` entries |
+| `readings-der-voltage` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER voltage with `minimum_count` entries |
 | `response-contents` | `latest: bool/None` `status: int/None` | True if at least one received Response matches the filter. `latest` will only consider the most recent received Response.  |
 
 #### Hexbinary Parameters for Bitwise Operations
