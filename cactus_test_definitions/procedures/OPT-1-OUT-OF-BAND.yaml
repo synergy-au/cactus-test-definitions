@@ -3,6 +3,9 @@ Category: Registration
 Classes:
   - C
 
+TargetVersions:
+  - v1.2
+
 Preconditions:
   actions:
     - type: register-end-device

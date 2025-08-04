@@ -3,7 +3,10 @@ Category: Registration
 Classes:
   - A
   - DR-A
-  
+
+TargetVersions:
+  - v1.2
+
 Preconditions:
   actions:
     - type: register-end-device

@@ -3,6 +3,9 @@ Category: Control
 Classes:
   - A
 
+TargetVersions:
+  - v1.2
+
 Criteria:
   checks:
     - type: all-steps-complete

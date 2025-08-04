@@ -3,6 +3,9 @@ Category: DER
 Classes:
   - DER-G
 
+TargetVersions:
+  - v1.2
+
 Criteria:
   checks:
     - type: all-steps-complete
