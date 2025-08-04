@@ -2,7 +2,10 @@ Description: Validate DERCapability and DERSettings For Multiple DER
 Category: Monitoring
 Classes:
   - M
-  
+
+TargetVersions:
+  - v1.2
+
 Criteria:
   checks:
     - type: all-steps-complete

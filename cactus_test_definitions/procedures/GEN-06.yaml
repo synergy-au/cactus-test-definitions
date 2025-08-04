@@ -4,6 +4,9 @@ Classes:
   - G
   - S
 
+TargetVersions:
+  - v1.2
+
 Criteria:
   checks:
     - type: all-steps-complete

@@ -13,6 +13,14 @@ from cactus_test_definitions.events import Event, validate_event_parameters
 from dataclass_wizard import YAMLWizard
 
 
+class CSIPAusVersion(StrEnum):
+    """The various version identifiers for CSIP-Aus. Used for distinguishing what tests are compatible with what
+    released versions CSIP-Aus."""
+
+    RELEASE_1_2 = "v1.2"
+    BETA_1_3_STORAGE = "v1.3-beta/storage"
+
+
 class TestProcedureId(StrEnum):
     """The set of all available test ID's
 
@@ -149,6 +157,7 @@ class TestProcedure:
     description: str  # Metadata from test definitions
     category: str  # Metadata from test definitions
     classes: list[str]  # Metadata from test definitions
+    target_versions: list[CSIPAusVersion]  # What version(s) of csip-aus is this test targeting?
     steps: dict[str, Step]
     preconditions: Preconditions | None = None  # These execute during "init" and setup the test for a valid start state
     criteria: Criteria | None = None  # How will success/failure of this procedure be determined?
