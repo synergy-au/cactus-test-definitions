@@ -7,6 +7,7 @@ from cactus_test_definitions.errors import (
 )
 from cactus_test_definitions.events import EVENT_PARAMETER_SCHEMA, Event
 from cactus_test_definitions.test_procedures import (
+    CSIPAusVersion,
     Preconditions,
     Step,
     TestProcedure,
@@ -38,6 +39,7 @@ __all__ = [
     "ACTION_PARAMETER_SCHEMA",
     "Check",
     "CHECK_PARAMETER_SCHEMA",
+    "CSIPAusVersion",
     "EVENT_PARAMETER_SCHEMA",
     "Step",
     "Preconditions",
