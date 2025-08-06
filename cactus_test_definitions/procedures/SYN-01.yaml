@@ -1,0 +1,106 @@
+Description: Individual readings - storage
+Category: Monitoring
+Classes:
+  - G
+  - L
+# ALL-02 completed
+
+Criteria:
+  checks:
+    - type: all-steps_complete
+      parameters: {}
+
+    # Test includes ~ 5 minuts of waiting + initial reading sent during test
+    # A minimum of 6 readings is required by the test procedure
+    - type: readings-der-stored-energy
+      parameters: { "minimum_count": 6 }
+
+Preconditions:
+  actions:
+    - type: set-comms-rate
+      parameters:
+        der_list_poll_seconds: 60
+        mup_post_seconds: 60
+
+Steps:
+  GET-MUP:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /mup
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-MUP
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-MUP
+
+  POST-MUP:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /mup
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-MUP-2
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-MUP
+
+  GET-MUP-2:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /mup
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - SET-CONTROL
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-MUP-2
+
+  SET-CONTROL:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 120 # Wait for at least 2 sets of readings to arrive (with post rate 60 seconds)
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now)
+          duration_seconds: 300
+          opModStorageTargetW: $(rtgMaxDischargeRateW * 0.5)
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL
+      - type: remove-steps
+        parameters:
+          steps:
+            - SET-CONTROL
+
+  # This just lets the test run for a few more posts after the control comes into effect
+  # after which, we will force the test to shutdown (as Criteria is partially defined by this ONLY running for a few posts)
+  WAIT-CONTROL:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 180 # Wait for at least 3 sets of readings to arrive (with post rate 60 seconds)
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL
+      - type: finish-test
+        parameters: {}
+
+

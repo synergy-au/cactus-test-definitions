@@ -1,0 +1,103 @@
+Description: Storage Control - opModStorageTargetW
+Category: Control
+Classes:
+  - L
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+  
+  Preconditions:
+    actions:
+      - type: set-comms-rate
+        parameters:
+          der_list_poll_seconds: 60
+          derp_list_poll_seconds: 60
+
+Steps:
+  # This will be the first poll 
+  GET-DERC-1:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+        serve_request_first: true # Run this AFTER servers receives the request
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now + 300)
+          duration_seconds: 900
+          opModStorageTargetW: $(rtgMaxDischargeRateW * 0.5)
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC-2
+
+  # Waits for the control to finish (with a bit of overtime)
+  WAIT-CONTROL-END:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 1260
+
+  # On this poll a new control will be discovered with 0W opModStorageTargetW
+  GET-DERC-2:
+    event:
+      - type: GET-request-received
+        parameters:
+          endpoint: /edev/1/derp/1/derc
+          serve_request_first: true # Run this AFTER server receives the request
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now + 300)
+          duration_seconds: 900
+          opModStorageTargetW: 0
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END-2
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC-2
+
+  # Waits for the control to finish (with a bit of overtime)
+  WAIT-CONTROL-END-2:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 1260
+
+  GET-DERC-3:
+    event:
+      - type: GET-request-received
+        parameters:
+          endpoint: /edev/1/derp/1/derc
+          serve_request_first: true # Run this AFTER server receives the request
+    actions:
+      - type: create-der-control
+        parameters:
+          start: $(now + 300)
+          duration_seconds: 900
+          opModStorageTargetW: $(-0.5 * rtgMaxChargeRateW)
+      - type: enable-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END-3
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DERC-3
+
+  # Waits for the control to finish (with a bit of overtime)
+  WAIT-CONTROL-END-3:
+    event:
+      type: wait
+      parameters:
+        duration_seconds: 1260

@@ -1,0 +1,95 @@
+Description: Capabilities and settings - storage
+Category: Monitoring
+Classes:
+  - L
+
+Criteria:
+  checks:
+    - type: all-steps-complete
+      parameters: {}
+    - type: der-capability-contents
+      parameters: {
+        "rtgMaxChargeRateW": "$(this > 0)",
+        "rtgMaxDischargeRateW": "$(this > 0)",
+        "rtgMaxWh": "$(this > 0)",
+        "vppModesSupport_set": "01",
+      }
+    - type: der-settings-contents
+      parameters: {
+        "setMaxChargeRateW": "$(this <= rtgMaxChargeRateW)",
+        "setMaxDischargeRateW": "$(this <= rtgMaxDischargeRateW)",
+        "setMaxWh": "(this <= rtgMaxWh)",
+        "setMinWh": "(this >= 0)",
+        "vppModesEnabled_set": "01",
+      }
+
+Steps:
+  GET-DER:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/der
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS
+            - POST-DERCAPABILITY
+            - POST-DERSETTINGS
+      - type: remove-steps
+        parameters:
+          steps:
+            - GET-DER
+
+  POST-DERSTATUS:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-2
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS
+
+  POST-DERCAPABILITY:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/dercap
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - POST-DERCAPABILITY-2
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERCAPABILITY
+
+  POST-DERSTATUS-2:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/ders
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERSTATUS-2
+  
+  POST-DERCAPABILITY-2:
+    event:
+      type: POST-request-received
+      parameters:
+        endpoint: /edev/1/der/1/dercap
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - POST-DERCAPABILITY-2
+
