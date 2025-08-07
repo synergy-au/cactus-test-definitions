@@ -117,7 +117,7 @@ Steps:
         parameters:
           start: $(now + 300)
           duration_seconds: 900
-          opModStorageTargetW: $(-1 * rtgMaxChargeRateW)
+          opModStorageTargetW: $(0 - rtgMaxChargeRateW)  # Hack to obtain negative direction control
           opModExpLimW: $(0.5 * rtgMaxDischargeRateW)
       - type: enable-steps
         parameters:
