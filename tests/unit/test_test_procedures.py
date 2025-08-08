@@ -131,6 +131,7 @@ def test_procedures_have_required_preconditions(tp_id: str, tp: TestProcedure):
         "OPT-1-IN-BAND",  # In-band device registration during test procedure
         "OPT-1-OUT-OF-BAND",  # Out-of-band device registration
         "ALL-04",  # In-band device registration during test procedure
+        "DRA-01",  # In-band device registration during test procedure (implied)
     ]
     if tp_id not in enddevice_not_required:
         assert tp.preconditions is not None
