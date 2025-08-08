@@ -16,13 +16,12 @@ Criteria:
           derp_list_poll_seconds: 60
 
 Steps:
-  # This will be the first poll 
+  # On this poll a new control will be discovered with opModStorageTargetW == 50% rtgMaxDischargeRateW
   GET-DERC-1:
     event:
       type: GET-request-received
       parameters:
         endpoint: /edev/1/derp/1/derc
-        serve_request_first: true # Run this AFTER servers receives the request
     actions:
       - type: create-der-control
         parameters:
@@ -32,18 +31,27 @@ Steps:
       - type: enable-steps
         parameters:
           steps:
-            - WAIT-CONTROL-END
+            - WAIT-CONTROL-END-1
       - type: remove-steps
         parameters:
           steps:
             - GET-DERC-2
 
-  # Waits for the control to finish (with a bit of overtime)
-  WAIT-CONTROL-END:
+  # Waits for the new control to finish (with a bit of overtime)
+  WAIT-CONTROL-END-1:
     event:
       type: wait
       parameters:
         duration_seconds: 1260
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-DERC-2
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END-1
 
   # On this poll a new control will be discovered with 0W opModStorageTargetW
   GET-DERC-2:
@@ -51,7 +59,6 @@ Steps:
       - type: GET-request-received
         parameters:
           endpoint: /edev/1/derp/1/derc
-          serve_request_first: true # Run this AFTER server receives the request
     actions:
       - type: create-der-control
         parameters:
@@ -67,25 +74,34 @@ Steps:
           steps:
             - GET-DERC-2
 
-  # Waits for the control to finish (with a bit of overtime)
+  # Waits for the new control to finish (with a bit of overtime)
   WAIT-CONTROL-END-2:
     event:
       type: wait
       parameters:
         duration_seconds: 1260
+    actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-DERC-3
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END-2
 
+  # On this poll a new control will be discovered with opModStorageTargetW == -50% rtgMaxChargeRateW
   GET-DERC-3:
     event:
       - type: GET-request-received
         parameters:
           endpoint: /edev/1/derp/1/derc
-          serve_request_first: true # Run this AFTER server receives the request
     actions:
       - type: create-der-control
         parameters:
           start: $(now + 300)
           duration_seconds: 900
-          opModStorageTargetW: $(-0.5 * rtgMaxChargeRateW)
+          opModStorageTargetW: $(0.5 * negRtgMaxChargeRateW) # Negative value
       - type: enable-steps
         parameters:
           steps:
@@ -95,9 +111,14 @@ Steps:
           steps:
             - GET-DERC-3
 
-  # Waits for the control to finish (with a bit of overtime)
+  # Waits for the new control to finish (with a bit of overtime)
   WAIT-CONTROL-END-3:
     event:
       type: wait
       parameters:
         duration_seconds: 1260
+    actions:
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-CONTROL-END-3

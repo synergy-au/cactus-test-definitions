@@ -23,7 +23,7 @@ Preconditions:
         "rtgMaxChargeRateW": "$(this == rtgMaxVA)",
         "rtgMaxDischargeRateW": "$(this == rtgMaxVA)",
       }
-    # Confirm stored energy requirement (which should contain 50% charge upon inspection)  //AS4777.2:2020 Table 4.5 Australia B
+    # Confirm stored energy requirement (which should contain 50% charge upon inspection) 
     - type: readings-der-stored-energy
       parameters: {
         "minimum_count": 1

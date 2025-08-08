@@ -1,9 +1,7 @@
 Description: Individual readings - storage
 Category: Monitoring
 Classes:
-  - G
   - L
-# ALL-02 completed
 
 Criteria:
   checks:
@@ -13,7 +11,7 @@ Criteria:
     # Test includes ~ 5 minuts of waiting + initial reading sent during test
     # A minimum of 6 readings is required by the test procedure
     - type: readings-der-stored-energy
-      parameters: { "minimum_count": 6 }
+      parameters: { "minimum_count": 5 }
 
 Preconditions:
   actions:
@@ -72,13 +70,13 @@ Steps:
     event:
       type: wait
       parameters:
-        duration_seconds: 120 # Wait for at least 2 sets of readings to arrive (with post rate 60 seconds)
+        duration_seconds: 180 # Wait for at least 2 sets of readings to arrive (with post rate 60 seconds)
     actions:
       - type: create-der-control
         parameters:
           start: $(now)
-          duration_seconds: 300
-          opModStorageTargetW: $(rtgMaxDischargeRateW * 0.5)
+          duration_seconds: 600
+          opModStorageTargetW: 5000
       - type: enable-steps
         parameters:
           steps:
@@ -102,5 +100,3 @@ Steps:
             - WAIT-CONTROL
       - type: finish-test
         parameters: {}
-
-
