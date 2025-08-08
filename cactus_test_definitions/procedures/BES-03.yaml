@@ -7,13 +7,13 @@ Criteria:
   checks:
     - type: all-steps-complete
       parameters: {}
-  
-  Preconditions:
-    actions:
-      - type: set-comms-rate
-        parameters:
-          der_list_poll_seconds: 60
-          derp_list_poll_seconds: 60
+
+Preconditions:
+  actions:
+    - type: set-comms-rate
+      parameters:
+        der_list_poll_seconds: 60
+        derp_list_poll_seconds: 60
 
 Steps:
   # On this poll a new control will be discovered with opModStorageTargetW == 50% rtgMaxDischargeRateW
@@ -35,7 +35,7 @@ Steps:
       - type: remove-steps
         parameters:
           steps:
-            - GET-DERC-2
+            - GET-DERC-1
 
   # Waits for the new control to finish (with a bit of overtime)
   WAIT-CONTROL-END-1:
@@ -56,9 +56,9 @@ Steps:
   # On this poll a new control will be discovered with 0W opModStorageTargetW
   GET-DERC-2:
     event:
-      - type: GET-request-received
-        parameters:
-          endpoint: /edev/1/derp/1/derc
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
     actions:
       - type: create-der-control
         parameters:
@@ -93,9 +93,9 @@ Steps:
   # On this poll a new control will be discovered with opModStorageTargetW == -50% rtgMaxChargeRateW
   GET-DERC-3:
     event:
-      - type: GET-request-received
-        parameters:
-          endpoint: /edev/1/derp/1/derc
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
     actions:
       - type: create-der-control
         parameters:

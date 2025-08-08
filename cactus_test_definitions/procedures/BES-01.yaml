@@ -5,7 +5,7 @@ Classes:
 
 Criteria:
   checks:
-    - type: all-steps_complete
+    - type: all-steps-complete
       parameters: {}
 
     # Test includes ~ 5 minuts of waiting + initial reading sent during test

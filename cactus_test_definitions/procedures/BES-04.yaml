@@ -33,9 +33,9 @@ Steps:
   # Client discovers control for opModStorageTargetW and opModExpLimW
   GET-DERC-1:
     event:
-      - type: GET-request-received
-        parameters:
-          endpoint: /edev/1/derp/1/derc
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
     actions:
       - type: create-der-control
         parameters:
@@ -214,5 +214,5 @@ Steps:
       - type: remove-steps
         parameters:
           steps:
-            - WAIT-CONTROL-END-4
+            - WAIT-CONTROL-END-5
 

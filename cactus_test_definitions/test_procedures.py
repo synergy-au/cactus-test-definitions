@@ -79,6 +79,12 @@ class TestProcedureId(StrEnum):
     OPT_1_IN_BAND = "OPT-1-IN-BAND"
     OPT_1_OUT_OF_BAND = "OPT-1-OUT-OF-BAND"
 
+    # Storage extension
+    BES_01 = "BES-01"
+    BES_02 = "BES-02"
+    BES_03 = "BES-03"
+    BES_04 = "BES-04"
+
 
 class UniqueKeyLoader(yaml.SafeLoader):
     """Originally sourced from https://gist.github.com/pypt/94d747fe5180851196eb
