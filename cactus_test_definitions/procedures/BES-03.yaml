@@ -14,6 +14,11 @@ Preconditions:
       parameters:
         der_list_poll_seconds: 60
         derp_list_poll_seconds: 60
+    - type: create-der-control
+      parameters:
+        start: $(now + 300)
+        duration_seconds: 900
+        opModStorageTargetW: $(rtgMaxDischargeRateW * 0.5)
 
 Steps:
   # On this poll a new control will be discovered with opModStorageTargetW == 50% rtgMaxDischargeRateW
@@ -23,11 +28,6 @@ Steps:
       parameters:
         endpoint: /edev/1/derp/1/derc
     actions:
-      - type: create-der-control
-        parameters:
-          start: $(now + 300)
-          duration_seconds: 900
-          opModStorageTargetW: $(rtgMaxDischargeRateW * 0.5)
       - type: enable-steps
         parameters:
           steps:
