@@ -20,6 +20,12 @@ Preconditions:
         der_list_poll_seconds: 60
         mup_post_seconds: 60
 
+    # Enable this to allow control to be assigned
+    - type: create-der-program
+      parameters: 
+        primacy: 1
+        fsa_id: 1
+
 Steps:
   GET-MUP:
     event:
