@@ -16,7 +16,7 @@ Preconditions:
         derp_list_poll_seconds: 60
     - type: create-der-control
       parameters:
-        start: $(now + 300)
+        start: $(now + '300 seconds')
         duration_seconds: 900
         opModStorageTargetW: $(rtgMaxDischargeRateW * 0.5)
 
@@ -62,7 +62,7 @@ Steps:
     actions:
       - type: create-der-control
         parameters:
-          start: $(now + 300)
+          start: $(now + '300 seconds')
           duration_seconds: 900
           opModStorageTargetW: 0
       - type: enable-steps
@@ -99,7 +99,7 @@ Steps:
     actions:
       - type: create-der-control
         parameters:
-          start: $(now + 300)
+          start: $(now + '300 seconds')
           duration_seconds: 900
           opModStorageTargetW: $(0.5 * negRtgMaxChargeRateW) # Negative value
       - type: enable-steps

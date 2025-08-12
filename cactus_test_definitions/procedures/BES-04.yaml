@@ -19,7 +19,7 @@ Preconditions:
         opModExpLimW: 1500
     - type: create-der-control
       parameters:
-        start: $(now + 300)
+        start: $(now + '300 seconds')
         duration_seconds: 900
         opModStorageTargetW: $(rtgMaxDischargeRateW)
         opModExpLimW: $(2 * rtgMaxDischargeRateW)
@@ -77,7 +77,7 @@ Steps:
     actions:
       - type: create-der-control
         parameters:
-          start: $(now + 300)
+          start: $(now + '300 seconds')
           duration_seconds: 900
           opModStorageTargetW: $(rtgMaxDischargeRateW)
           opModExpLimW: $(0.5 * rtgMaxDischargeRateW)
@@ -115,7 +115,7 @@ Steps:
     actions:
       - type: create-der-control
         parameters:
-          start: $(now + 300)
+          start: $(now + '300 seconds')
           duration_seconds: 900
           opModStorageTargetW: $(0 - rtgMaxChargeRateW)  # Hack to obtain negative direction control
           opModExpLimW: $(0.5 * rtgMaxDischargeRateW)
@@ -153,7 +153,7 @@ Steps:
     actions:
       - type: create-der-control
         parameters:
-          start: $(now + 300)
+          start: $(now + '300 seconds')
           duration_seconds: 900
           opModStorageTargetW: 0
           opModExpLimW: 0
@@ -191,7 +191,7 @@ Steps:
     actions:
       - type: create-der-control
         parameters:
-          start: $(now + 300)
+          start: $(now + '300 seconds')
           duration_seconds: 900
           opModStorageTargetW: $(0.3 * rtgMaxDischargeRateW)
           opModExpLimW: $(rtgMaxDischargeRateW)
