@@ -8,8 +8,8 @@ Criteria:
     - type: all-steps-complete
       parameters: {}
 
-    # Test includes ~ 5 minuts of waiting + initial reading sent during test
-    # A minimum of 6 readings is required by the test procedure
+    # Test includes ~ 5 minutes of waiting + initial reading sent during test
+    # A minimum of 5 readings is required by the test procedure
     - type: readings-der-stored-energy
       parameters: { "minimum_count": 5 }
 
@@ -60,23 +60,40 @@ Steps:
       - type: enable-steps
         parameters:
           steps:
-            - SET-CONTROL
+            - WAIT-READINGS
       - type: remove-steps
         parameters:
           steps:
             - GET-MUP-2
 
-  SET-CONTROL:
+  # Wait for at least 2 readings to arrive
+  WAIT-READINGS:
     event:
       type: wait
       parameters:
         duration_seconds: 180 # Wait for at least 2 sets of readings to arrive (with post rate 60 seconds)
     actions:
+      - type: enable-steps
+        parameters:
+          steps:
+            - GET-DERC
+      - type: remove-steps
+        parameters:
+          steps:
+            - WAIT-READINGS
+
+  # On this poll, client will discover new 0W control is in place
+  GET-DERC:
+    event:
+      type: GET-request-received
+      parameters:
+        endpoint: /edev/1/derp/1/derc
+    actions:
       - type: create-der-control
         parameters:
           start: $(now)
           duration_seconds: 600
-          opModStorageTargetW: 5000
+          opModStorageTargetW: 0
       - type: enable-steps
         parameters:
           steps:
@@ -84,7 +101,7 @@ Steps:
       - type: remove-steps
         parameters:
           steps:
-            - SET-CONTROL
+            - GET-DERC
 
   # This just lets the test run for a few more posts after the control comes into effect
   # after which, we will force the test to shutdown (as Criteria is partially defined by this ONLY running for a few posts)
