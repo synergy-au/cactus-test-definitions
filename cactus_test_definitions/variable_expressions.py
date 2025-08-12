@@ -69,7 +69,7 @@ class NamedVariableType(IntEnum):
 
     # Storage extension
     DERSETTING_SET_MIN_WH = auto()
-    DERCAPABILITY_NEG_RTG_MAX_CHARGE_RATE_W = auto() # -W (after multiplier applied), reference $negRtgMaxChargeRateW
+    DERCAPABILITY_NEG_RTG_MAX_CHARGE_RATE_W = auto()  # -W (after multiplier applied), reference $negRtgMaxChargeRateW
 
 
 class OperationType(IntEnum):
