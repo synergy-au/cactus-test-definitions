@@ -58,8 +58,6 @@ class NamedVariableType(IntEnum):
     DERSETTING_SET_MAX_CHARGE_RATE_W = auto()
     DERSETTING_SET_MAX_DISCHARGE_RATE_W = auto()
     DERSETTING_SET_MAX_WH = auto()
-    # Storage extension
-    DERSETTING_SET_MIN_WH = auto()
 
     # Must resolve to DERCapablity of the current EndDevice under test
     DERCAPABILITY_RTG_MAX_VA = auto()  # VA ( after multiplier applied), reference $rtgMaxVA
@@ -68,6 +66,10 @@ class NamedVariableType(IntEnum):
     DERCAPABILITY_RTG_MAX_CHARGE_RATE_W = auto()  # W ( after multiiplier applied), reference $rtgMaxChargeRateW
     DERCAPABILITY_RTG_MAX_DISCHARGE_RATE_W = auto()  # W ( after multiplier applied), reference $rtgMaxDischargeRateW
     DERCAPABILITY_RTG_MAX_WH = auto()  # Wh ( after multiplier applied), reference $rtgMaxWh
+
+    # Storage extension
+    DERSETTING_SET_MIN_WH = auto()
+    DERCAPABILITY_NEG_RTG_MAX_CHARGE_RATE_W = auto()  # -W (after multiplier applied), reference $negRtgMaxChargeRateW
 
 
 class OperationType(IntEnum):
@@ -203,6 +205,8 @@ def parse_unary_expression(token: Token) -> Constant | NamedVariable:
             # Storage extension
             case "setMinWh":
                 return NamedVariable(NamedVariableType.DERSETTING_SET_MIN_WH)
+            case "negRtgMaxChargeRateW":
+                return NamedVariable(NamedVariableType.DERCAPABILITY_NEG_RTG_MAX_CHARGE_RATE_W)
 
         raise UnparseableVariableExpressionError(f"'{token.string}' isn't recognized as a named variable")
 

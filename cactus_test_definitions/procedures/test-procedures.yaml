@@ -61,4 +61,8 @@ TestProcedures:
   MUL-03: !include MUL-03.yaml
   OPT-1-IN-BAND: !include OPT-1-IN-BAND.yaml
   OPT-1-OUT-OF-BAND: !include OPT-1-OUT-OF-BAND.yaml
+  BES-01: !include BES-01.yaml
+  BES-02: !include BES-02.yaml
+  BES-03: !include BES-03.yaml
+  BES-04: !include BES-04.yaml
 
