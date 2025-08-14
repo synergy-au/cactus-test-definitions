@@ -3,14 +3,25 @@ Category: Monitoring
 Classes:
   - A
 
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
       parameters: {}
-    
+
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
+
 Steps:
   
   POST-DERSTATUS-DISCONNECT:
+    instructions:
+      - Disconnect all DER from the grid.
     event:
       type: POST-request-received
       parameters:
@@ -32,6 +43,8 @@ Steps:
             - POST-DERSTATUS-DISCONNECT
   
   POST-DERSTATUS-CONNECT:
+    instructions:
+      - Reconnect all DER to the grid.
     event:
       type: POST-request-received
       parameters:

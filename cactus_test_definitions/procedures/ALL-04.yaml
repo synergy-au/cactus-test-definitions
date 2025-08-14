@@ -3,6 +3,10 @@ Category: Registration
 Classes:
   - A
 
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Preconditions:
   actions:
     - type: 'edev-registration-links'

@@ -3,6 +3,10 @@ Category: Monitoring
 Classes:
   - A
 
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
@@ -21,6 +25,10 @@ Criteria:
     - type: readings-der-voltage
       parameters: {"minimum_count": 3}
 
+Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
 
 Steps:
   

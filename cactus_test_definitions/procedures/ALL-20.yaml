@@ -3,6 +3,10 @@ Category: Control
 Classes:
   - A
 
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
@@ -11,6 +15,8 @@ Criteria:
 Preconditions:
   checks:
     - type: end-device-contents
+      parameters: {}
+    - type: der-settings-contents
       parameters: {}
   actions:
     - type: set-comms-rate

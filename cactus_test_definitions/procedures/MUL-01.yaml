@@ -3,6 +3,10 @@ Category: Monitoring
 Classes:
   - M
 
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
@@ -11,6 +15,10 @@ Criteria:
 
 Preconditions:
   checks:
+    - type: end-device-contents
+      parameters: {}
+    - type: der-settings-contents
+      parameters: {}
     - type: der-status-contents
       parameters: 
         genConnectStatus_bit0: true
@@ -26,6 +34,8 @@ Steps:
   
   # The client powers off one DER
   POST-DERSTATUS-FIRST-DISCONNECT:
+    instructions:
+      - Power off one DER either by a hardware switch on the DER or by disconnection from the grid supply. Priority should be given to DER capable of generation.
     event:
       type: POST-request-received
       parameters:
@@ -51,6 +61,8 @@ Steps:
   
   # The client powers off all remaining DER
   POST-DERSTATUS-FULL-DISCONNECT:
+    instructions:
+      - Power off off remaining DER.
     event:
       type: POST-request-received
       parameters:

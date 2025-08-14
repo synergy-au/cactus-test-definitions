@@ -1,11 +1,3 @@
-# Cactus Test Definitions - Forked for Synergy Storage Extension
-
-This is a forked project with a long lived branch which implements the CSIP-Aus storage extension (https://csipaus.org/ns/v1.3-beta/storage) proposed by Synergy
-
-The original project, which focuses implementation on the current accepted CSIP-Aus standards, is developed by [BSGIP here](https://github.com/bsgip/cactus-test-definitions)
-
-<br>
-
 # Cactus Test Definitions
 
 This repository contains YAML test procedure definitions for use with the CSIP-AUS Client Test Harness.
@@ -153,23 +145,23 @@ checks:
 | -------- | ---------- | --------------- |
 | `all-steps-complete` | `ignored_steps: list[str]/None` | True if every `Step` in a `TestProcedure` has been deactivated (excepting any ignored steps) |
 | `all-notifications-transmitted` | None | True if every transmitted notification (pub/sub) has been received with a HTTP success code response from the subscription notification URI |
-| `end-device-contents` | `has_connection_point_id: bool/None` | True if an `EndDevice` is registered and optionally has the specified contents. `has_connection_point_id` (if True) will check whether the active `EndDevice` has `ConnectionPoint.id` specified. |
+| `end-device-contents` | `has_connection_point_id: bool/None` `deviceCategory_anyset: hex/none` | True if an `EndDevice` is registered and optionally has the specified contents. `has_connection_point_id` (if True) will check whether the active `EndDevice` has `ConnectionPoint.id` specified. |
 | `der-settings-contents` | `setGradW: int/None` `doeModesEnabled_set: hex/none` `doeModesEnabled_unset: hex/none` `modesEnabled_set: hex/none` `modesEnabled_unset: hex/none` `setMaxVA: bool/none` `setMaxVar: bool/none` `setMaxW: bool/none` `setMaxChargeRateW: bool/none` `setMaxDischargeRateW: bool/none` `setMaxWh: bool/none` `setMinWh: bool/none` `vppModesEnabled_set: hexbinary/none` `vppModesEnabled_unset: hexbinary/none` | True if a `DERSettings` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `der-capability-contents` | `doeModesSupported_set: hex/none` `doeModesSupported_unset: hex/none` `modesSupported_set: hex/none` `modesSupported_unset: hex/none` `rtgMaxVA: bool/none` `rtgMaxVar: bool/none` `rtgMaxW: bool/none` `rtgMaxChargeRateW: bool/none` `rtgMaxDischargeRateW: bool/none` `rtgMaxWh: bool/none` `vppModesSupported_set: hexbinary/none` `vppModesSupported_unset: hexbinary/none` | True if a `DERCapability` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
-| `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
-| `readings-site-active-power` | `minimum_count: int` | True if MUP for site wide active power has `minimum_count` entries |
-| `readings-site-reactive-power` | `minimum_count: int` | True if MUP for site wide reactive power has `minimum_count` entries |
-| `readings-site-voltage` | `minimum_count: int` | True if MUP for site wide voltage has `minimum_count` entries |
-| `readings-der-active-power` | `minimum_count: int` | True if MUP for DER active power has `minimum_count` entries |
-| `readings-der-reactive-power` | `minimum_count: int` | True if MUP for DER reactive power has `minimum_count` entries |
-| `readings-der-voltage` | `minimum_count: int` | True if MUP for DER voltage has `minimum_count` entries |
+| `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` `alarmStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
+| `readings-site-active-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide active power with `minimum_count` entries |
+| `readings-site-reactive-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide reactive power with `minimum_count` entries |
+| `readings-site-voltage` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide voltage with `minimum_count` entries |
+| `readings-der-active-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER active power with `minimum_count` entries |
+| `readings-der-reactive-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER reactive power with `minimum_count` entries |
+| `readings-der-voltage` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER voltage with `minimum_count` entries |
 | `response-contents` | `latest: bool/None` `status: int/None` | True if at least one received Response matches the filter. `latest` will only consider the most recent received Response.  |
 
 The following are csipaus.org/ns/v1.3-beta/storage extension specific checks implemented
 
 | **name** | **params** | **description** |
 | -------- | ---------- | --------------- |
-| `readings-der-stored-energy` | `minimum_count: int` | True if MUP for DER stored energy has `minimum_count` entries |
+| `readings-der-stored-energy` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER stored energy with `minimum_count` entries |
 <br>
 
 #### Hexbinary Parameters for Bitwise Operations

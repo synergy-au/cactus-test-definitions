@@ -3,6 +3,10 @@ Category: Control
 Classes:
   - S
 
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
@@ -11,6 +15,9 @@ Criteria:
       parameters: {}
 
 Preconditions:
+  checks:
+    - type: end-device-contents
+      parameters: {}
   actions:
     - type: register-end-device
       parameters: {}
@@ -29,6 +36,8 @@ Steps:
 
   # Wait for a subscription to /edev and then update the active EndDevice's postRate to trigger a notification
   POST-SUBSCRIPTION-EDEV:
+    instructions:
+      - Trigger an EndDeviceList subscription request from the aggregator client system (this can be an automated response to completing the Discovery process).
     event:
       type: POST-request-received
       parameters:
@@ -49,6 +58,8 @@ Steps:
 
   # Wait for a subscription to /edev/1/fsa and then update the active fsa list to trigger a notification
   POST-SUBSCRIPTION-FSAL:
+    instructions:
+      - Trigger a FunctionSetAssignmentsList subscription request from the aggregator client system.
     event:
       type: POST-request-received
       parameters:
@@ -70,6 +81,8 @@ Steps:
 
   # Wait for a subscription to /edev/1/fsa/1/derp and then update the active DERProgram list to trigger a notification
   POST-SUBSCRIPTION-DERP:
+    instructions:
+      - Trigger a DERProgramList subscription request from the aggregator client system.
     event:
       type: POST-request-received
       parameters:
@@ -90,6 +103,8 @@ Steps:
 
   # Wait for a subscription to /edev/1/derp/1/derc and then create a DERControl to trigger a notification
   POST-SUBSCRIPTION-DERC:
+    instructions:
+      - Trigger a DERControlList subscription request from the aggregator client system.
     event:
       type: POST-request-received
       parameters:
@@ -113,6 +128,8 @@ Steps:
 
   # Wait for a subscription to /edev/1/derp/1/dderc and then update the DefaultDERControl to trigger a notification
   POST-SUBSCRIPTION-DEFAULT-DERC:
+    instructions:
+      - Trigger a DefaultDERControl subscription request from the aggregator client system.
     event:
       type: POST-request-received
       parameters:

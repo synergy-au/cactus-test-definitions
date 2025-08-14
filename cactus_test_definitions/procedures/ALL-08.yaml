@@ -2,7 +2,11 @@ Description: Capabilities and Settings
 Category: Monitoring
 Classes:
   - A
-  
+
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
@@ -12,6 +16,11 @@ Criteria:
     - type: der-settings-contents
       parameters: {}
     - type: der-status-contents
+      parameters: {}
+
+Preconditions:
+  checks:
+    - type: end-device-contents
       parameters: {}
 
 Steps:

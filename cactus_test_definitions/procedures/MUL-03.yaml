@@ -2,7 +2,11 @@ Description: Validate DERCapability and DERSettings For Multiple DER
 Category: Monitoring
 Classes:
   - M
-  
+
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
@@ -12,6 +16,11 @@ Criteria:
     - type: der-settings-contents
       parameters: {}
     - type: der-status-contents
+      parameters: {}
+
+Preconditions:
+  checks:
+    - type: end-device-contents
       parameters: {}
 
 Steps:
@@ -34,6 +43,8 @@ Steps:
   # There is little we can automatically validate - this test will rely on the lab technician to validate the 
   # DERSettings being reported in the output report
   POST-DERSETTINGS-UPDATED:
+    instructions:
+      - Modify the maximum rating of one DER in the device settings.
     event:
       type: POST-request-received
       parameters:

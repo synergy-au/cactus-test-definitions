@@ -4,6 +4,10 @@ Classes:
   - L
   - S
 
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
@@ -12,9 +16,12 @@ Criteria:
       parameters: {}
 
 Preconditions:
-  actions:
-    - type: register-end-device
+  checks:
+    - type: end-device-contents
       parameters: {}
+    - type: der-settings-contents
+      parameters: {}
+  actions:
     - type: set-comms-rate
       parameters:
         # Set this to a large value - we want to test they respond due to notification - not polling

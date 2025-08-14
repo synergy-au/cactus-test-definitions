@@ -4,15 +4,20 @@ Classes:
   - A
   - DR-A
 
+TargetVersions:
+  - v1.2
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
       parameters: {}
 
 Preconditions:
-  actions:
-    - type: register-end-device
+  checks:
+    - type: end-device-contents
       parameters: {}
+  actions:
     - type: set-comms-rate
       parameters:
         fsa_list_poll_seconds: 300

@@ -39,6 +39,7 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "all-notifications-transmitted": {},
     "end-device-contents": {
         "has_connection_point_id": ParameterSchema(False, ParameterType.Boolean),
+        "deviceCategory_anyset": ParameterSchema(False, ParameterType.HexBinary),  # Any of these bits set to 1
     },
     "der-settings-contents": {
         "setGradW": ParameterSchema(False, ParameterType.Integer),  # Hundredths of a percent / second
@@ -79,7 +80,8 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "genConnectStatus_bit0": ParameterSchema(False, ParameterType.Boolean),
         "genConnectStatus_bit1": ParameterSchema(False, ParameterType.Boolean),
         "genConnectStatus_bit2": ParameterSchema(False, ParameterType.Boolean),
-        "operationalModeStatus": ParameterSchema(False, ParameterType.Boolean),
+        "operationalModeStatus": ParameterSchema(False, ParameterType.Integer),
+        "alarmStatus": ParameterSchema(False, ParameterType.Integer),
     },
     "readings-site-active-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-site-reactive-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},

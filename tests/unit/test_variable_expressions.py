@@ -11,6 +11,7 @@ from cactus_test_definitions.variable_expressions import (
     NamedVariableType,
     OperationType,
     UnparseableVariableExpressionError,
+    has_named_variable,
     is_resolvable_variable,
     parse_time_delta,
     parse_variable_expression_body,
@@ -295,5 +296,42 @@ def test_parse_variable_expression_body_this(
 )
 def test_is_resolvable_variable(input: Any, expected: bool):
     result = is_resolvable_variable(input)
+    assert isinstance(result, bool)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "parameter,variable,expected",
+    [
+        (Constant(value=0), NamedVariableType.DERSETTING_SET_MAX_W, False),
+        (Constant(value=5), NamedVariableType.DERSETTING_SET_MAX_W, False),
+        (NamedVariable(NamedVariableType.DERSETTING_SET_MAX_W), NamedVariableType.DERSETTING_SET_MAX_W, True),
+        (NamedVariable(NamedVariableType.DERSETTING_SET_MAX_VA), NamedVariableType.DERSETTING_SET_MAX_W, False),
+        (
+            Expression(OperationType.ADD, Constant(1.23), NamedVariable(NamedVariableType.NOW)),
+            NamedVariableType.DERSETTING_SET_MAX_W,
+            False,
+        ),
+        (
+            Expression(OperationType.ADD, NamedVariable(NamedVariableType.NOW), Constant(1.23)),
+            NamedVariableType.DERSETTING_SET_MAX_W,
+            False,
+        ),
+        (
+            Expression(OperationType.ADD, Constant(1.23), NamedVariable(NamedVariableType.DERSETTING_SET_MAX_W)),
+            NamedVariableType.DERSETTING_SET_MAX_W,
+            True,
+        ),
+        (
+            Expression(OperationType.ADD, NamedVariable(NamedVariableType.DERSETTING_SET_MAX_W), Constant(1.23)),
+            NamedVariableType.DERSETTING_SET_MAX_W,
+            True,
+        ),
+    ],
+)
+def test_has_named_variable(
+    parameter: NamedVariable | Expression | Constant, variable: NamedVariableType, expected: bool
+):
+    result = has_named_variable(parameter_value=parameter, named_variable=variable)
     assert isinstance(result, bool)
     assert result == expected

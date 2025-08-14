@@ -30,6 +30,10 @@ TestProcedures:
   ALL-27: !include ALL-27.yaml
   ALL-28: !include ALL-28.yaml
   ALL-29: !include ALL-29.yaml
+  DRA-01: !include DRA-01.yaml
+  DRA-02: !include DRA-02.yaml
+  DRD-01: !include DRD-01.yaml
+  DRL-01: !include DRL-01.yaml
   GEN-01: !include GEN-01.yaml
   GEN-02: !include GEN-02.yaml
   GEN-03: !include GEN-03.yaml
