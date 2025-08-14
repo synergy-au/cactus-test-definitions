@@ -212,6 +212,19 @@ def test_parse_time_delta(unquoted_raw: str, expected: timedelta | type[Exceptio
         ("7 + + 8 ", UnparseableVariableExpressionError),
         ("'5 mins + now ", UnparseableVariableExpressionError),  # Unterminated string literal
         ("now + '5 mins", UnparseableVariableExpressionError),  # Unterminated string literal
+        # Storage extension
+        (
+            "setMinWh >= 0.5",
+            Expression(OperationType.GTE, NamedVariable(NamedVariableType.DERSETTING_SET_MIN_WH), Constant(0.5)),
+        ),
+        (
+            "negRtgMaxChargeRateW + 50",
+            Expression(
+                OperationType.ADD,
+                NamedVariable(NamedVariableType.DERCAPABILITY_NEG_RTG_MAX_CHARGE_RATE_W),
+                Constant(50),
+            ),
+        ),
     ],
 )
 def test_parse_variable_expression_body(

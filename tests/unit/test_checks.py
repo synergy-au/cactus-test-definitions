@@ -18,6 +18,12 @@ from cactus_test_definitions import variable_expressions as varexps
         (Check("der-settings-contents", {"modesEnabled_unset": "E"}), True),
         (Check("der-settings-contents", {"doeModesEnabled_set": 12}), False),
         (Check("der-settings-contents", {"doeModesEnabled_unset": 12}), False),
+        # Storage extension
+        (Check("der-settings-contents", {"vppModesEnabled_set": "1"}), True),
+        (Check("der-settings-contents", {"vppModesEnabled_unset": "1"}), True),
+        (Check("der-capability-contents", {"vppModesSupported_set": "1"}), True),
+        (Check("der-capability-contents", {"vppModesSupported_unset": "1"}), True),
+        (Check("readings-der-stored-energy", {"minimum_count": 3}), True),
     ],
 )
 def test_validate_check_parameters(check: Check, is_valid: bool):

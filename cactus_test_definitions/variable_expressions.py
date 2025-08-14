@@ -67,6 +67,10 @@ class NamedVariableType(IntEnum):
     DERCAPABILITY_RTG_MAX_DISCHARGE_RATE_W = auto()  # W ( after multiplier applied), reference $rtgMaxDischargeRateW
     DERCAPABILITY_RTG_MAX_WH = auto()  # Wh ( after multiplier applied), reference $rtgMaxWh
 
+    # Storage extension
+    DERSETTING_SET_MIN_WH = auto()
+    DERCAPABILITY_NEG_RTG_MAX_CHARGE_RATE_W = auto()  # -W (after multiplier applied), reference $negRtgMaxChargeRateW
+
 
 class OperationType(IntEnum):
     ADD = auto()
@@ -198,6 +202,11 @@ def parse_unary_expression(token: Token) -> Constant | NamedVariable:
                 return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_DISCHARGE_RATE_W)
             case "rtgMaxWh":
                 return NamedVariable(NamedVariableType.DERCAPABILITY_RTG_MAX_WH)
+            # Storage extension
+            case "setMinWh":
+                return NamedVariable(NamedVariableType.DERSETTING_SET_MIN_WH)
+            case "negRtgMaxChargeRateW":
+                return NamedVariable(NamedVariableType.DERCAPABILITY_NEG_RTG_MAX_CHARGE_RATE_W)
 
         raise UnparseableVariableExpressionError(f"'{token.string}' isn't recognized as a named variable")
 
