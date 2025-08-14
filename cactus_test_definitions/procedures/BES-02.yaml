@@ -3,6 +3,9 @@ Category: Monitoring
 Classes:
   - L
 
+TargetVersions:
+  - v1.3-beta/storage
+
 Criteria:
   checks:
     - type: all-steps-complete
