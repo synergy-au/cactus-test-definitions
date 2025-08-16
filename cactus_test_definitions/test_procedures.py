@@ -150,8 +150,9 @@ class Preconditions:
     utilise immediate_start with precondition checks.
     """
 
+    init_actions: list[Action] | None = None  # To be executed as the runner starts (before anything can occur)
     immediate_start: bool = False  # If True - a test execution will have NO "pre-start" phase.
-    actions: list[Action] | None = None  # To be executed as the test case first "starts"
+    actions: list[Action] | None = None  # To be executed as the test case "starts" (usually on request of client)
     checks: list[Check] | None = None  # Will prevent move from "init" state to "started" state of a test if any fail
     instructions: list[str] | None = None
 
@@ -223,9 +224,14 @@ class TestProcedures(YAMLWizard):
 
         for test_procedure_name, test_procedure in self.test_procedures.items():
             # Validate actions in the preconditions
-            if test_procedure.preconditions and test_procedure.preconditions.actions:
-                for action in test_procedure.preconditions.actions:
-                    self._do_action_validate(test_procedure, test_procedure_name, "Precondition", action)
+            if test_procedure.preconditions:
+                if test_procedure.preconditions.actions:
+                    for action in test_procedure.preconditions.actions:
+                        self._do_action_validate(test_procedure, test_procedure_name, "Precondition", action)
+
+                if test_procedure.preconditions.init_actions:
+                    for action in test_procedure.preconditions.init_actions:
+                        self._do_action_validate(test_procedure, test_procedure_name, "Precondition", action)
 
             # Validate actions that exist on steps
             for step_name, step in test_procedure.steps.items():

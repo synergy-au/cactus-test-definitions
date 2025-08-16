@@ -13,17 +13,22 @@ Criteria:
       parameters: {}
 
 Preconditions:
+  init_actions:
+    - type: set-comms-rate
+      parameters:
+        dcap_poll_seconds: 60
+        edev_list_poll_seconds: 60
+        fsa_list_poll_seconds: 60
+        der_list_poll_seconds: 60
+        derp_list_poll_seconds: 120
+        mup_post_seconds: 60
   checks:
     - type: end-device-contents
       parameters: {}
-  actions:
-    - type: set-comms-rate
-      parameters:
-        fsa_list_poll_seconds: 120
     
 Steps:
 
-  # As the client polls the FSA list - update the poll rate to 60 seconds
+  # As the client polls the derp list - update the poll rate to 60 seconds
   # Give them 120 seconds to poll again before shutting everything down
   GET-DERP-LIST-1:
     event:
@@ -34,7 +39,7 @@ Steps:
     actions:
       - type: set-comms-rate
         parameters:
-          fsa_list_poll_seconds: 60
+          derp_list_poll_seconds: 60
       - type: enable-steps
         parameters:
           steps:
