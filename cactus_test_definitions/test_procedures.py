@@ -144,8 +144,13 @@ class Preconditions:
 
     Instructions are out-of-band operations that need performing at the start of the test procedure
     e.g. attach a load etc.
+
+    If immediate_start is set to True - the "initialization" step will be progressed through immediately so that the
+    client has no opportunity to interact with the server in this state. Any actions will still be executed. Do NOT
+    utilise immediate_start with precondition checks.
     """
 
+    immediate_start: bool = False  # If True - a test execution will have NO "pre-start" phase.
     actions: list[Action] | None = None  # To be executed as the test case first "starts"
     checks: list[Check] | None = None  # Will prevent move from "init" state to "started" state of a test if any fail
     instructions: list[str] | None = None

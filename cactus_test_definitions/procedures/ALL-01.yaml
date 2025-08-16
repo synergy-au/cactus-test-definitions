@@ -9,6 +9,7 @@ TargetVersions:
   - v1.3-beta/storage
 
 Preconditions:
+  immediate_start: true
   actions:
     - type: register-end-device
       parameters:
