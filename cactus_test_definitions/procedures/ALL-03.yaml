@@ -14,6 +14,7 @@ Criteria:
     - type: end-device-contents
       parameters:
         has_connection_point_id: true
+        check_lfdi: true
 
 Preconditions:
   immediate_start: true # There will be no "init" phase - all interactions will be immediately logged against the test

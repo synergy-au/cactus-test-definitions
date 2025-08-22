@@ -40,6 +40,7 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "end-device-contents": {
         "has_connection_point_id": ParameterSchema(False, ParameterType.Boolean),
         "deviceCategory_anyset": ParameterSchema(False, ParameterType.HexBinary),  # Any of these bits set to 1
+        "check_lfdi": ParameterSchema(False, ParameterType.Boolean),  # Should LFDI be validated in detail
     },
     "der-settings-contents": {
         "setGradW": ParameterSchema(False, ParameterType.Integer),  # Hundredths of a percent / second

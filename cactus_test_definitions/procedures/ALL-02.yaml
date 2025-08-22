@@ -19,7 +19,6 @@ Preconditions:
         derp_list_poll_seconds: 60
         mup_post_seconds: 60
   
-
 Criteria:
   checks:
     - type: all-steps-complete
@@ -30,6 +29,9 @@ Criteria:
       parameters: {}
     - type: der-status-contents
       parameters: {}
+    - type: end-device-contents
+      parameters:
+        check_lfdi: true
       
 Steps:
   # (b, c, d, e, f)
