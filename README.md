@@ -115,7 +115,7 @@ actions:
 | `set-comms-rate` | `dcap_poll_seconds: int/None` `edev_post_seconds: int/None` `edev_list_poll_seconds: int/None` `fsa_list_poll_seconds: int/None` `derp_list_poll_seconds: int/None` `der_list_poll_seconds: int/None` `mup_post_seconds: int/None` | Updates one or more post/poll rates for various resources. For non list resources, the rate will apply to all resources. Unspecified values will not update existing server values. |
 | `communications-status` | `enabled: bool` | If `enabled: false` simulates a full outage for the server (from the perspective of the client). There are many potential outage classes (eg: networking, DNS, software, performance issues) - for consistency the recommended outage simulation is for all requests to be served with a HTTP 500. Defaults to `enabled: true` at test start |
 | `edev-registration-links` | `enabled: bool` | If `enabled: false` `EndDevice` entities will NOT encode `RegistrationLink` elements. Defaults to `enabled: true` at test start |
-| `register-end-device` | `nmi: str/None` `registration_pin: int/None` | Creates a new `EndDevice`, optionally with the specified ConnectionPoint ID or PIN |
+| `register-end-device` | `nmi: str/None` `registration_pin: int/None` `aggregator_lfdi: HexBinary/None` `aggregator_sfdi: int/None` | Creates a new `EndDevice`, optionally with the specified details. `aggregator_lfdi` / `aggregator_sfdi` will ONLY apply to an Aggregator certificate test with the `aggregator_lfdi` being rewritten with the client's PEN. |
 
 
 ### Checks

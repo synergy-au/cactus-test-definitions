@@ -78,6 +78,8 @@ ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
     "register-end-device": {
         "nmi": ParameterSchema(False, ParameterType.String),
         "registration_pin": ParameterSchema(False, ParameterType.Integer),
+        "aggregator_lfdi": ParameterSchema(False, ParameterType.HexBinary),
+        "aggregator_sfdi": ParameterSchema(False, ParameterType.Integer),
     },
 }
 VALID_ACTION_NAMES: set[str] = set(ACTION_PARAMETER_SCHEMA.keys())
