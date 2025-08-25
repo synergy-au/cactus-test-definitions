@@ -13,16 +13,26 @@ Criteria:
       parameters: {}
     - type: der-capability-contents
       parameters:
-        rtgMaxW: true
-        rtgMaxVA: true
-        rtgMaxVar: true
-        doeModesSupported: true
+        rtgMaxChargeRateW: true # Maximum rate of energy transfer received
+        rtgMaxDischargeRateW: true # Maximum rate of energy transfer delivered
+        rtgMaxVA: true # Maximum apparent power
+        rtgMaxVar: true # Maximum reactive power delivered
+        rtgMaxVarNeg: true # Maximum reactive power received
+        rtgMaxW: true # Maximum active power
+        rtgMinPFOverExcited: true # Minimum power factor displacement
+        rtgMinPFUnderExcited: true # Minimum power factor displacement
+        doeModesSupported: true # CSIP-Aus DOE modes supported
     - type: der-settings-contents
       parameters:
-        setMaxW: true
-        setMaxVA: true
-        setMaxVar: true
-        doeModesEnabled: true
+        setMaxChargeRateW: true # Maximum rate of energy transfer received
+        setMaxDischargeRateW: true # Maximum rate of energy transfer delivered
+        setMaxVA: true # Maximum apparent power
+        setMaxVar: true # Maximum reactive power delivered
+        setMaxVarNeg: true # Maximum reactive power received
+        setMaxW: true # Maximum active power
+        setMinPFOverExcited: true # Minimum power factor displacement
+        setMinPFUnderExcited: true # Minimum power factor displacement
+        doeModesEnabled: true # CSIP-Aus DOE modes enabled
     - type: der-status-contents
       parameters: {}
 
