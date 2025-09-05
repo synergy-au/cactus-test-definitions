@@ -151,10 +151,9 @@ checks:
 | `der-status-contents` | `genConnectStatus: int/None` `operationalModeStatus: int/None` `alarmStatus: int/None` | True if a `DERStatus` has been set for the `EndDevice` under test (and if certain elements have been set to certain values) |
 | `readings-site-active-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide active power with `minimum_count` entries |
 | `readings-site-reactive-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide reactive power with `minimum_count` entries |
-| `readings-site-voltage` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide voltage with `minimum_count` entries |
+| `readings-voltage` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for site wide voltage OR DER voltage with `minimum_count` entries (at least one is required) |
 | `readings-der-active-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER active power with `minimum_count` entries |
 | `readings-der-reactive-power` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER reactive power with `minimum_count` entries |
-| `readings-der-voltage` | `minimum_count: int` | True if any MirrorUsagePoint has a MirrorMeterReading for DER voltage with `minimum_count` entries |
 | `response-contents` | `latest: bool/None` `status: int/None` `all: bool/None` | True if at least one received Response matches the filter. `latest` will only consider the most recent received Response. `all` will look for a nominated status match for every `DERControl` |
 | `subscription-contents` | `subscribed_resource: str` | True if a subscription to `subscribed_resource` has been created | 
 

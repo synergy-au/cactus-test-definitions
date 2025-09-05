@@ -88,12 +88,11 @@ CHECK_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
         "operationalModeStatus": ParameterSchema(False, ParameterType.Integer),
         "alarmStatus": ParameterSchema(False, ParameterType.Integer),
     },
+    "readings-voltage": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-site-active-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-site-reactive-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
-    "readings-site-voltage": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-der-active-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-der-reactive-power": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
-    "readings-der-voltage": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},
     "readings-der-stored-energy": {"minimum_count": ParameterSchema(True, ParameterType.Integer)},  # Storage extension
     "subscription-contents": {"subscribed_resource": ParameterSchema(True, ParameterType.String)},
     "response-contents": {
