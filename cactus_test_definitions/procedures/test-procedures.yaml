@@ -26,6 +26,7 @@ TestProcedures:
   ALL-21: !include ALL-21.yaml
   ALL-22: !include ALL-22.yaml
   ALL-23: !include ALL-23.yaml
+  ALL-24: !include ALL-24.yaml
   ALL-25: !include ALL-25.yaml
   ALL-26: !include ALL-26.yaml
   ALL-27: !include ALL-27.yaml
