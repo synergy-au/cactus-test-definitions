@@ -37,8 +37,9 @@ Steps:
   GET-DCAP:
     instructions:
       - "An EndDevice has already been registered (out of band) with PIN 111115"
-      - "[Aggregator Client Only] LFDI: 3E4F45AB31EDFE5B67E343E5E4562E31XXXXXXXX (The X values will match your client PEN)"
-      - "[Aggregator Client Only] SFDI: 16726121139"
+      - "If you are connecting using an Aggregator client/certificate the out of band registered EndDevice will have the following:"
+      - "LFDI: 3E4F45AB31EDFE5B67E343E5E4562E31XXXXXXXX (The X values will match your client PEN)"
+      - "SFDI: 16726121139"
     event:
       type: GET-request-received
       parameters:
