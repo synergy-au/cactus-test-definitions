@@ -90,7 +90,7 @@ Steps:
       - type: create-der-control
         parameters:
           start: $(now)
-          duration_seconds: 300
+          duration_seconds: 600 # Extra long but will be cancelled (give clients enough time to see cancellation)
           opModExpLimW: $(setMaxW * 0.5)
           opModImpLimW: $(setMaxW * 0.5)
           ramp_time_seconds: 60
