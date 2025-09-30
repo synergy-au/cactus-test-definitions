@@ -5,8 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cactus-test-definitions"
 dynamic = ["version", "readme"]
-authors = [{ name = "Mike Turner", email = "mike.turner@anu.edu.au" }]
-maintainers = [{ name = "Mike Turner", email = "mike.turner@anu.edu.au" }]
+authors = [
+  { name = "Mike Turner", email = "mike.turner@anu.edu.au" },
+  { name = "Josh Vote", email = "joshua.vote@anu.edu.au" },
+]
+maintainers = [
+  { name = "Mike Turner", email = "mike.turner@anu.edu.au" },
+  { name = "Josh Vote", email = "joshua.vote@anu.edu.au" },
+]
 description = "CSIP-AUS Client Test Harness Test Definitions"
 keywords = ["CSIP-AUS", "client", "testing", "definitions"]
 requires-python = ">=3.12"
