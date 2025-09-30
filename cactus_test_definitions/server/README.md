@@ -106,7 +106,6 @@ action:
 | `upsert-der-settings` | `type: int` `setMaxW: int` `setGradW: int` `modesEnabled: int` `doeModesEnabled: int` | Sends DERSettings - validates that the server persisted the values correctly |
 | `send-malformed-der-settings` | `updatedTime_missing: bool` `modesEnabled_int: bool`  | Sends a malformed DERSettings - expects a failure and that the server will NOT change anything |
 | `send-malformed-response` | `mrid_unknown: bool` `endDeviceLFDI_unknown: bool` `response_invalid: bool`  | Sends a malformed Response (using the most recent DERControl replyTo) - expects a failure response |
-
 | `create-subscription` | `sub_id: str` `resource: CSIPAusResource` | Sends a new Subscription - validates that the server persisted the values correctly via Location. `sub_id` will alias this subscription for future action calls. |
 | `delete-subscription` | `sub_id: str` | Sends a deletion for a previously created Subscription. |
 | `respond-der-controls` | None | Enumerates all known DERControls and sends a Response for any that require it. |
