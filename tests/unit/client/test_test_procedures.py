@@ -1,3 +1,5 @@
+from importlib import resources
+
 import pytest
 from cactus_test_definitions.client.test_procedures import (
     TestProcedure,
@@ -35,6 +37,14 @@ def test_TestProcedureId_synchronised():
     # for t in (t.replace("_", "-") for t in TestProcedureId):
     for t in TestProcedureId:
         assert t.value in available_tests, "TestProcedureId has extra procedures not found in TestProcedureConfig"
+
+
+@pytest.mark.parametrize("tp_id", TestProcedureId)
+def test_TestProcedure_individually_valid(tp_id: TestProcedureId):
+    yaml_resource = resources.files("cactus_test_definitions.client.procedures") / f"{tp_id}.yaml"
+    with resources.as_file(yaml_resource) as yaml_file:
+        tp = TestProcedure.from_yaml_file(yaml_file)
+    assert tp.steps
 
 
 def test_available_tests_populated():
