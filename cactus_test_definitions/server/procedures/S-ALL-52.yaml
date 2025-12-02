@@ -8,26 +8,28 @@ TargetVersions:
 
 Preconditions:
   required_clients:
-    - id: client
+    - id: CLIENT-A
+    - id: CLIENT-B
 
 Steps:
-  - id: PRECONDITION
+  - id: PRECONDITION - register end device on clientA.
+    client: CLIENT-A
     repeat_until_pass: true
     instructions:
-      - Ensure no end devices are registered, ready for new discovery.
+      - Create an EndDevice registration for clientA.
     action:
       type: discovery
       parameters:
         resources:
           - EndDevice
     checks:
-      - type: end-device # Block UNTIL there is no existing EndDevice registration
+      - type: end-device # This will be the check that will block UNTIL there is an existing EndDevice registration
         parameters:
-          matches_client: false
+          matches_client: true
 
-  - id: Step 1 - Register device with non matching LFDI - expect rejection
+  - id: Step 1 - Attempt to upsert end device with that the client doesnt own - expect rejection
+    client: CLIENT-B
     action:
       type: insert-end-device
       parameters:
-          force_lfdi: 1A2B34CD45EFGH5B67E343E5E4562E3100000099
           expect_rejection: True 
