@@ -38,7 +38,7 @@ Steps:
           poll_rate_seconds: 300
       - type: poll-rate
         parameters:
-          resource: FunctionSetAssignments
+          resource: FunctionSetAssignmentsList
           poll_rate_seconds: 300
       - type: poll-rate
         parameters:

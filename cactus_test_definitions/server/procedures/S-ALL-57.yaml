@@ -20,7 +20,6 @@ Steps:
       parameters:
         resources:
           - EndDevice
-          - SubscriptionList
           - DERControl
     checks:
       - type: end-device 
