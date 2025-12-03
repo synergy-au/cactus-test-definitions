@@ -15,7 +15,7 @@ Steps:
     repeat_until_pass: true
     client: client
     instructions:
-      - The client has a device with DeviceCapability, EndDeviceList and FunctionSetAssignments poll-rate set to 300s, DERProgramList, DERList and MirrorUsagePoint to 60s.
+      - The client has a device with DeviceCapability, EndDeviceList and FunctionSetAssignmentsList poll-rate set to 300s, DERProgramList, DERList and MirrorUsagePoint to 60s.
     action: 
       type: discovery
       parameters:
@@ -23,7 +23,7 @@ Steps:
           - EndDevice
           - DeviceCapability
           - EndDeviceList
-          - FunctionSetAssignments
+          - FunctionSetAssignmentsList
           - DERProgramList
           - DERList
           - MirrorUsagePoint
@@ -38,7 +38,7 @@ Steps:
           poll_rate_seconds: 300
       - type: poll-rate
         parameters:
-          resource: FunctionSetAssignments
+          resource: FunctionSetAssignmentsList
           poll_rate_seconds: 300
       - type: poll-rate
         parameters:
