@@ -151,3 +151,50 @@ def test_procedures_have_required_preconditions(tp_id: TestProcedureId):
                 ):
                     assert tp.preconditions.checks is not None
                     assert any([check.type == "der-settings-contents" for check in tp.preconditions.checks])
+
+
+@pytest.mark.parametrize("tp_id", TestProcedureId)
+def test_response_subject_tags_have_corresponding_der_control_tags(tp_id: TestProcedureId):
+    """Ensures that every subject_tag in response-contents checks has a corresponding
+    tag defined in a create-der-control action in the same test procedure."""
+
+    tp = get_test_procedure(tp_id)
+
+    # Collect all tags defined in create-der-control actions
+    der_control_tags = set()
+
+    if tp.preconditions and tp.preconditions.actions:
+        der_control_tags.update(
+            [
+                a.parameters.get("tag")
+                for a in tp.preconditions.actions
+                if a.type == "create-der-control" and a.parameters and a.parameters.get("tag")
+            ]
+        )
+
+    der_control_tags.update(
+        [
+            a.parameters.get("tag")
+            for s in tp.steps.values()
+            for a in s.actions
+            if a.type == "create-der-control" and a.parameters and a.parameters.get("tag")
+        ]
+    )
+
+    # Collect all subject_tags referenced in response-contents checks
+    referenced_subject_tags = set(
+        [
+            c.parameters.get("subject_tag")
+            for s in tp.steps.values()
+            if s.event.checks
+            for c in s.event.checks
+            if c.type == "response-contents" and c.parameters and c.parameters.get("subject_tag")
+        ]
+    )
+
+    # Verify all referenced subject_tags have corresponding der-control tags
+    missing_tags = referenced_subject_tags - der_control_tags
+    assert not missing_tags, (
+        f"The following subject_tags in response-contents checks do not have corresponding "
+        f"tags in create-der-control actions: {missing_tags}"
+    )
