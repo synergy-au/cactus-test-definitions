@@ -31,7 +31,6 @@ Steps:
       - type: end-device # This will be the check that will block if there is an existing EndDevice registration
         parameters:
           matches_client: false 
-      - type: time-synced
 
   - id: REGISTER
     action: 
@@ -61,4 +60,5 @@ Steps:
             - DERStatus
             - Time
             - MirrorUsagePointList
+      - type: time-synced
     
