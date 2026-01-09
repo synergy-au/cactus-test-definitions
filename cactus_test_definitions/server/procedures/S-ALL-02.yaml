@@ -23,10 +23,7 @@ Steps:
       parameters:
         resources:
           - DeviceCapability
-          - Time
-          - MirrorUsagePointList
           - EndDevice
-          - DER
     checks:
       - type: discovered
         parameters:
@@ -59,6 +56,8 @@ Steps:
       type: discovery
       parameters:
         resources:
+          - Time
+          - MirrorUsagePointList
           - DER
     checks:
       - type: discovered
