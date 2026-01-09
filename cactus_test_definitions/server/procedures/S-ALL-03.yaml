@@ -26,8 +26,6 @@ Steps:
       - type: discovered
         parameters:
           resources:
-            - Time
-            - MirrorUsagePointList
             - DeviceCapability
             - EndDeviceList
       - type: end-device # This will be the check that will block if there is an existing EndDevice registration
@@ -60,5 +58,7 @@ Steps:
             - DERCapability
             - DERSettings
             - DERStatus
+            - Time
+            - MirrorUsagePointList
       - type: time-synced
     
