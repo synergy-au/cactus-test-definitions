@@ -126,6 +126,14 @@ def named_variable_repr(named_var: NamedVariableType) -> str:
             return "(-DERCapability.rtgMaxChargeRateW)"
         case ["DERCAPABILITY", "RTG_MAX_VA"]:
             return "DERCapability.rtgMaxVA"
+        case ["DERCAPABILITY", "RTG_MIN_PF_OVER_EXCITED"]:
+            return "DERCapability.rtgMinPFOverExcited"
+        case ["DERCAPABILITY", "RTG_MIN_PF_UNDER_EXCITED"]:
+            return "DERCapability.rtgMinPFUnderExcited"
+        case ["DERSETTING", "SET_MIN_PF_OVER_EXCITED"]:
+            return "DERSetting.setMinPFOverExcited"
+        case ["DERSETTING", "SET_MIN_PF_UNDER_EXCITED"]:
+            return "DERSetting.setMinPFUnderExcited"
         case ["DERSETTING", "SET_MAX_VA"]:
             return "DERSetting.setMaxVA"
         case ["DERCAPABILITY", param_name]:
