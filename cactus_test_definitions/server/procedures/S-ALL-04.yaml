@@ -92,10 +92,6 @@ Steps:
       - type: mirror-usage-point
         parameters:
           matches: true
-          location: Device
-          reading_types: 
-            - ActivePowerAverage
-            - VoltageSinglePhaseAverage  
 
   - id: CLIENT-B CREATE MUPS
     client: CLIENT-B
@@ -111,10 +107,6 @@ Steps:
       - type: mirror-usage-point
         parameters:
           matches: true
-          location: Device
-          reading_types: 
-            - ActivePowerAverage
-            - VoltageSinglePhaseAverage  
 
   - id: CLIENT-A SEND READINGS
     client: CLIENT-A
