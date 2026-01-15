@@ -302,6 +302,7 @@ Steps:
         parameters:
           steps:
             - WAIT-RAMP-DERC-4
+            - POST-RESPONSE-STARTED
       - type: remove-steps
         parameters:
           steps:
@@ -315,10 +316,6 @@ Steps:
       parameters:
         duration_seconds: 180
     actions:
-      - type: enable-steps
-        parameters:
-          steps:
-            - POST-RESPONSE-STARTED
       - type: remove-steps
         parameters:
           steps:
