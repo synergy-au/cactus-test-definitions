@@ -46,14 +46,6 @@ Steps:
       - type: mirror-usage-point
         parameters:
           matches: true
-          check_mup_mrid: AAAAAAAAAAAAAAAAAAAAAAA000000001
-          reading_types:
-            - ActivePowerAverage
-            - VoltageSinglePhaseAverage
-          mmr_mrids:
-            - BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-            - CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-          location: Site
 
   - id: STEP 1 - UPDATE MUP ROLEFLAGS # Post same MirrorUsagePoint mRID with different roleFlags
     action: 
@@ -72,14 +64,6 @@ Steps:
       - type: mirror-usage-point
         parameters:
           matches: true
-          check_mup_mrid: AAAAAAAAAAAAAAAAAAAAAAA000000001
-          reading_types: 
-            - ActivePowerAverage
-            - VoltageSinglePhaseAverage
-          mmr_mrids:
-            - BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-            - CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-          location: Device
 
   - id: POST INITIAL READING
     action: 
@@ -121,11 +105,3 @@ Steps:
       - type: mirror-usage-point
         parameters:
           matches: true
-          check_mup_mrid: AAAAAAAAAAAAAAAAAAAAAAA000000001
-          reading_types:
-            - ReactivePowerAverage
-            - VoltageSinglePhaseAverage
-          mmr_mrids:
-            - BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-            - CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-          location: Device
