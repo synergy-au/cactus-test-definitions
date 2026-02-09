@@ -34,7 +34,7 @@ Steps:
       parameters:
         mup_id: mup_mrid_1
         set_mup_mrid: AAAAAAAAAAAAAAAAAAAAAAA000000001
-        reading_types: 
+        reading_types:
           - ActivePowerAverage
           - VoltageSinglePhaseAverage
         location: Site  # Set the roleflags
