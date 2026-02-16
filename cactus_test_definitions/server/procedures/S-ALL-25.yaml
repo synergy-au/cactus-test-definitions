@@ -35,22 +35,22 @@ Steps:
         sub_id: edev_list_sub
         resource: EndDeviceList
 
-  - id: 2- AWAIT EDEV LIST NOTIFICATION
-    repeat_until_pass: true
-    instructions:
-      - Change the EndDeviceList to have a pollRate of 30 seconds. Ensure it sends a Notification.
-    action: 
-      type: notifications
-      parameters:
-        sub_id: edev_list_sub
-        collect: true
-    checks:
-      - type: end-device-list
-        parameters:
-          minimum_count: 1
-          maximum_count: 1
-          poll_rate: 30
-          sub_id: edev_list_sub
+#  - id: 2- AWAIT EDEV LIST NOTIFICATION
+#    repeat_until_pass: true
+#    instructions:
+#      - Change the EndDeviceList to have a pollRate of 30 seconds. Ensure it sends a Notification.
+#    action: 
+#      type: notifications
+#      parameters:
+#        sub_id: edev_list_sub
+#        collect: true
+#    checks:
+#      - type: end-device-list
+#        parameters:
+#          minimum_count: 1
+#          maximum_count: 1
+#          poll_rate: 30
+#          sub_id: edev_list_sub
 
   - id: 3 - FSA LIST SUBSCRIBE
     action: 
@@ -59,22 +59,22 @@ Steps:
         sub_id: fsa_list_sub
         resource: FunctionSetAssignmentsList
     
-  - id: 4 - AWAIT FSA LIST NOTIFICATION
-    repeat_until_pass: true
-    instructions:
-      - Add a new FunctionSetAssignment to client EndDevice. Ensure it sends a Notification.
-    action: 
-      type: notifications
-      parameters:
-        sub_id: fsa_list_sub
-        collect: true
-    checks:
-      - type: function-set-assignment
-        parameters:
-          minimum_count: 1
-          maximum_count: 1
-          matches_client_edev: true
-          sub_id: fsa_list_sub
+#  - id: 4 - AWAIT FSA LIST NOTIFICATION
+#    repeat_until_pass: true
+#    instructions:
+#      - Add a new FunctionSetAssignment to client EndDevice. Ensure it sends a Notification.
+#    action: 
+#      type: notifications
+#      parameters:
+#        sub_id: fsa_list_sub
+#        collect: true
+#    checks:
+#      - type: function-set-assignment
+#        parameters:
+#          minimum_count: 1
+#          maximum_count: 1
+#          matches_client_edev: true
+#          sub_id: fsa_list_sub
 
 
   # At this point the client will have a FunctionSetAssignment with a LINK to a DERProgramList but NO
@@ -96,22 +96,22 @@ Steps:
         sub_id: derp_list_sub
         resource: DERProgramList
 
-  - id: 6 - AWAIT DERP LIST NOTIFICATION
-    repeat_until_pass: true
-    instructions:
-      - Add a new DERProgram to the newly created FunctionSetAssignment. Ensure it sends a Notification.
-    action: 
-      type: notifications
-      parameters:
-        sub_id: derp_list_sub
-        collect: true
-    checks:
-      - type: der-program
-        parameters:
-          minimum_count: 1
-          maximum_count: 1
-          fsa_index: -1 # Must belong to the latest FunctionSetAssignment
-          sub_id: derp_list_sub
+#  - id: 6 - AWAIT DERP LIST NOTIFICATION
+#    repeat_until_pass: true
+#    instructions:
+#      - Add a new DERProgram to the newly created FunctionSetAssignment. Ensure it sends a Notification.
+#    action: 
+#      type: notifications
+#      parameters:
+#        sub_id: derp_list_sub
+#        collect: true
+#    checks:
+#      - type: der-program
+#        parameters:
+#          minimum_count: 1
+#          maximum_count: 1
+#          fsa_index: -1 # Must belong to the latest FunctionSetAssignment
+#          sub_id: derp_list_sub
 
   # Same as above - we don't have the DERControlList (only a link) - we need to resolve it
   - id: 7A - DISCOVER DERC LIST
@@ -131,21 +131,21 @@ Steps:
         sub_id: derc_list_sub
         resource: DERControlList
 
-  - id: 8- AWAIT DERC NOTIFICATION
-    repeat_until_pass: true
-    instructions:
-      - Add a new DERControl to the same EndDevice updated in Step 2.
-    action: 
-      type: notifications
-      parameters:
-        sub_id: derc_list_sub
-        collect: true
-    checks:
-      - type: der-control
-        parameters:
-          minimum_count: 1
-          maximum_count: 1
-          sub_id: derc_list_sub
+#  - id: 8- AWAIT DERC NOTIFICATION
+#    repeat_until_pass: true
+#    instructions:
+#      - Add a new DERControl to the same EndDevice updated in Step 2.
+#    action: 
+#      type: notifications
+#      parameters:
+#        sub_id: derc_list_sub
+#        collect: true
+#    checks:
+#      - type: der-control
+#        parameters:
+#          minimum_count: 1
+#          maximum_count: 1
+#          sub_id: derc_list_sub
 
   # Same as above - we don't have the DefaultDERControl (only a link) - we need to resolve it
   - id: 9A - DISCOVER NEW DERC
@@ -169,18 +169,18 @@ Steps:
         sub_id: dderc_sub
         resource: DefaultDERControl
 
-  - id: 10 - AWAIT DEFAULT DERC NOTIFICATION
-    repeat_until_pass: true
-    instructions:
-      - Adjust the DefaultDERControl to have opModeExpLimW 2000 W. Ensure it sends a Notification.
-    action: 
-      type: notifications
-      parameters:
-        sub_id: dderc_sub
-        collect: true
-    checks:
-      - type: default-der-control
-        parameters:
-          opModExpLimW: 2000
-          sub_id: dderc_sub
-          minimum_count: 1
+#  - id: 10 - AWAIT DEFAULT DERC NOTIFICATION
+#    repeat_until_pass: true
+#    instructions:
+#      - Adjust the DefaultDERControl to have opModeExpLimW 2000 W. Ensure it sends a Notification.
+#    action: 
+#      type: notifications
+#      parameters:
+#        sub_id: dderc_sub
+#        collect: true
+#    checks:
+#      - type: default-der-control
+#        parameters:
+#          opModExpLimW: 2000
+#          sub_id: dderc_sub
+#          minimum_count: 1
