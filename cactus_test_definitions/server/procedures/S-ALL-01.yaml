@@ -11,6 +11,12 @@ Preconditions:
     - id: client
   
 Steps:
+  # Add a step here describing the creation of a device
+  - id: OUT-OF-BAND-REGISTER
+    action:
+      type: admin-device-register
+      parameters:
+        direct: true
   - id: DISCOVERY
     repeat_until_pass: true
     instructions:
