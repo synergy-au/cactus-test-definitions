@@ -49,12 +49,7 @@ class Action:
 
 # The parameter schema for each action, keyed by the action name
 ACTION_PARAMETER_SCHEMA: dict[str, dict[str, ParameterSchema]] = {
-    "admin-device-register": {
-        "direct": ParameterSchema(False, ParameterType.Boolean),  # True for direct device, false for aggregator
-        "lfdi": ParameterSchema(
-            False, ParameterType.HexBinary
-        ),  # Provide if not using client LFDI e.g. Aggregator device or for competing device means
-    },  # Admin api plugin specific to out of band register
+    "admin-device-register": {},  # Admin api plugin specific to out of band register
     "discovery": {
         "resources": ParameterSchema(True, ParameterType.ListCSIPAusResource),  # What resources to try and resolve?
         "next_polling_window": ParameterSchema(
