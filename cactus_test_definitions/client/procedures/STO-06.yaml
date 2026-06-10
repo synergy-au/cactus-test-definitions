@@ -48,6 +48,7 @@ Preconditions:
       parameters: {
         "minimum_count": 1
       }
+  # setGradW and opModExpLimW is now set up at the start, inline with the test set up requirements in section 12.4.4 of SA TS 5573 (noting that this may be set up in configuration at a later date).
   actions:
     - type: set-default-der-control
       parameters:
@@ -55,7 +56,10 @@ Preconditions:
         setGradW: 27
 
 Steps:
-  # Client discovers all controls for opModStorageTargetW and opModExpLimW
+  # Client discovers all controls for opModStorageTargetW and opModExpLimW upfront
+  # The first control starts 5 minutes in the future with duration 15 minutes.
+  # All subsequent controls occur at the end time of the previous control, with duration of 15 minutes.
+  
   GET-DERC-1:
     event:
       type: GET-request-received
@@ -106,7 +110,10 @@ Steps:
           steps:
             - GET-DERC-1
             
-  # Waits for the first control to finish with a bit of overtime.
+  # This wait step runs once all controls have been retrieved, and overlaps into the second control being executed.
+  # Each wait step corresponds to a particular control in the previous step as there are now 6 controls, each 15 minutes duration that run sequentially with no gaps.
+  # No action is required to be taken by the client - the wait step just provides an indication to the tester of where the client is up to in the test case.
+  
   WAIT-CONTROL-END-1:
     event:
       type: wait
