@@ -171,5 +171,5 @@ Steps:
     action:
       type: refresh-resource
       parameters:
-        resource: EndDeviceList
+        resource: EndDevice
         expect_rejection_or_empty: true
