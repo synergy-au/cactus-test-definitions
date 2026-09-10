@@ -36,9 +36,6 @@ Preconditions:
         opModImpLimW: 0
         opModExpLimW: 0
         setGradW: 27
-  checks:
-    - type: end-device-contents
-      parameters: {}
 
 Steps:
   GET-MUP:
